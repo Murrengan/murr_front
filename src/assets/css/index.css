@@ -1,0 +1,142 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "JetBrainsMono-Regular", serif;
+    color: #B0BEC5;
+    outline: none;
+}
+
+input {
+    min-width: 300px;
+    background-color: transparent;
+    border: solid 3px #AD00FF;
+    border-radius: 5px;
+
+    font-size: 1rem;
+    text-align: center;
+    padding: 0.8rem 0;
+    transition: ease-in-out 0.5s;
+}
+
+ul {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+.grecaptcha-badge {
+    display: none !important;
+}
+
+.mb {
+    margin-bottom: 1rem;
+}
+
+.mr {
+    margin-right: 1rem;
+}
+
+.fs {
+    font-size: 1.2rem;
+}
+
+.error-text {
+    color: orangered;
+    font-size: 0.9rem;
+    margin-top: 0.2rem;
+}
+
+.invalid_field {
+    border: orangered 3px solid;
+    background-color: #680013;
+}
+
+
+/* BUTTONS */
+
+.murr-button {
+    background-color: #A36FFF;
+}
+
+.murr-button > i {
+    color: white;
+}
+
+.murr-button > span {
+    color: white;
+}
+
+.murr-button:hover {
+    background-color: #B388FF;
+}
+
+.murr-button:active, .murr-button:focus {
+    background-color: #C3A1FF;
+}
+
+
+.murr-button__primary {
+    background-color: #65a3ca;
+}
+
+.murr-button__primary > i {
+    color: white;
+}
+
+.murr-button__primary > span {
+    color: white;
+}
+
+.murr-button__primary:hover {
+    background-color: #69b1d8;
+}
+
+.murr-button__primary:active, .murr-button__primary:focus {
+    background-color: #6CCFF6;
+}
+
+
+.murr-button__danger {
+    background-color: #bf4060;
+}
+
+.murr-button__danger > i {
+    color: white;
+}
+
+.murr-button__danger > span {
+    color: white;
+}
+
+.murr-button__danger:hover {
+    background-color: #d53f63;
+}
+
+.murr-button__danger:active, .murr-button__danger:focus {
+    background-color: #EE4266;
+}
+
+
+.link {
+    color: #69A2FF;
+}
+
+.link:hover {
+    color: #82B1FF;
+}
+
+.link:active {
+    color: #9CC2FF;
+}
+
+.element-ui-message__error {
+    background-color: #680013;
+}
+
+.element-ui-message__success {
+    background-color: #1a2931;
+    color: orangered;
+}
