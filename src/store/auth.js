@@ -3,7 +3,7 @@ import axios from 'axios'
 export default {
     state: {
 
-        accessToken: localStorage.getItem('accessToken') || null,
+        accessToken:null,
         murrenName: ''
     },
 
@@ -20,7 +20,6 @@ export default {
 
                     await commit('setAccessToken_mutations', accessToken);
                     await commit('setMurrenName_mutations', username);
-                    await localStorage.setItem('accessToken', accessToken);
                 }
 
             } catch (e) {
@@ -29,8 +28,6 @@ export default {
         },
 
         async logout({commit}) {
-
-            localStorage.removeItem('accessToken');
             commit('logout_mutations');
         }
     },

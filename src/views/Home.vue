@@ -36,13 +36,11 @@
 
             const r = await axios.get('/murren/all');
             this.signUpMurrens = r.data.reverse();
-
         },
 
         data: () => ({
             signUpMurrens: ''
         }),
-        components: {},
     }
 
 </script>
@@ -50,7 +48,6 @@
 <style scoped>
 
   .murrens-list {
-
     width: 300px;
     max-height: 40vh;
     overflow: auto;
@@ -67,7 +64,6 @@
     align-items: center;
     text-align: center;
     padding: 0 15px 5px;
-
     background-color: #1a2931;
   }
 

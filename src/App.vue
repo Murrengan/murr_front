@@ -21,11 +21,8 @@
             layout() {
                 return this.$route.meta.layout
             },
-
-            // isMurrenLoggedIn() {
-            //     return this.$store.getters.accessToken
-            // }
         },
+
         components: {
             EmptyLayout, MainLayout
         }

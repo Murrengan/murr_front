@@ -1,5 +1,6 @@
 <template>
   <div class="home-main-container">
+
     <p class="mb font">Это личная страничка Муррена</p>
     <small>Доступно для авторизованного Муррена</small>
     <div>
@@ -17,6 +18,7 @@
         Выйти
       </el-button>
     </div>
+
   </div>
 </template>
 
@@ -29,15 +31,15 @@
         async beforeCreate() {
 
             const r = await axios.get('murren/tanochka/',
-                {headers: {'Authorization': 'Bearer ' + localStorage.getItem('accessToken')}});
+                {headers: {'Authorization': 'Bearer ' + this.$store.getters.accessToken_getters}});
             this.tanochkaUrl = axios.defaults.baseURL + r.data.img_url;
 
         },
 
         data: () => ({
-
             tanochkaUrl: ''
         }),
+
         methods: {
             async logout() {
 

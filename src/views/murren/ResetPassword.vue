@@ -72,14 +72,13 @@
             native-type="submit"
             class="murr-button mb"
             :loading="this.showLoadingBtn"
-
-        >Жду письмо
+        >
+          Жду письмо
         </el-button>
 
       </div>
 
     </form>
-
 
   </div>
 </template>
