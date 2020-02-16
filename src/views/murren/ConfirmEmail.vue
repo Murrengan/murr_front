@@ -31,8 +31,8 @@
 
         async created() {
 
-            const murren_id = this.$route.query.activation_code;
-            let data = {murren_id: murren_id};
+            const murren_email = this.$route.query.activation_code;
+            let data = {murren_email: murren_email};
             const murrBackResponse = await axios.post('/murren/activation/', data);
 
             if (murrBackResponse.data.murren_is_active === true) {
