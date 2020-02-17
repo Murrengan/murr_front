@@ -34,7 +34,7 @@
     export default {
         async beforeCreate() {
 
-            const r = await axios.get('/murren/all');
+            const r = await axios.get('/murren/all/');
             this.signUpMurrens = r.data.reverse();
         },
 
