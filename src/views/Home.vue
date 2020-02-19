@@ -9,17 +9,22 @@
 
     <div>
       <p class="mb">Уже присоединились:</p>
-      <div class="murrens-list">
-        <ul>
-          <li v-for="murren in this.signUpMurrens"
-              :key="murren.id"
-              class="mb"
-          >
-            {{ murren.id }}. {{ murren.username }}
-          </li>
-        </ul>
 
-      </div>
+      <loader v-if="loading" />
+
+      <transition name="fade" mode="out-in">
+        <div class="murrens-list" v-if="!loading">
+          <ul>
+            <li v-for="murren in this.signUpMurrens"
+                :key="murren.id"
+                class="mb"
+            >
+              {{ murren.id }}. {{ murren.username }}
+            </li>
+          </ul>
+        </div>
+      </transition>
+
 
     </div>
 
@@ -33,12 +38,13 @@
 
     export default {
         async beforeCreate() {
-
             const r = await axios.get('/murren/all/');
             this.signUpMurrens = r.data.reverse();
+            this.loading = false
         },
 
         data: () => ({
+            loading: true,
             signUpMurrens: ''
         }),
     }

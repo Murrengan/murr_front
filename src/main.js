@@ -11,8 +11,12 @@ import '@/assets/css/index.css'
 import '@/assets/css/fade-and-slide-fade.css'
 import '@/assets/css/fonts.css'
 
+import Loader from "./components/Loader";
+
 Vue.use(ElementUI);
 Vue.use(Vuelidate);
+
+Vue.component(Loader.name, Loader);
 
 Vue.config.productionTip = false;
 
