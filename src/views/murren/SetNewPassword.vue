@@ -162,8 +162,7 @@
                 if (murrBackResponse.data.password_successfully_changed === true) {
 
                     const dataForPopUpMessage = {
-                        message: 'Пароль успешно изменен. Добро пожаловать😎',
-                        customClass: 'element-ui-message__success',
+                        message: 'Пароль успешно изменен. Добро пожаловать 😎',
                         type: 'success'
                     };
 
@@ -180,8 +179,7 @@
                         this.showLoadingBtn = false;
                         const dataForPopUpMessage = {
                             message: 'Кое-что пошло не так',
-                            customClass: 'element-ui-message__error',
-                            type: 'warning'
+                            type: 'error'
                         };
                         await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
                     }

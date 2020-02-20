@@ -182,9 +182,7 @@
                     this.showLoadingBtn = false;
 
                     const dataForPopUpMessage = {
-
                         message: 'Письмо для активации отправлено на почту 😘',
-                        customClass: 'element-ui-message__success',
                         type: 'success'
                     };
 
@@ -197,9 +195,7 @@
                         this.showLoadingBtn = false;
 
                         const dataForPopUpMessage = {
-
                             message: murrBackResponse.data.recaptcha_response_text,
-                            customClass: 'element-ui-message__error',
                             type: 'warning'
                         };
 

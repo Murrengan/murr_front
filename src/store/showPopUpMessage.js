@@ -1,19 +1,28 @@
-import {Message} from "element-ui";
-
+import {Message} from 'element-ui';
 
 export default {
+  actions: {
+    async popUpMessage(context, {message, customClass, type}) {
+      let className = [
+        'murr-notification',
+        `murr-notification-${type || `success`}`
+      ];
 
-    actions: {
+      if (customClass) {
+        if (typeof customClass === 'object') {
+          className = [...className, ...customClass]
+        } else {
+          className.push(customClass)
+        }
+      }
 
-        async popUpMessage(context, {message, customClass, type}) {
-
-            await Message({
-                message: message,
-                center: true,
-                customClass: customClass,
-                type: type,
-                showClose: true
-            });
-        },
+      await Message({
+        message: message,
+        center: true,
+        customClass: className.join(' '),
+        type: type,
+        showClose: true,
+      });
     },
-}
+  },
+};

@@ -45,7 +45,6 @@
 
                 const dataForPopUpMessage = {
                     message: 'Ты разлогинился 😱',
-                    customClass: 'element-ui-message__success',
                     type: 'success'
                 };
 

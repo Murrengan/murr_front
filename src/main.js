@@ -35,9 +35,7 @@ axios.interceptors.response.use((response) => {
             if (error.response.data.messages[0].message === "Token is invalid or expired") {
 
                 const dataForPopUpMessage = {
-
                     message: 'Истек токен доступа. Перезайди в Мурренган',
-                    customClass: 'element-ui-message__error',
                     type: 'warning'
                 };
 

@@ -39,7 +39,6 @@
 
                 const dataForPopUpMessage = {
                     message: 'Почта успешно подтверждена. Добро пожаловать😎',
-                    customClass: 'element-ui-message__success',
                     type: 'success'
                 };
 
@@ -51,7 +50,6 @@
 
                     const dataForPopUpMessage = {
                         message: 'Кое-что пошло не так',
-                        customClass: 'element-ui-message__error',
                         type: 'warning'
                     };
 

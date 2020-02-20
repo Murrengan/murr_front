@@ -132,13 +132,44 @@ a {
     color: #9CC2FF;
 }
 
-.element-ui-message__error {
-    background-color: #680013;
+/**** Notification ****/
+
+.murr-notification {
+    min-width: 300px;
+    max-width: 500px;
 }
 
-.element-ui-message__success {
-    background-color: #1a2931;
-    color: orangered;
+/* Error notification */
+.murr-notification.murr-notification-error {
+    background-color: #430000;
+    border-color: #f56c6c;
+}
+.murr-notification.murr-notification-error .el-message__content,
+.murr-notification.murr-notification-error .el-message__closeBtn,
+.murr-notification.murr-notification-error .el-message__icon {
+    color: #f56c6c;
+}
+
+/* Warning notification */
+.murr-notification.murr-notification-warning {
+    background-color: #434300;
+    border-color: #ffe88f;
+}
+.murr-notification.murr-notification-warning .el-message__content,
+.murr-notification.murr-notification-warning .el-message__closeBtn,
+.murr-notification.murr-notification-warning .el-message__icon {
+    color: #ffe88f;
+}
+
+/* Success notification */
+.murr-notification.murr-notification-success {
+    background-color: #004300;
+    border-color: #67C23A;
+}
+.murr-notification.murr-notification-success .el-message__content,
+.murr-notification.murr-notification-success .el-message__closeBtn,
+.murr-notification.murr-notification-success .el-message__icon {
+    color: #67C23A;
 }
 
 /* ScrollBar */
