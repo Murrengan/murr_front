@@ -143,16 +143,21 @@ a {
 
 /* ScrollBar */
 
+body, * {
+    scrollbar-color: #ad00ff #1a2931;
+    scrollbar-width: thin;
+}
+
 ::-webkit-scrollbar-track {
     opacity: 1;
 }
 
 ::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 20px;
-    border-radius: 20px;
+    -webkit-border-radius: 0;
+    border-radius: 0;
     background-color: #AD00FF;
 }
 
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 5px;
 }
