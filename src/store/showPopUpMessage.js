@@ -2,10 +2,11 @@ import {Message} from 'element-ui';
 
 export default {
   actions: {
-    async popUpMessage(context, {message, customClass, type}) {
+    async popUpMessage(context, {message, customClass, type, textAlign}) {
       let className = [
         'murr-notification',
-        `murr-notification-${type || `success`}`
+        `murr-notification-${type || `success`}`,
+        `murr-notification-${textAlign || `center`}`
       ];
 
       if (customClass) {

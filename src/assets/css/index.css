@@ -172,6 +172,19 @@ a {
     color: #67C23A;
 }
 
+.murr-notification.murr-notification-left .el-message__content {
+    text-align: left;
+}
+.murr-notification.murr-notification-center .el-message__content {
+    text-align: center;
+}
+.murr-notification.murr-notification-right .el-message__content {
+    text-align: right;
+}
+.murr-notification.murr-notification-justify .el-message__content {
+    text-align: justify;
+}
+
 /* ScrollBar */
 
 body, * {
