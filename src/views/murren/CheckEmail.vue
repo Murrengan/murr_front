@@ -8,12 +8,9 @@
       </a>
     </div>
 
-    <a href="#" @click.prevent="switchCheckEmail">
-      <img
-          src="@/assets/img/logo_in_circle.png"
-          alt="circle_logo"
-          class="murrengan-logo mb">
-    </a>
+    <div>
+      <img src="@/assets/img/logo_in_circle.png" alt="circle_logo" class="murrengan-logo mb">
+    </div>
 
     <h1 class="mb">Замечательно!</h1>
     <p class="mb">Подтверди почту и добро пожаловать!</p>

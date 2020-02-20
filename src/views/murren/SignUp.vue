@@ -8,12 +8,9 @@
       </a>
     </div>
 
-    <a href="#" @click.prevent="switchSignUpForm">
-      <img
-          src="@/assets/img/logo_in_circle.png"
-          alt="circle_logo"
-          class="murrengan-logo mb">
-    </a>
+    <div>
+      <img src="@/assets/img/logo_in_circle.png" alt="circle_logo" class="murrengan-logo mb">
+    </div>
 
     <form @submit.prevent="createRecaptchaTokenThenSignUp">
 

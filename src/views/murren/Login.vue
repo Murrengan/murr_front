@@ -8,12 +8,9 @@
       </a>
     </div>
 
-    <a href="#" @click.prevent="switchLoginForm">
-      <img
-          src="@/assets/img/logo_in_circle.png"
-          alt="circle_logo"
-          class="murrengan-logo mb">
-    </a>
+    <div>
+      <img src="@/assets/img/logo_in_circle.png" alt="circle_logo" class="murrengan-logo mb">
+    </div>
 
     <form @submit.prevent="login">
 
