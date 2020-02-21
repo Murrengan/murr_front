@@ -1,0 +1,66 @@
+.m-form {
+  &__group {
+    margin-bottom: 1.5rem;
+  }
+
+  &__label {
+    display: inline-block;
+    position: relative;
+  }
+
+  &__clear {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 40px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::before {
+      display: block;
+      content: '×';
+    }
+  }
+
+  &__control {
+    background-color: transparent;
+    border: solid 3px #ad00ff;
+    border-radius: 5px;
+    font-size: 1rem;
+    text-align: center;
+    padding: 0.8rem 0;
+    transition: border .1s ease-in-out, background-color .1s ease-in-out;
+  }
+
+  &__help {
+    font-size: 0.8rem;
+    margin: 5px 0;
+  }
+
+  &__group--invalid &__control {
+    border-color: #ff4500;
+    background-color: #680013;
+  }
+
+  &__group--invalid &__clear,
+  &__group--invalid &__help {
+    color: #ff4500;
+  }
+
+  &__group--invalid &__clear {
+    transition: color .1s ease-in-out,
+                font-size .1s ease-in-out;
+
+    &:hover {
+      color: #b0bec5;
+      font-size: 2rem;
+    }
+    &:active {
+      color: #8b8ac5;
+    }
+  }
+}

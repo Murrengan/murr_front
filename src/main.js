@@ -10,6 +10,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import '@/assets/css/index.css'
 import '@/assets/css/fade-and-slide-fade.css'
 import '@/assets/css/fonts.css'
+import '@/assets/scss/main.scss'
 
 import Loader from "./components/Loader";
 
