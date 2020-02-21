@@ -2,76 +2,60 @@
   <div class="main-slide-fade-container">
 
     <div class="hide__main-slide-fade-container">
-      <a href="#"
-         @click.prevent="switchResetPassword">
+      <a href="#" @click.prevent="goHome">
         <i class="el-icon-arrow-down hide-icon__main-slide-fade-container"></i>
       </a>
     </div>
 
-    <a href="#" @click.prevent="switchResetPassword">
-      <img
-          src="@/assets/img/logo_in_circle.png"
-          alt="circle_logo"
-          class="murrengan-logo mb">
-    </a>
+    <div>
+      <img src="@/assets/img/logo_in_circle.png" alt="Logo" class="murrengan-logo mb">
+    </div>
 
+    <h1 class="mb">Восстановить пароль</h1>
 
-    <form @submit.prevent="createRecaptchaTokenThenResetPassword">
-      <h1 class="mb">Восстановить пароль</h1>
+    <form @submit.prevent="() => $refs.invisibleRecaptcha.execute()">
 
       <div class="mb">
 
         <label>
           <input
-              type="text"
-              v-model.trim="murren_email"
-              placeholder="Почта"
-              :class="{invalid_field: ($v.murren_email.$dirty && !$v.murren_email.required)
-              || ($v.murren_email.$dirty && !$v.murren_email.email)
-              || (this.existMurrenEmail === false)}"
+            type="text"
+            placeholder="Почта"
+            v-model.trim="email"
+            :class="{invalid_field: ($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email)}"
           >
         </label>
 
         <div
-            class="error-text"
-            v-if="$v.murren_email.$dirty && !$v.murren_email.required">
+          class="error-text"
+          v-if="$v.email.$dirty && !$v.email.required">
           Почта нужна для восстановления пароля
         </div>
 
         <div
-            class="error-text"
-            v-else-if="$v.murren_email.$dirty && !$v.murren_email.email">
+          class="error-text"
+          v-else-if="$v.email.$dirty && !$v.email.email">
           Почта указана не верно
-        </div>
-
-        <div
-            class="error-text"
-            v-else-if="this.existMurrenEmail === false">
-          Эта почта не используется
         </div>
 
       </div>
 
       <div class="terms mb">
         <small>Эта почта была указана при регистрации</small>
-
       </div>
 
       <div>
-
         <vue-recaptcha
-            ref="invisibleRecaptcha"
-            @verify="resetPassword"
-            size="invisible"
-            :sitekey="siteKey"
-        >
-
-        </vue-recaptcha>
+          ref="invisibleRecaptcha"
+          size="invisible"
+          @verify="handlerResetPassword"
+          :sitekey="siteKey"
+        />
 
         <el-button
-            native-type="submit"
-            class="murr-button mb"
-            :loading="this.showLoadingBtn"
+          class="murr-button mb"
+          native-type="submit"
+          :loading="loading"
         >
           Жду письмо
         </el-button>
@@ -84,106 +68,46 @@
 </template>
 
 <script>
-    import VueRecaptcha from 'vue-recaptcha';
-    import axios from 'axios'
-    import {email, required} from 'vuelidate/lib/validators'
-    import {siteKey} from "@/devAndProdVariables";
+  import {mapActions} from 'vuex';
+  import VueRecaptcha from 'vue-recaptcha';
+  import {email, required} from 'vuelidate/lib/validators';
+  import {siteKey} from '@/devAndProdVariables';
 
-    export default {
+  export default {
+    components: {VueRecaptcha},
+    data: () => ({
+      siteKey,
+      email: '',
+      loading: false,
+    }),
+    validations: {
+      email: {email, required},
+    },
+    methods: {
+      ...mapActions({
+        resetPassword: 'requestResetPassword',
+        goHome: 'changeShowResetPasswordForm_actions',
+      }),
+      async handlerResetPassword(recaptchaToken) {
 
-        components: {VueRecaptcha},
+        if (this.$v.$invalid) {
+          this.$v.$touch();
+          return;
+        }
 
-        data: () => ({
+        this.loading = true;
 
-            murren_email: '',
+        const isRedirect = await this.resetPassword({
+          email: this.email,
+          recaptchaToken
+        });
 
-            siteKey: siteKey,
+        this.loading = false;
 
-            existMurrenEmail: true,
-            showLoadingBtn: false
-
-        }),
-        methods: {
-
-            async createRecaptchaTokenThenResetPassword() {
-
-                this.showLoadingBtn = true;
-                await this.$refs.invisibleRecaptcha.execute()
-            },
-
-            async resetPassword(recaptchaToken) {
-
-                if (this.$v.$invalid) {
-
-                    this.$v.$touch();
-                    this.showLoadingBtn = false;
-                    return
-                }
-
-                const formData = {
-
-                    email: this.murren_email,
-                    recaptchaToken: recaptchaToken
-                };
-
-                const murrBackResponse = await axios.post('/murren/reset_password/', formData);
-
-                if (murrBackResponse.data.email_sent_successfully === true) {
-
-                    await this.$store.dispatch('changeShowResetPasswordForm_actions');
-                    this.showLoadingBtn = false;
-
-                    const dataForPopUpMessage = {
-
-                        message: 'Письмо для восстановления пароля отправлено на почту 😘',
-                        customClass: 'element-ui-message__success',
-                        type: 'success'
-                    };
-
-                    await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
-
-                } else {
-
-                    if (murrBackResponse.data.recaptcha_response_problem === true) {
-
-                        this.showLoadingBtn = false;
-
-                        const dataForPopUpMessage = {
-
-                            message: murrBackResponse.data.recaptcha_response_text,
-                            customClass: 'element-ui-message__error',
-                            type: 'warning'
-                        };
-
-                        await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
-                    }
-
-                    if (murrBackResponse.data.error_on_backend === true) {
-
-                        this.showLoadingBtn = false;
-
-                        const dataForPopUpMessage = {
-
-                            message: 'Кое-что пошло не так',
-                            customClass: 'element-ui-message__error',
-                            type: 'warning'
-                        };
-
-                        await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
-                    }
-                }
-            },
-
-            switchResetPassword() {
-                this.$store.dispatch('changeShowResetPasswordForm_actions')
-            }
-        },
-
-        validations: {
-
-            murren_email: {email, required},
-        },
-    }
+        !isRedirect || this.goHome();
+      },
+    },
+  };
 </script>
 
 <style scoped>
