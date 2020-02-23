@@ -12,249 +12,208 @@
       <img src="@/assets/img/logo_in_circle.png" alt="circle_logo" class="murrengan-logo mb">
     </div>
 
-    <form @submit.prevent="createRecaptchaTokenThenSignUp">
+    <h1 class="mb">Создать аккаунт</h1>
 
+    <form class="m-form"
+          @submit.prevent="() => $refs.invisibleRecaptcha.execute()">
 
-      <h1 class="mb">Создать аккаунт</h1>
+      <!-- Email field begin -->
+      <div :class="{'m-form__group--invalid': validEmail}" class="m-form__group">
+        <label class="m-form__label">
+          <input type="text" placeholder="Почта" class="m-form__control"
+                 v-model.trim="murren_email">
 
-      <div class="mb">
-        <label>
-          <input
-              type="text"
-              v-model.trim="murren_email"
-              placeholder="Почта"
-              :class="{invalid_field: ($v.murren_email.$dirty && !$v.murren_email.required)
-              || ($v.murren_email.$dirty && !$v.murren_email.email)
-              || (this.uniqueMurrenEmail === false)}"
-          >
+          <span v-if="validEmail && murren_email.length"
+                @click="() => murren_email = ''"
+                class="m-form__clear"></span>
         </label>
 
-        <div
-            class="error-text"
-            v-if="$v.murren_email.$dirty && !$v.murren_email.required">
+        <div v-if="validEmailRequired" class="m-form__help">
           Почта нужна для восстановления пароля
         </div>
-
-        <div
-            class="error-text"
-            v-else-if="$v.murren_email.$dirty && !$v.murren_email.email">
+        <div v-if="validEmailIsEmail" class="m-form__help">
           Почта указана не верно
         </div>
-
-        <div
-            class="error-text"
-            v-else-if="this.uniqueMurrenEmail === false">
+        <div v-if="!uniqueMurrenEmail" class="m-form__help">
           Эта почта уже используется
         </div>
-
       </div>
+      <!-- Email field end -->
 
-      <div class="mb">
-        <label>
-          <input
-              type="text"
-              v-model.trim="murren_username"
-              placeholder="Имя в Мурренган"
-              :class="{invalid_field: ($v.murren_username.$dirty && !$v.murren_username.required)
-              || (this.uniqueMurrenName === false)}"
-          >
+      <!-- Username field begin -->
+      <div :class="{'m-form__group--invalid': validUserName}" class="m-form__group">
+        <label class="m-form__label">
+          <input type="text" placeholder="Имя в Мурренган" class="m-form__control"
+                 v-model.trim="murren_username">
+
+          <span v-if="validUserName && murren_username.length"
+                @click="() => murren_username = ''"
+                class="m-form__clear"></span>
         </label>
 
-        <div
-            class="error-text"
-            v-if="$v.murren_username.$dirty && !$v.murren_username.required">
+        <div v-if="validUserNameRequired" class="m-form__help">
           У каждого члена Мурренган есть имя
         </div>
-
-        <div
-            class="error-text"
-            v-else-if="this.uniqueMurrenName === false">
+        <div v-if="!uniqueMurrenName" class="m-form__help">
           Это имя уже используется
         </div>
       </div>
+      <!-- Username field end -->
 
-      <div class="mb">
-        <label>
-          <input
-              type="password"
-              v-model.trim="murren_password"
-              placeholder="Пароль"
-              :class="{invalid_field: ($v.murren_password.$dirty && !$v.murren_password.required) || ($v.murren_password.$dirty && !$v.murren_password.minLength)}"
-
-          >
+      <!-- Password field begin -->
+      <div :class="{'m-form__group--invalid': validPassword}" class="m-form__group">
+        <label class="m-form__label">
+          <input type="password" placeholder="Пароль" class="m-form__control"
+                 v-model.trim="murren_password">
         </label>
 
-        <div
-            class="error-text"
-            v-if="$v.murren_password.$dirty && !$v.murren_password.required">
+        <div v-if="validPasswordRequired" class="m-form__help">
           Пароль нужен обязательно
         </div>
-
-        <div
-            class="error-text"
-            v-else-if="$v.murren_password.$dirty && !$v.murren_password.minLength">
+        <div v-if="validPasswordMinLength" class="m-form__help">
           Пароль минимум {{ $v.murren_password.$params.minLength.min }} символов
         </div>
       </div>
+      <!-- Password field end -->
 
-      <div class="terms mb">
-        <small>Регистрирация подтверждает, что ты согласен с нашими <a href="#" class="link">правилами</a></small>
-
+      <div class="m-form__group">
+        <small>
+          Регистрирация подтверждает, что ты согласен с нашими <a href="#" class="link">правилами</a>
+        </small>
       </div>
 
-      <div>
+      <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
+                     @verify="signUp"
+                     :sitekey="siteKey"/>
 
-        <vue-recaptcha
-            ref="invisibleRecaptcha"
-            @verify="signUp"
-            size="invisible"
-            :sitekey="siteKey"
-        >
-
-        </vue-recaptcha>
-
-        <el-button
-            native-type="submit"
-            class="murr-button mb"
-            :loading="this.showLoadingBtn"
-
-        >Создать
-        </el-button>
-
-      </div>
-
+      <el-button class="murr-button mb" native-type="submit"
+                 :loading="loading">
+        Создать
+      </el-button>
     </form>
-
   </div>
 </template>
 
 <script>
+  import VueRecaptcha from 'vue-recaptcha';
+  import axios from 'axios';
+  import {email, required, minLength} from 'vuelidate/lib/validators';
+  import {siteKey} from '@/devAndProdVariables';
 
-    import VueRecaptcha from 'vue-recaptcha';
-    import axios from 'axios'
-    import {email, required, minLength} from 'vuelidate/lib/validators'
-    import {siteKey} from "@/devAndProdVariables";
+  export default {
+    data: () => ({
+      siteKey,
+      murren_email: '',
+      murren_username: '',
+      murren_password: '',
+      uniqueMurrenEmail: true,
+      uniqueMurrenName: true,
+      loading: false,
+    }),
+    methods: {
+      async signUp(recaptchaToken) {
+        if (this.$v.$invalid) {
+          this.$v.$touch();
+          this.loading = false;
+          return;
+        }
 
-    export default {
-        data: () => ({
+        this.loading = true;
 
-            murren_email: '',
-            murren_username: '',
-            murren_password: '',
-            siteKey: siteKey,
-            uniqueMurrenEmail: true,
-            uniqueMurrenName: true,
-            showLoadingBtn: false
+        const formData = {
+          recaptchaToken,
+          email: this.murren_email,
+          username: this.murren_username,
+          password: this.murren_password
+        };
 
-        }),
+        const murrBackResponse = await axios.post('/murren/register/', formData);
 
-        methods: {
+        if (murrBackResponse.data.is_murren_created === 'true') {
+          await this.$store.dispatch('changeShownSignUpForm_actions');
+          await this.$store.dispatch('changeCheckEmail_actions');
+          this.loading = false;
 
-            async createRecaptchaTokenThenSignUp() {
+          const dataForPopUpMessage = {
+            message: 'Письмо для активации отправлено на почту 😘',
+            customClass: 'element-ui-message__success',
+            type: 'success',
+          };
 
-                this.showLoadingBtn = true;
-                await this.$refs.invisibleRecaptcha.execute()
-            },
+          await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
+        } else {
+          if (murrBackResponse.data.recaptcha_response_problem === true) {
+            this.loading = false;
 
-            async signUp(recaptchaToken) {
+            const dataForPopUpMessage = {
+              message: murrBackResponse.data.recaptcha_response_text,
+              customClass: 'element-ui-message__error',
+              type: 'warning',
+            };
 
-                if (this.$v.$invalid) {
+            await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
+          }
 
-                    this.$v.$touch();
-                    this.showLoadingBtn = false;
-                    return
-                }
-
-                const formData = {
-
-                    email: this.murren_email,
-                    username: this.murren_username,
-                    password: this.murren_password,
-                    recaptchaToken: recaptchaToken
-                };
-
-                const murrBackResponse = await axios.post('/murren/register/', formData);
-
-                if (murrBackResponse.data.is_murren_created === 'true') {
-
-                    await this.$store.dispatch('changeShownSignUpForm_actions');
-                    await this.$store.dispatch('changeCheckEmail_actions');
-                    this.showLoadingBtn = false;
-
-                    const dataForPopUpMessage = {
-                        message: 'Письмо для активации отправлено на почту 😘',
-                        type: 'success'
-                    };
-
-                    await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
-
-                } else {
-
-                    if (murrBackResponse.data.recaptcha_response_problem === true) {
-
-                        this.showLoadingBtn = false;
-
-                        const dataForPopUpMessage = {
-                            message: murrBackResponse.data.recaptcha_response_text,
-                            type: 'warning'
-                        };
-
-                        await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
-
-                    }
-
-                    if (murrBackResponse.data.hasOwnProperty('username')) {
-
-                        if (murrBackResponse.data.username[0] === 'A user with that username already exists.') {
-
-                            this.uniqueMurrenName = false;
-                            this.showLoadingBtn = false;
-                        }
-                    }
-
-                    if (murrBackResponse.data.hasOwnProperty('email')) {
-
-                        if (murrBackResponse.data.email[0] === 'User with this Email already exists.') {
-
-                            this.uniqueMurrenEmail = false;
-                            this.showLoadingBtn = false;
-                        }
-                    }
-                }
-            },
-
-            switchSignUpForm() {
-                this.$store.dispatch('changeShownSignUpForm_actions')
-            },
-
-        },
-
-        components: {VueRecaptcha},
-
-        validations: {
-
-            murren_email: {email, required},
-            murren_username: {required},
-            murren_password: {required, minLength: minLength(6)}
-        },
-
-        watch: {
-
-            murren_email() {
-                this.uniqueMurrenEmail = true
-            },
-
-            murren_username() {
-                this.uniqueMurrenName = true
+          if (murrBackResponse.data.hasOwnProperty('username')) {
+            if (murrBackResponse.data.username[0] === 'A user with that username already exists.') {
+              this.uniqueMurrenName = false;
+              this.loading = false;
             }
-        },
-    }
+          }
+
+          if (murrBackResponse.data.hasOwnProperty('email')) {
+            if (murrBackResponse.data.email[0] === 'User with this Email already exists.') {
+              this.uniqueMurrenEmail = false;
+              this.loading = false;
+            }
+          }
+        }
+      },
+      switchSignUpForm() {
+        this.$store.dispatch('changeShownSignUpForm_actions');
+      },
+    },
+    computed: {
+      validEmailRequired() {
+        return this.$v.murren_email.$dirty && !this.$v.murren_email.required;
+      },
+      validEmailIsEmail() {
+        return this.$v.murren_email.$dirty && !this.$v.murren_email.email;
+      },
+      validEmail() {
+        return this.validEmailRequired || this.validEmailIsEmail || !this.uniqueMurrenEmail;
+      },
+      validUserNameRequired() {
+        return this.$v.murren_username.$dirty && !this.$v.murren_username.required;
+      },
+      validUserName() {
+        return this.validUserNameRequired || !this.uniqueMurrenName;
+      },
+      validPasswordRequired() {
+        return this.$v.murren_password.$dirty && !this.$v.murren_password.required;
+      },
+      validPasswordMinLength() {
+        return this.$v.murren_password.$dirty && !this.$v.murren_password.minLength;
+      },
+      validPassword() {
+        return this.validPasswordRequired || this.validPasswordMinLength;
+      },
+    },
+    watch: {
+      murren_email() {
+        this.uniqueMurrenEmail = true;
+      },
+      murren_username() {
+        this.uniqueMurrenName = true;
+      },
+    },
+    validations: {
+      murren_email: {email, required},
+      murren_username: {required},
+      murren_password: {required, minLength: minLength(6)},
+    },
+    components: {
+      VueRecaptcha
+    },
+  };
 </script>
-
-<style scoped>
-
-  .terms {
-    margin: 1rem;
-  }
-
-</style>

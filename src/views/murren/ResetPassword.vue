@@ -13,55 +13,41 @@
 
     <h1 class="mb">Восстановить пароль</h1>
 
-    <form @submit.prevent="() => $refs.invisibleRecaptcha.execute()">
+    <form class="m-form"
+          @submit.prevent="() => $refs.invisibleRecaptcha.execute()">
 
-      <div class="mb">
+      <!-- Email field begin -->
+      <div :class="{'m-form__group--invalid': validEmail}" class="m-form__group">
+        <label class="m-form__label">
+          <input type="text" placeholder="Почта" class="m-form__control"
+                 v-model.trim="email">
 
-        <label>
-          <input
-            type="text"
-            placeholder="Почта"
-            v-model.trim="email"
-            :class="{invalid_field: ($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email)}"
-          >
+          <span v-if="validEmail && email.length"
+                @click="() => email = ''"
+                class="m-form__clear"></span>
         </label>
 
-        <div
-          class="error-text"
-          v-if="$v.email.$dirty && !$v.email.required">
+        <div v-if="validEmailRequired" class="m-form__help">
           Почта нужна для восстановления пароля
         </div>
-
-        <div
-          class="error-text"
-          v-else-if="$v.email.$dirty && !$v.email.email">
+        <div v-if="validEmailIsEmail" class="m-form__help">
           Почта указана не верно
         </div>
+      </div>
+      <!-- Email field end -->
 
+      <div class="m-form__group">
+        <small class="m-form__help">Эта почта была указана при регистрации</small>
       </div>
 
-      <div class="terms mb">
-        <small>Эта почта была указана при регистрации</small>
-      </div>
+      <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
+                     @verify="handlerResetPassword"
+                     :sitekey="siteKey"/>
 
-      <div>
-        <vue-recaptcha
-          ref="invisibleRecaptcha"
-          size="invisible"
-          @verify="handlerResetPassword"
-          :sitekey="siteKey"
-        />
-
-        <el-button
-          class="murr-button mb"
-          native-type="submit"
-          :loading="loading"
-        >
-          Жду письмо
-        </el-button>
-
-      </div>
-
+      <el-button class="murr-button mb" native-type="submit"
+                 :loading="loading">
+        Жду письмо
+      </el-button>
     </form>
 
   </div>
@@ -74,15 +60,11 @@
   import {siteKey} from '@/devAndProdVariables';
 
   export default {
-    components: {VueRecaptcha},
     data: () => ({
       siteKey,
       email: '',
       loading: false,
     }),
-    validations: {
-      email: {email, required},
-    },
     methods: {
       ...mapActions({
         resetPassword: 'requestResetPassword',
@@ -106,6 +88,23 @@
 
         !isRedirect || this.goHome();
       },
+    },
+    computed: {
+      validEmailRequired() {
+        return this.$v.email.$dirty && !this.$v.email.required;
+      },
+      validEmailIsEmail() {
+        return this.$v.email.$dirty && !this.$v.email.email;
+      },
+      validEmail() {
+        return this.validEmailRequired || this.validEmailIsEmail;
+      },
+    },
+    validations: {
+      email: {email, required},
+    },
+    components: {
+      VueRecaptcha
     },
   };
 </script>

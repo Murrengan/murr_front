@@ -12,58 +12,47 @@
       <img src="@/assets/img/logo_in_circle.png" alt="circle_logo" class="murrengan-logo mb">
     </div>
 
-    <form @submit.prevent="login">
+    <h1 class="mb">Войти</h1>
 
-      <h1 class="mb">Войти</h1>
+    <form @submit.prevent="login" class="m-from">
 
-      <div class="mb">
-        <label>
-          <input
-              type="text"
-              v-model.trim="murren_username"
-              placeholder="Имя в Мурренган"
-              :class="{invalid_field: ($v.murren_username.$dirty && !$v.murren_username.required)
-              || (this.accountActivated === false)}"
-          >
+      <!-- Username field begin -->
+      <div :class="{'m-form__group--invalid': validUserName}" class="m-form__group">
+        <label class="m-form__label">
+          <input type="text" placeholder="Имя в Мурренган" class="m-form__control"
+                 v-model.trim="murren_username">
+
+          <span v-if="validUserName && murren_username.length"
+                @click="() => murren_username = ''"
+                class="m-form__clear"></span>
         </label>
 
-        <div
-            class="error-text"
-            v-if="$v.murren_username.$dirty && !$v.murren_username.required">
+        <div v-if="validUserNameRequired" class="m-form__help">
           Какое у тебя имя в Мурренган?
         </div>
-
-        <div
-            class="error-text"
-            v-if="this.accountActivated === false">
+        <div v-if="!accountActivated" class="m-form__help">
           Активный Муррен с указанными данными не найден
         </div>
       </div>
+      <!-- Username field end -->
 
-      <div class="mb">
-        <label>
-          <input
-              type="password"
-              v-model.trim="murren_password"
-              placeholder="Пароль"
-              :class="{invalid_field: ($v.murren_password.$dirty && !$v.murren_password.required) || ($v.murren_password.$dirty && !$v.murren_password.minLength)}"
-          >
+      <!-- Password field begin -->
+      <div :class="{'m-form__group--invalid': validPassword}" class="m-form__group">
+        <label class="m-form__label">
+          <input type="password" placeholder="Пароль" class="m-form__control"
+                 v-model.trim="murren_password">
         </label>
 
-        <div
-            class="error-text"
-            v-if="$v.murren_password.$dirty && !$v.murren_password.required">
+        <div v-if="validPasswordRequired" class="m-form__help">
           Пароль нужен обязательно
         </div>
-
-        <div
-            class="error-text"
-            v-else-if="$v.murren_password.$dirty && !$v.murren_password.minLength">
+        <div v-if="validPasswordMinLength" class="m-form__help">
           Пароль минимум {{ $v.murren_password.$params.minLength.min }} символов
         </div>
       </div>
+      <!-- Password field end -->
 
-      <div class="flex mb">
+      <div class="m-form__group">
         <a href="#"
            @click.prevent="hideLoginAndShowSignUpForm">
           <small class="link">РЕГИСТРАЦИЯ</small>
@@ -75,97 +64,85 @@
            @click.prevent="hideLoginAndShowResetPasswordForm">
           <small class="link">ВОССТАНОВИТЬ ПАРОЛЬ</small>
         </a>
-
       </div>
 
-      <div>
-        <el-button
-            native-type="submit"
-            class="murr-button mb"
-        >Войти
-        </el-button>
-      </div>
+      <el-button class="murr-button mb"
+                 native-type="submit">
+        Войти
+      </el-button>
 
     </form>
-
   </div>
 </template>
 
 <script>
+  import {required, minLength} from 'vuelidate/lib/validators';
 
-    import {required, minLength} from 'vuelidate/lib/validators'
-
-    export default {
-
-        data: () => ({
-
-            murren_username: '',
-            murren_password: '',
-            accountActivated: true
-        }),
-
-        watch: {
-
-            murren_username() {
-                this.accountActivated = true
-            }
-        },
-
-        validations: {
-
-            murren_username: {required},
-            murren_password: {required, minLength: minLength(6)}
-        },
-
-        methods: {
-
-            switchLoginForm() {
-                this.$store.dispatch('changeShowLoginForm_actions')
-            },
-            hideLoginAndShowResetPasswordForm() {
-
-                this.$store.dispatch('changeShowLoginForm_actions');
-                this.$store.dispatch('changeShowResetPasswordForm_actions');
-            },
-            hideLoginAndShowSignUpForm() {
-
-                this.$store.dispatch('changeShowLoginForm_actions');
-                this.$store.dispatch('changeShownSignUpForm_actions');
-            },
-
-
-            async login() {
-
-                if (this.$v.$invalid) {
-
-                    this.$v.$touch();
-                    return
-                }
-
-                const formData = {
-
-                    username: this.murren_username,
-                    password: this.murren_password,
-                };
-
-                try {
-
-                    await this.$store.dispatch('login', formData);
-                    await this.$store.dispatch('changeShowLoginForm_actions');
-                    await this.$router.push('/murren');
-
-                } catch (e) {
-
-                    if (e.response.data.detail === 'No active account found with the given credentials') {
-
-                        this.accountActivated = false
-                    }
-                }
-            }
+  export default {
+    data: () => ({
+      murren_username: '',
+      murren_password: '',
+      accountActivated: true,
+    }),
+    methods: {
+      switchLoginForm() {
+        this.$store.dispatch('changeShowLoginForm_actions');
+      },
+      hideLoginAndShowResetPasswordForm() {
+        this.$store.dispatch('changeShowLoginForm_actions');
+        this.$store.dispatch('changeShowResetPasswordForm_actions');
+      },
+      hideLoginAndShowSignUpForm() {
+        this.$store.dispatch('changeShowLoginForm_actions');
+        this.$store.dispatch('changeShownSignUpForm_actions');
+      },
+      async login() {
+        if (this.$v.$invalid) {
+          this.$v.$touch();
+          return;
         }
-    }
+
+        const formData = {
+          username: this.murren_username,
+          password: this.murren_password,
+        };
+
+        try {
+          await this.$store.dispatch('login', formData);
+          await this.$store.dispatch('changeShowLoginForm_actions');
+          await this.$router.push('/murren');
+        } catch (e) {
+          if (e.response.data.detail === 'No active account found with the given credentials') {
+            this.accountActivated = false;
+          }
+        }
+      },
+    },
+    computed: {
+      validPasswordRequired() {
+        return this.$v.murren_password.$dirty && !this.$v.murren_password.required;
+      },
+      validPasswordMinLength() {
+        return this.$v.murren_password.$dirty && !this.$v.murren_password.minLength;
+      },
+      validPassword() {
+        return this.validPasswordRequired || this.validPasswordMinLength;
+      },
+      validUserNameRequired() {
+        return this.$v.murren_username.$dirty && !this.$v.murren_username.required;
+      },
+      validUserName() {
+        return this.validUserNameRequired || !this.accountActivated;
+      },
+    },
+    watch: {
+      murren_username() {
+        this.accountActivated = true;
+      },
+    },
+    validations: {
+      murren_username: {required},
+      murren_password: {required, minLength: minLength(6)},
+    },
+  };
 </script>
-
-<style scoped>
-
-</style>
