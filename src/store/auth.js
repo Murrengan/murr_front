@@ -6,10 +6,10 @@ export default {
     murrenName: '',
   },
   actions: {
-    async login({commit}, {username, password}) {
+    async login({commit}, {username, password, recaptchaToken}) {
       try {
         const response = await axios.post('/murren/token_create/',
-          {username, password});
+          {username, password, recaptchaToken});
         const accessToken = response.data.access;
 
         if (accessToken) {
