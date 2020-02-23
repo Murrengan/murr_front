@@ -12,7 +12,8 @@
       <img src="@/assets/img/logo_in_circle.png" alt="circle_logo" class="murrengan-logo mb">
     </div>
 
-    <form @submit.prevent="login">
+    <form
+      @submit.prevent="() => $refs.invisibleRecaptcha.execute()">
 
       <h1 class="mb">Войти</h1>
 
@@ -79,6 +80,10 @@
       </div>
 
       <div>
+        <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
+                       @verify="login"
+                       :sitekey="siteKey"/>
+
         <el-button
             native-type="submit"
             class="murr-button mb"
@@ -92,13 +97,14 @@
 </template>
 
 <script>
-
+    import VueRecaptcha from 'vue-recaptcha';
     import {required, minLength} from 'vuelidate/lib/validators'
+    import {siteKey} from '@/devAndProdVariables';
 
     export default {
 
         data: () => ({
-
+            siteKey,
             murren_username: '',
             murren_password: '',
             accountActivated: true
@@ -134,7 +140,7 @@
             },
 
 
-            async login() {
+            async login(recaptchaToken) {
 
                 if (this.$v.$invalid) {
 
@@ -143,7 +149,7 @@
                 }
 
                 const formData = {
-
+                    recaptchaToken,
                     username: this.murren_username,
                     password: this.murren_password,
                 };
@@ -162,7 +168,8 @@
                     }
                 }
             }
-        }
+        },
+        components: {VueRecaptcha},
     }
 </script>
 
