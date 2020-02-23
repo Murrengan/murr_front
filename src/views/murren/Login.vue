@@ -14,7 +14,8 @@
 
     <h1 class="mb">Войти</h1>
 
-    <form @submit.prevent="login" class="m-from">
+    <form class="m-from"
+          @submit.prevent="() => $refs.invisibleRecaptcha.execute()">
 
       <!-- Username field begin -->
       <div :class="{'m-form__group--invalid': validUserName}" class="m-form__group">
@@ -66,6 +67,10 @@
         </a>
       </div>
 
+      <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
+                     @verify="login"
+                     :sitekey="siteKey"/>
+
       <el-button class="murr-button mb"
                  native-type="submit">
         Войти
@@ -77,9 +82,12 @@
 
 <script>
   import {required, minLength} from 'vuelidate/lib/validators';
+  import VueRecaptcha from 'vue-recaptcha';
+  import {siteKey} from '@/devAndProdVariables';
 
   export default {
     data: () => ({
+      siteKey,
       murren_username: '',
       murren_password: '',
       accountActivated: true,
@@ -96,13 +104,14 @@
         this.$store.dispatch('changeShowLoginForm_actions');
         this.$store.dispatch('changeShownSignUpForm_actions');
       },
-      async login() {
+      async login(recaptchaToken) {
         if (this.$v.$invalid) {
           this.$v.$touch();
           return;
         }
 
         const formData = {
+          recaptchaToken,
           username: this.murren_username,
           password: this.murren_password,
         };
@@ -143,6 +152,9 @@
     validations: {
       murren_username: {required},
       murren_password: {required, minLength: minLength(6)},
+    },
+    components: {
+      VueRecaptcha
     },
   };
 </script>
