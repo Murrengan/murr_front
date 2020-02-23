@@ -2,8 +2,7 @@
   <div class="main-slide-fade-container">
 
     <div class="hide__main-slide-fade-container">
-      <a href="#"
-         @click.prevent="switchLoginForm">
+      <a href="#" @click.prevent="goHome">
         <i class="el-icon-arrow-down hide-icon__main-slide-fade-container"></i>
       </a>
     </div>
@@ -54,25 +53,23 @@
       <!-- Password field end -->
 
       <div class="m-form__group">
-        <a href="#"
-           @click.prevent="hideLoginAndShowSignUpForm">
+        <a href="#" @click.prevent="handlerGoSignUp">
           <small class="link">РЕГИСТРАЦИЯ</small>
         </a>
 
         <span> / </span>
 
-        <a href="#"
-           @click.prevent="hideLoginAndShowResetPasswordForm">
+        <a href="#" @click.prevent="handlerGoResetPassword">
           <small class="link">ВОССТАНОВИТЬ ПАРОЛЬ</small>
         </a>
       </div>
 
       <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
-                     @verify="login"
+                     @verify="handlerLogin"
                      :sitekey="siteKey"/>
 
-      <el-button class="murr-button mb"
-                 native-type="submit">
+      <el-button class="murr-button mb" native-type="submit"
+                 :loading="loading">
         Войти
       </el-button>
 
@@ -81,6 +78,7 @@
 </template>
 
 <script>
+  import {mapActions} from "vuex"
   import {required, minLength} from 'vuelidate/lib/validators';
   import VueRecaptcha from 'vue-recaptcha';
   import {siteKey} from '@/devAndProdVariables';
@@ -91,39 +89,45 @@
       murren_username: '',
       murren_password: '',
       accountActivated: true,
+      loading: false,
     }),
     methods: {
-      switchLoginForm() {
-        this.$store.dispatch('changeShowLoginForm_actions');
+      ...mapActions({
+        goHome: 'changeShowLoginForm_actions',
+        goResetPassword: 'changeShowResetPasswordForm_actions',
+        goSignUp: 'changeShownSignUpForm_actions',
+        createToken: 'createToken',
+      }),
+      handlerGoResetPassword() {
+        this.goHome();
+        this.goResetPassword();
       },
-      hideLoginAndShowResetPasswordForm() {
-        this.$store.dispatch('changeShowLoginForm_actions');
-        this.$store.dispatch('changeShowResetPasswordForm_actions');
+      handlerGoSignUp() {
+        this.goHome();
+        this.goSignUp();
       },
-      hideLoginAndShowSignUpForm() {
-        this.$store.dispatch('changeShowLoginForm_actions');
-        this.$store.dispatch('changeShownSignUpForm_actions');
-      },
-      async login(recaptchaToken) {
+      async handlerLogin(recaptchaToken) {
         if (this.$v.$invalid) {
           this.$v.$touch();
           return;
         }
 
-        const formData = {
+        this.loading = true;
+
+        const result = await this.createToken({
           recaptchaToken,
           username: this.murren_username,
           password: this.murren_password,
-        };
+        });
 
-        try {
-          await this.$store.dispatch('login', formData);
-          await this.$store.dispatch('changeShowLoginForm_actions');
+        this.loading = false;
+        this.accountActivated = result.accountActivated;
+
+        if (!result.error) {
+          this.murren_username = '';
+          this.murren_password = '';
+          this.goHome();
           await this.$router.push('/murren');
-        } catch (e) {
-          if (e.response.data.detail === 'No active account found with the given credentials') {
-            this.accountActivated = false;
-          }
         }
       },
     },
@@ -142,11 +146,6 @@
       },
       validUserName() {
         return this.validUserNameRequired || !this.accountActivated;
-      },
-    },
-    watch: {
-      murren_username() {
-        this.accountActivated = true;
       },
     },
     validations: {
