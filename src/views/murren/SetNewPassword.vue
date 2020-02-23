@@ -12,208 +12,162 @@
       <img src="@/assets/img/logo_in_circle.png" alt="circle_logo" class="murrengan-logo mb">
     </div>
 
-    <form @submit.prevent="createRecaptchaTokenThenSetNewPassword">
-      <h1 class="mb">Новый пароль</h1>
+    <h1 class="mb">Новый пароль</h1>
 
-      <div class="mb">
-        <label>
-          <input
-              type="password"
-              v-model.trim="murren_password_1"
-              placeholder="Новый пароль"
-              :class="{invalid_field: ($v.murren_password_1.$dirty && !$v.murren_password_1.required)
-              || ($v.murren_password_1.$dirty && !$v.murren_password_1.minLength)
-              || (this.newPasswordsMatch === false)}"
-          >
+    <form class="m-form"
+          @submit.prevent="() => $refs.invisibleRecaptcha.execute()">
+
+      <!-- Password field begin -->
+      <div :class="{'m-form__group--invalid': validPassword}" class="m-form__group">
+        <label class="m-form__label">
+          <input type="password" placeholder="Новый пароль" class="m-form__control"
+                 v-model.trim="murren_password_1">
         </label>
 
-        <div
-            class="error-text"
-            v-if="$v.murren_password_1.$dirty && !$v.murren_password_1.required">
+        <div v-if="validPasswordRequired" class="m-form__help">
           Пароль нужен обязательно
         </div>
-
-        <div
-            class="error-text"
-            v-else-if="$v.murren_password_1.$dirty && !$v.murren_password_1.minLength">
+        <div v-if="validPasswordMinLength" class="m-form__help">
           Пароль минимум {{ $v.murren_password_1.$params.minLength.min }} символов
         </div>
-
-        <div
-            class="error-text"
-            v-if="this.newPasswordsMatch === false">
+        <div v-if="!newPasswordsMatch" class="m-form__help">
           Пароли не совпадают
         </div>
-
       </div>
+      <!-- Password field end -->
 
-      <div class="mb">
-        <label>
-          <input
-              type="password"
-              v-model.trim="murren_password_2"
-              placeholder="Повторить новый пароль"
-              :class="{invalid_field: ($v.murren_password_2.$dirty && !$v.murren_password_2.required)
-              || ($v.murren_password_2.$dirty && !$v.murren_password_2.minLength)
-              || (this.newPasswordsMatch === false)}"
-          >
+      <!-- PasswordConfirm field begin -->
+      <div :class="{'m-form__group--invalid': validPasswordConfirm}" class="m-form__group">
+        <label class="m-form__label">
+          <input type="password" placeholder="Повторить новый пароль" class="m-form__control"
+                 v-model.trim="murren_password_2">
         </label>
 
-        <div
-            class="error-text"
-            v-if="$v.murren_password_2.$dirty && !$v.murren_password_2.required">
+        <div v-if="validPasswordConfirmRequired" class="m-form__help">
           Пароль нужен обязательно
         </div>
-
-        <div
-            class="error-text"
-            v-else-if="$v.murren_password_2.$dirty && !$v.murren_password_2.minLength">
+        <div v-if="validPasswordConfirmMinLength" class="m-form__help">
           Пароль минимум {{ $v.murren_password_2.$params.minLength.min }} символов
         </div>
-        <div
-            class="error-text"
-            v-if="this.newPasswordsMatch === false">
+        <div v-if="!newPasswordsMatch" class="m-form__help">
           Пароли не совпадают
         </div>
       </div>
+      <!-- PasswordConfirm field end -->
 
-      <div>
+      <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
+                     @verify="setNewPassword"
+                     :sitekey="siteKey"/>
 
-        <vue-recaptcha
-            ref="invisibleRecaptcha"
-            @verify="setNewPassword"
-            size="invisible"
-            :sitekey="siteKey"
-        >
-
-        </vue-recaptcha>
-
-        <el-button
-            native-type="submit"
-            class="murr-button mb"
-            :loading="this.showLoadingBtn"
-
-        >Готово
-        </el-button>
-
-      </div>
+      <el-button class="murr-button mb" native-type="submit"
+                 :loading="loading">
+        Готово
+      </el-button>
 
     </form>
 
   </div>
-
 </template>
 
 <script>
+  import axios from 'axios';
+  import {required, minLength} from 'vuelidate/lib/validators';
+  import VueRecaptcha from 'vue-recaptcha';
+  import {siteKey} from '@/devAndProdVariables';
 
-    import axios from "axios";
-    import {required, minLength} from 'vuelidate/lib/validators'
-    import VueRecaptcha from 'vue-recaptcha';
-    import {siteKey} from "@/devAndProdVariables";
+  export default {
+    data: () => ({
+      siteKey,
+      murren_password_1: '',
+      murren_password_2: '',
+      newPasswordsMatch: true,
+      loading: false,
+    }),
+    methods: {
+      async setNewPassword(recaptchaToken) {
+        if (this.$v.$invalid) {
+          this.$v.$touch();
+          return;
+        }
 
-    export default {
+        if (this.murren_password_1 !== this.murren_password_2) {
+          this.newPasswordsMatch = false;
+          return;
+        }
 
-        data: () => ({
+        this.loading = true;
 
-            murren_password_1: '',
-            murren_password_2: '',
+        const murren_email = this.$route.query.activation_code;
 
-            siteKey: siteKey,
+        const formData = {
+          murren_password_1: this.murren_password_1,
+          murren_password_2: this.murren_password_2,
+          murren_email,
+          recaptchaToken,
+        };
 
-            newPasswordsMatch: true,
-            showLoadingBtn: false
+        const murrBackResponse = await axios.post('/murren/confirm_new_password/', formData);
 
-        }),
+        if (murrBackResponse.data.password_successfully_changed === true) {
+          const dataForPopUpMessage = {
+            message: 'Пароль успешно изменен. Добро пожаловать 😎',
+            type: 'success',
+          };
 
-        methods: {
+          this.loading = false;
+          await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
+          await this.$router.push('/');
+          await this.$store.dispatch('changeShowLoginForm_actions');
+        } else {
+          if (murrBackResponse.data.error_on_backend === true) {
+            this.loading = false;
+            const dataForPopUpMessage = {
+              message: 'Кое-что пошло не так',
+              type: 'error',
+            };
 
-            async createRecaptchaTokenThenSetNewPassword() {
-
-                if (this.murren_password_1 !== this.murren_password_2) {
-
-                    this.newPasswordsMatch = false;
-                    return
-                }
-
-                if (this.$v.$invalid) {
-
-                    this.$v.$touch();
-                    return
-                }
-
-                this.showLoadingBtn = true;
-                await this.$refs.invisibleRecaptcha.execute()
-            },
-
-            async setNewPassword(recaptchaToken) {
-
-
-                const murren_email = this.$route.query.activation_code;
-
-                const formData = {
-                    murren_password_1: this.murren_password_1,
-                    murren_password_2: this.murren_password_2,
-                    murren_email: murren_email,
-                    recaptchaToken: recaptchaToken
-                };
-
-                const murrBackResponse = await axios.post('/murren/confirm_new_password/', formData);
-
-                if (murrBackResponse.data.password_successfully_changed === true) {
-
-                    const dataForPopUpMessage = {
-                        message: 'Пароль успешно изменен. Добро пожаловать 😎',
-                        type: 'success'
-                    };
-
-                    this.showLoadingBtn = false;
-                    await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
-                    await this.$router.push('/');
-                    await this.$store.dispatch('changeShowLoginForm_actions');
-
-
-                } else {
-
-                    if (murrBackResponse.data.error_on_backend === true) {
-
-                        this.showLoadingBtn = false;
-                        const dataForPopUpMessage = {
-                            message: 'Кое-что пошло не так',
-                            type: 'error'
-                        };
-                        await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
-                    }
-                }
-            },
-
-            async switchSetNewPasswordForm() {
-
-                await this.$router.push('/');
-            }
-
-        },
-
-        components: {VueRecaptcha},
-
-        validations: {
-
-            murren_password_1: {required, minLength: minLength(6)},
-            murren_password_2: {required, minLength: minLength(6)}
-        },
-
-        watch: {
-
-            murren_password_1() {
-                this.newPasswordsMatch = true
-            },
-
-            murren_password_2() {
-                this.newPasswordsMatch = true
-            }
-        },
-    }
+            await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
+          }
+        }
+      },
+      async switchSetNewPasswordForm() {
+        await this.$router.push('/');
+      },
+    },
+    computed: {
+      validPasswordRequired() {
+        return this.$v.murren_password_1.$dirty && !this.$v.murren_password_1.required;
+      },
+      validPasswordMinLength() {
+        return this.$v.murren_password_1.$dirty && !this.$v.murren_password_1.minLength;
+      },
+      validPassword() {
+        return this.validPasswordRequired || this.validPasswordMinLength || !this.newPasswordsMatch;
+      },
+      validPasswordConfirmRequired() {
+        return this.$v.murren_password_2.$dirty && !this.$v.murren_password_2.required;
+      },
+      validPasswordConfirmMinLength() {
+        return this.$v.murren_password_2.$dirty && !this.$v.murren_password_2.minLength;
+      },
+      validPasswordConfirm() {
+        return this.validPasswordConfirmRequired || this.validPasswordConfirmMinLength || !this.newPasswordsMatch;
+      }
+    },
+    watch: {
+      murren_password_1() {
+        this.newPasswordsMatch = true;
+      },
+      murren_password_2() {
+        this.newPasswordsMatch = true;
+      },
+    },
+    validations: {
+      murren_password_1: {required, minLength: minLength(6)},
+      murren_password_2: {required, minLength: minLength(6)},
+    },
+    components: {
+      VueRecaptcha,
+    },
+  };
 </script>
-
-<style scoped>
-
-</style>
