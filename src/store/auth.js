@@ -6,18 +6,24 @@ export default {
     murrenName: '',
   },
   actions: {
-    async login({commit}, {username, password, recaptchaToken}) {
+    async createToken({commit}, payload) {
       try {
-        const response = await axios.post('/murren/token_create/',
-          {username, password, recaptchaToken});
-        const accessToken = response.data.access;
+        const {data} = await axios.post('/murren/token_create/', payload);
 
-        if (accessToken) {
-          await commit('setAccessToken_mutations', accessToken);
-          await commit('setMurrenName_mutations', username);
+        if (data.access) {
+          commit('setAccessToken_mutations', data.access);
+          commit('setMurrenName_mutations', payload.username);
         }
       } catch (e) {
-        throw e;
+        return {
+          error: true,
+          accountActivated: !(e.response.data.detail === 'No active account found with the given credentials')
+        }
+      }
+
+      return {
+        error: false,
+        accountActivated: true
       }
     },
     async logout({commit}) {
