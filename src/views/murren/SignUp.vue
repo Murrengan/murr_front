@@ -70,8 +70,14 @@
         <div v-if="validPasswordRequired" class="m-form__help">
           Пароль нужен обязательно
         </div>
-        <div v-if="validPasswordMinLength" class="m-form__help">
+        <div v-else-if="validPasswordMinLength" class="m-form__help">
           Пароль минимум {{ $v.murren_password.$params.minLength.min }} символов
+        </div>
+        <div v-else-if="validPasswordIsNumeric" class="m-form__help">
+          Пароль не должен состоять только из цифр
+        </div>
+        <div v-else-if="passwordIsTooCommon" class="m-form__help">
+          Пароль слишком простой
         </div>
       </div>
       <!-- Password field end -->
@@ -97,7 +103,7 @@
 <script>
   import VueRecaptcha from 'vue-recaptcha';
   import axios from 'axios';
-  import {email, required, minLength} from 'vuelidate/lib/validators';
+  import {email, required, minLength, helpers} from 'vuelidate/lib/validators';
   import {siteKey} from '@/devAndProdVariables';
 
   export default {
@@ -109,6 +115,7 @@
       uniqueMurrenEmail: true,
       uniqueMurrenName: true,
       loading: false,
+      passwordIsTooCommon: false
     }),
     methods: {
       async signUp(recaptchaToken) {
@@ -167,6 +174,13 @@
               this.loading = false;
             }
           }
+
+          if (murrBackResponse.data.hasOwnProperty('password')) {
+            if (murrBackResponse.data.password[0] === 'This password is too common.') {
+              this.passwordIsTooCommon = true;
+              this.loading = false;
+            }
+          }
         }
       },
       switchSignUpForm() {
@@ -195,8 +209,12 @@
       validPasswordMinLength() {
         return this.$v.murren_password.$dirty && !this.$v.murren_password.minLength;
       },
+      validPasswordIsNumeric() {
+        return this.$v.murren_password.$dirty && !this.$v.murren_password.is_numeric;
+      },
       validPassword() {
-        return this.validPasswordRequired || this.validPasswordMinLength;
+        return this.validPasswordRequired || this.validPasswordMinLength || this.validPasswordIsNumeric ||
+            this.passwordIsTooCommon;
       },
     },
     watch: {
@@ -206,11 +224,18 @@
       murren_username() {
         this.uniqueMurrenName = true;
       },
+      murren_password() {
+        this.passwordIsTooCommon = false
+      },
     },
     validations: {
       murren_email: {email, required},
       murren_username: {required},
-      murren_password: {required, minLength: minLength(6)},
+      murren_password: {
+        required,
+        minLength: minLength(6),
+        is_numeric: helpers.regex('alpha', /^(?=.*?[^0-9])/)
+      },
     },
     components: {
       VueRecaptcha
