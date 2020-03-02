@@ -30,8 +30,11 @@
         <div v-if="validPasswordMinLength" class="m-form__help">
           Пароль минимум {{ $v.murren_password_1.$params.minLength.min }} символов
         </div>
-        <div v-if="!newPasswordsMatch" class="m-form__help">
-          Пароли не совпадают
+        <div v-else-if="validPasswordIsNumeric" class="m-form__help">
+          Пароль не должен состоять только из цифр
+        </div>
+        <div v-else-if="newPasswordTooCommon" class="m-form__help">
+          Пароль слишком простой
         </div>
       </div>
       <!-- Password field end -->
@@ -71,7 +74,7 @@
 
 <script>
   import axios from 'axios';
-  import {required, minLength} from 'vuelidate/lib/validators';
+  import {required, minLength, helpers} from 'vuelidate/lib/validators';
   import VueRecaptcha from 'vue-recaptcha';
   import {siteKey} from '@/devAndProdVariables';
 
@@ -81,6 +84,7 @@
       murren_password_1: '',
       murren_password_2: '',
       newPasswordsMatch: true,
+      newPasswordTooCommon: false,
       loading: false,
     }),
     methods: {
@@ -119,6 +123,13 @@
           await this.$router.push('/');
           await this.$store.dispatch('changeShowLoginForm_actions');
         } else {
+          if (murrBackResponse.data.password_not_valid) {
+            if (murrBackResponse.data.password[0] === 'This password is too common.') {
+              this.newPasswordTooCommon = true;
+              this.loading = false;
+            }
+          }
+
           if (murrBackResponse.data.error_on_backend === true) {
             this.loading = false;
             const dataForPopUpMessage = {
@@ -141,8 +152,12 @@
       validPasswordMinLength() {
         return this.$v.murren_password_1.$dirty && !this.$v.murren_password_1.minLength;
       },
+      validPasswordIsNumeric() {
+        return this.$v.murren_password_1.$dirty && !this.$v.murren_password_1.is_numeric;
+      },
       validPassword() {
-        return this.validPasswordRequired || this.validPasswordMinLength || !this.newPasswordsMatch;
+        return this.validPasswordRequired || this.validPasswordMinLength || this.validPasswordIsNumeric ||
+            !this.newPasswordsMatch || this.newPasswordTooCommon;
       },
       validPasswordConfirmRequired() {
         return this.$v.murren_password_2.$dirty && !this.$v.murren_password_2.required;
@@ -151,20 +166,29 @@
         return this.$v.murren_password_2.$dirty && !this.$v.murren_password_2.minLength;
       },
       validPasswordConfirm() {
-        return this.validPasswordConfirmRequired || this.validPasswordConfirmMinLength || !this.newPasswordsMatch;
+        return this.validPasswordConfirmRequired || this.validPasswordConfirmMinLength ||
+            !this.newPasswordsMatch || this.newPasswordTooCommon;
       }
     },
     watch: {
       murren_password_1() {
         this.newPasswordsMatch = true;
+        this.newPasswordTooCommon = false;
       },
       murren_password_2() {
         this.newPasswordsMatch = true;
       },
     },
     validations: {
-      murren_password_1: {required, minLength: minLength(6)},
-      murren_password_2: {required, minLength: minLength(6)},
+      murren_password_1: {
+        required,
+        minLength: minLength(6),
+        is_numeric: helpers.regex('alpha', /^(?=.*?[^0-9])/)
+      },
+      murren_password_2: {
+        required,
+        minLength: minLength(6),
+      },
     },
     components: {
       VueRecaptcha,
