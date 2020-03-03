@@ -56,6 +56,9 @@
         <div v-if="uniqueName" class="m-form__help">
           Это имя уже используется
         </div>
+        <div v-if="validUserNameMaxLength" class="m-form__help">
+          Имя максимум {{ $v.username.$params.maxLength.max }} символов
+        </div>
       </div>
       <!-- Username field end -->
 
@@ -102,7 +105,7 @@
 <script>
   import {mapActions} from 'vuex'
   import VueRecaptcha from 'vue-recaptcha';
-  import {email, required, minLength, helpers} from 'vuelidate/lib/validators';
+  import {email, required, maxLength, minLength, helpers} from 'vuelidate/lib/validators';
   import {siteKey} from '@/devAndProdVariables';
 
   export default {
@@ -172,8 +175,11 @@
       validUserNameRequired() {
         return this.$v.username.$dirty && !this.$v.username.required
       },
+      validUserNameMaxLength() {
+        return this.$v.username.$dirty && !this.$v.username.maxLength;
+      },
       validUserName() {
-        return this.validUserNameRequired || this.uniqueName
+        return this.validUserNameRequired || this.validUserNameMaxLength || this.uniqueName
       },
       validPasswordRequired() {
         return this.$v.password.$dirty && !this.$v.password.required
@@ -202,7 +208,7 @@
     },
     validations: {
       email: {email, required},
-      username: {required},
+      username: {required, maxLength: maxLength(24)},
       password: {
         required,
         minLength: minLength(6),
