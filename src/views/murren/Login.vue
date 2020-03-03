@@ -30,6 +30,9 @@
         <div v-if="validUserNameRequired" class="m-form__help">
           Какое у тебя имя в Мурренган?
         </div>
+        <div v-if="validUserNameMaxLength" class="m-form__help">
+          Имя максимум {{ $v.murren_username.$params.maxLength.max }} символов
+        </div>
         <div v-if="!accountActivated" class="m-form__help">
           Активный Муррен с указанными данными не найден
         </div>
@@ -79,7 +82,7 @@
 
 <script>
   import {mapActions} from "vuex"
-  import {required, minLength} from 'vuelidate/lib/validators';
+  import {required, maxLength, minLength} from 'vuelidate/lib/validators';
   import VueRecaptcha from 'vue-recaptcha';
   import {siteKey} from '@/devAndProdVariables';
 
@@ -144,12 +147,15 @@
       validUserNameRequired() {
         return this.$v.murren_username.$dirty && !this.$v.murren_username.required;
       },
+      validUserNameMaxLength() {
+        return this.$v.murren_username.$dirty && !this.$v.murren_username.maxLength;
+      },
       validUserName() {
-        return this.validUserNameRequired || !this.accountActivated;
+        return this.validUserNameRequired || this.validUserNameMaxLength || !this.accountActivated;
       },
     },
     validations: {
-      murren_username: {required},
+      murren_username: {required, maxLength: maxLength(24)},
       murren_password: {required, minLength: minLength(6)},
     },
     components: {

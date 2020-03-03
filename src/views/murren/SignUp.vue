@@ -57,6 +57,9 @@
         <div v-if="!uniqueMurrenName" class="m-form__help">
           Это имя уже используется
         </div>
+        <div v-if="validUserNameMaxLength" class="m-form__help">
+          Имя максимум {{ $v.murren_username.$params.maxLength.max }} символов
+        </div>
       </div>
       <!-- Username field end -->
 
@@ -103,7 +106,7 @@
 <script>
   import VueRecaptcha from 'vue-recaptcha';
   import axios from 'axios';
-  import {email, required, minLength, helpers} from 'vuelidate/lib/validators';
+  import {email, required, maxLength, minLength, helpers} from 'vuelidate/lib/validators';
   import {siteKey} from '@/devAndProdVariables';
 
   export default {
@@ -200,8 +203,11 @@
       validUserNameRequired() {
         return this.$v.murren_username.$dirty && !this.$v.murren_username.required;
       },
+      validUserNameMaxLength() {
+        return this.$v.murren_username.$dirty && !this.$v.murren_username.maxLength;
+      },
       validUserName() {
-        return this.validUserNameRequired || !this.uniqueMurrenName;
+        return this.validUserNameRequired || this.validUserNameMaxLength || !this.uniqueMurrenName;
       },
       validPasswordRequired() {
         return this.$v.murren_password.$dirty && !this.$v.murren_password.required;
@@ -230,7 +236,7 @@
     },
     validations: {
       murren_email: {email, required},
-      murren_username: {required},
+      murren_username: {required, maxLength: maxLength(24)},
       murren_password: {
         required,
         minLength: minLength(6),
