@@ -2,19 +2,17 @@
   <div class="home-main-container">
 
     <p class="mb font">Это личная страничка Муррена</p>
+
     <small>Доступно для авторизованного Муррена</small>
-    <div>
-      <img
-          :src="tanochkaUrl"
-          alt="tanochka"
-          class="tanochka">
+
+    <div v-if="tanochkaUrl">
+      <img class="tanochka" alt="tanochka"
+           :src="tanochkaUrl">
     </div>
 
     <div class="bottom-info">
-      <el-button
-          class="murr-button__danger"
-          @click="logout"
-      >
+      <el-button class="murr-button__danger"
+                 @click="logout">
         Выйти
       </el-button>
     </div>
@@ -23,49 +21,39 @@
 </template>
 
 <script>
+  import {mapActions} from 'vuex'
 
-    import axios from "axios";
+  export default {
+    data: () => ({
+      tanochkaUrl: null,
+    }),
+    async created() {
+      this.tanochkaUrl = await this.$store.dispatch('fetchTanochka')
+    },
+    methods: {
+      ...mapActions({
+        notification: 'popUpMessage'
+      }),
+      async logout() {
+        this.notification({
+          message: 'Ты разлогинился 😱',
+          type: 'success',
+        })
 
-    export default {
-
-        async beforeCreate() {
-
-            const r = await axios.get('murren/tanochka/',
-                {headers: {'Authorization': 'Bearer ' + this.$store.getters.accessToken_getters}});
-            this.tanochkaUrl = axios.defaults.baseURL + r.data.img_url;
-
-        },
-
-        data: () => ({
-            tanochkaUrl: ''
-        }),
-
-        methods: {
-            async logout() {
-
-                const dataForPopUpMessage = {
-                    message: 'Ты разлогинился 😱',
-                    type: 'success'
-                };
-
-                await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
-                await this.$store.dispatch('logout');
-                await this.$router.push('/');
-
-            }
-        }
-    }
+        await this.$store.dispatch('logout')
+        await this.$router.push('/')
+      },
+    },
+  }
 </script>
 
 <style scoped>
-
   .bottom-info {
     position: absolute;
     bottom: 0;
     padding-bottom: 60px;
     display: flex;
     flex-direction: column;
-
   }
 
   .home-main-container {

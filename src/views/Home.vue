@@ -25,34 +25,25 @@
         </div>
       </transition>
 
-
     </div>
-
-
   </div>
 </template>
 
 <script>
-
-    import axios from "axios";
-
-    export default {
-        async beforeCreate() {
-            const r = await axios.get('/murren/all/');
-            this.signUpMurrens = r.data.reverse();
-            this.loading = false
-        },
-
-        data: () => ({
-            loading: true,
-            signUpMurrens: ''
-        }),
-    }
-
+  export default {
+    data: () => ({
+        loading: true,
+        signUpMurrens: []
+    }),
+    async mounted() {
+      const result = await this.$store.dispatch('fetchMurrens')
+      this.signUpMurrens = result ? result.reverse() : []
+      this.loading = false
+    },
+  }
 </script>
 
 <style scoped>
-
   .murrens-list {
     width: 300px;
     max-height: 40vh;
@@ -61,7 +52,6 @@
     border-radius: 5px;
     padding-top: 1rem;
   }
-
 
   .home-main-container {
     display: flex;
@@ -72,5 +62,4 @@
     padding: 0 15px 5px;
     background-color: #1a2931;
   }
-
 </style>

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import axios from 'axios'
 import createPersistedState from 'vuex-persistedstate';
 
 import auth from './auth';
@@ -49,8 +50,26 @@ export default new Vuex.Store({
     async changeShowResetPasswordForm_actions(context) {
       context.commit('changeShowResetPasswordForm_mutations');
     },
-  },
+    async fetchMurrens() {
+      try {
+        const {data} = await axios.get('/murren/all/')
+        return data
+      } catch (error) {
+        return {error: true, message: 'Ошибка на сервере'}
+      }
+    },
+    async fetchTanochka({state}) {
+      try {
+        const {data} = await axios.get('/murren/tanochka/', {
+          headers: {Authorization: `Bearer ${state.auth.accessToken}`},
+        })
 
+        return axios.defaults.baseURL + data.img_url
+      } catch (e) {
+        return {error: true, message: 'Ошибка на сервере'}
+      }
+    },
+  },
   getters: {
     showRegisterForm_getters(state) {
       return state.showRegisterForm;

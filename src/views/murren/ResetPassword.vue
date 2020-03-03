@@ -54,10 +54,10 @@
 </template>
 
 <script>
-  import {mapActions} from 'vuex';
-  import VueRecaptcha from 'vue-recaptcha';
-  import {email, required} from 'vuelidate/lib/validators';
-  import {siteKey} from '@/devAndProdVariables';
+  import {mapActions} from 'vuex'
+  import VueRecaptcha from 'vue-recaptcha'
+  import {email, required} from 'vuelidate/lib/validators'
+  import {siteKey} from '@/devAndProdVariables'
 
   export default {
     data: () => ({
@@ -69,42 +69,65 @@
       ...mapActions({
         resetPassword: 'requestResetPassword',
         goHome: 'changeShowResetPasswordForm_actions',
+        setTimeRestriction: 'restrictedAccess/runRestriction',
+        isWaiting: 'restrictedAccess/isWaiting',
+        notification: 'popUpMessage',
       }),
       async handlerResetPassword(recaptchaToken) {
-
         if (this.$v.$invalid) {
-          this.$v.$touch();
-          return;
+          this.$v.$touch()
+          return
         }
 
-        this.loading = true;
+        if (await this.isWaiting(5 * 60)) {
+          this.notification({
+            message: 'Попробуйте попытку чуть позже',
+            type: 'warning',
+          })
+          return
+        }
 
-        const isRedirect = await this.resetPassword({
+        this.loading = true
+        const result = await this.resetPassword({
           email: this.email,
-          recaptchaToken
-        });
+          recaptchaToken,
+        })
+        this.loading = false
 
-        this.loading = false;
+        if (result.error) {
+          this.notification({
+            message: 'Ошибка на сервере',
+            type: 'error',
+          })
+          return
+        }
 
-        !isRedirect || this.goHome();
+        this.notification({
+          message: 'Вы получите письмо с востановлением данных на эту почту, ' +
+              'если она была подтверждена',
+          type: 'success',
+        })
+
+        this.goHome()
+        this.setTimeRestriction()
       },
     },
     computed: {
       validEmailRequired() {
-        return this.$v.email.$dirty && !this.$v.email.required;
+        return this.$v.email.$dirty && !this.$v.email.required
       },
       validEmailIsEmail() {
-        return this.$v.email.$dirty && !this.$v.email.email;
+        return this.$v.email.$dirty && !this.$v.email.email
       },
       validEmail() {
-        return this.validEmailRequired || this.validEmailIsEmail;
+        return this.validEmailRequired || this.validEmailIsEmail
       },
     },
     validations: {
       email: {email, required},
     },
     components: {
-      VueRecaptcha
+      VueRecaptcha,
     },
   };
 </script>

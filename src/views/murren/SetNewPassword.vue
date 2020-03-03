@@ -2,8 +2,7 @@
   <div class="main-slide-fade-container">
 
     <div class="hide__main-slide-fade-container">
-      <a href="#"
-         @click.prevent="switchSetNewPasswordForm">
+      <a href="#" @click.prevent="goHome">
         <i class="el-icon-arrow-down hide-icon__main-slide-fade-container"></i>
       </a>
     </div>
@@ -21,38 +20,38 @@
       <div :class="{'m-form__group--invalid': validPassword}" class="m-form__group">
         <label class="m-form__label">
           <input type="password" placeholder="Новый пароль" class="m-form__control"
-                 v-model.trim="murren_password_1">
+                 v-model.trim="password">
         </label>
 
         <div v-if="validPasswordRequired" class="m-form__help">
           Пароль нужен обязательно
         </div>
         <div v-if="validPasswordMinLength" class="m-form__help">
-          Пароль минимум {{ $v.murren_password_1.$params.minLength.min }} символов
+          Пароль минимум {{ $v.password.$params.minLength.min }} символов
         </div>
         <div v-else-if="validPasswordIsNumeric" class="m-form__help">
           Пароль не должен состоять только из цифр
         </div>
-        <div v-else-if="newPasswordTooCommon" class="m-form__help">
+        <div v-else-if="passwordIsTooCommon" class="m-form__help">
           Пароль слишком простой
         </div>
       </div>
       <!-- Password field end -->
 
       <!-- PasswordConfirm field begin -->
-      <div :class="{'m-form__group--invalid': validPasswordConfirm}" class="m-form__group">
+      <div :class="{'m-form__group--invalid': validPasswordRepeat}" class="m-form__group">
         <label class="m-form__label">
           <input type="password" placeholder="Повторить новый пароль" class="m-form__control"
-                 v-model.trim="murren_password_2">
+                 v-model.trim="passwordRepeat">
         </label>
 
-        <div v-if="validPasswordConfirmRequired" class="m-form__help">
+        <div v-if="validPasswordRepeatRequired" class="m-form__help">
           Пароль нужен обязательно
         </div>
-        <div v-if="validPasswordConfirmMinLength" class="m-form__help">
-          Пароль минимум {{ $v.murren_password_2.$params.minLength.min }} символов
+        <div v-else-if="validPasswordRepeatMinLength" class="m-form__help">
+          Пароль минимум {{ $v.passwordRepeat.$params.minLength.min }} символов
         </div>
-        <div v-if="!newPasswordsMatch" class="m-form__help">
+        <div v-else-if="validPasswordRepeatNoMatch" class="m-form__help">
           Пароли не совпадают
         </div>
       </div>
@@ -73,125 +72,122 @@
 </template>
 
 <script>
-  import axios from 'axios';
-  import {required, minLength, helpers} from 'vuelidate/lib/validators';
-  import VueRecaptcha from 'vue-recaptcha';
-  import {siteKey} from '@/devAndProdVariables';
+  import {mapActions} from 'vuex'
+  import VueRecaptcha from 'vue-recaptcha'
+  import {required, minLength, helpers, sameAs} from 'vuelidate/lib/validators'
+  import {siteKey} from '@/devAndProdVariables'
 
   export default {
     data: () => ({
       siteKey,
-      murren_password_1: '',
-      murren_password_2: '',
-      newPasswordsMatch: true,
-      newPasswordTooCommon: false,
+      password: '',
+      passwordRepeat: '',
+      passwordIsTooCommon: false,
       loading: false,
+      toke: null,
     }),
+    created() {
+      if (!this.$route.query.activation_code) {
+        this.notification({
+          message: 'Вы пришли без токена.', type: 'warning',
+        })
+        this.$router.push('/')
+        return
+      }
+
+      this.token = this.$route.query.activation_code
+    },
     methods: {
+      ...mapActions({
+        notification: 'popUpMessage',
+        goLogin: 'changeShowLoginForm_actions',
+      }),
       async setNewPassword(recaptchaToken) {
         if (this.$v.$invalid) {
-          this.$v.$touch();
-          return;
+          this.$v.$touch()
+          return
         }
 
-        if (this.murren_password_1 !== this.murren_password_2) {
-          this.newPasswordsMatch = false;
-          return;
-        }
-
-        this.loading = true;
-
-        const murren_email = this.$route.query.activation_code;
-
-        const formData = {
-          murren_password_1: this.murren_password_1,
-          murren_password_2: this.murren_password_2,
-          murren_email,
+        this.loading = true
+        const result = await this.$store.dispatch('setNewPassword', {
+          password: this.password,
+          passwordRepeat: this.passwordRepeat,
+          token: this.token,
           recaptchaToken,
-        };
+        })
+        this.loading = false
 
-        const murrBackResponse = await axios.post('/murren/confirm_new_password/', formData);
+        if (result.otherError || result.error) {
+          this.notification({
+            message: 'Ошибка на сервере',
+            type: 'error',
+          })
+          return
+        }
 
-        if (murrBackResponse.data.password_successfully_changed === true) {
-          const dataForPopUpMessage = {
+        if (result.passwordIsChanged) {
+          this.notification({
             message: 'Пароль успешно изменен. Добро пожаловать 😎',
             type: 'success',
-          };
-
-          this.loading = false;
-          await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
-          await this.$router.push('/');
-          await this.$store.dispatch('changeShowLoginForm_actions');
-        } else {
-          if (murrBackResponse.data.password_not_valid) {
-            if (murrBackResponse.data.password[0] === 'This password is too common.') {
-              this.newPasswordTooCommon = true;
-              this.loading = false;
-            }
-          }
-
-          if (murrBackResponse.data.error_on_backend === true) {
-            this.loading = false;
-            const dataForPopUpMessage = {
-              message: 'Кое-что пошло не так',
-              type: 'error',
-            };
-
-            await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
-          }
+          })
+          this.goHome()
+          this.goLogin()
+          return
         }
+
+        this.passwordIsTooCommon = result.passwordIsTooCommon
       },
-      async switchSetNewPasswordForm() {
-        await this.$router.push('/');
+      async goHome() {
+        await this.$router.push('/')
       },
     },
     computed: {
       validPasswordRequired() {
-        return this.$v.murren_password_1.$dirty && !this.$v.murren_password_1.required;
+        return this.$v.password.$dirty && !this.$v.password.required
       },
       validPasswordMinLength() {
-        return this.$v.murren_password_1.$dirty && !this.$v.murren_password_1.minLength;
+        return this.$v.password.$dirty && !this.$v.password.minLength
       },
       validPasswordIsNumeric() {
-        return this.$v.murren_password_1.$dirty && !this.$v.murren_password_1.is_numeric;
+        return this.$v.password.$dirty && !this.$v.password.is_numeric
       },
       validPassword() {
-        return this.validPasswordRequired || this.validPasswordMinLength || this.validPasswordIsNumeric ||
-            !this.newPasswordsMatch || this.newPasswordTooCommon;
+        return this.validPasswordRequired || this.validPasswordMinLength ||
+            this.validPasswordIsNumeric || this.passwordIsTooCommon
       },
-      validPasswordConfirmRequired() {
-        return this.$v.murren_password_2.$dirty && !this.$v.murren_password_2.required;
+      validPasswordRepeatRequired() {
+        return this.$v.passwordRepeat.$dirty && !this.$v.passwordRepeat.required
       },
-      validPasswordConfirmMinLength() {
-        return this.$v.murren_password_2.$dirty && !this.$v.murren_password_2.minLength;
+      validPasswordRepeatMinLength() {
+        return this.$v.passwordRepeat.$dirty && !this.$v.passwordRepeat.minLength
       },
-      validPasswordConfirm() {
-        return this.validPasswordConfirmRequired || this.validPasswordConfirmMinLength ||
-            !this.newPasswordsMatch || this.newPasswordTooCommon;
-      }
+      validPasswordRepeatNoMatch() {
+        return this.$v.passwordRepeat.$dirty && !this.$v.passwordRepeat.noMatch
+      },
+      validPasswordRepeat() {
+        return this.validPasswordRepeatRequired || this.validPasswordRepeatMinLength ||
+            this.validPasswordRepeatNoMatch || this.passwordIsTooCommon
+      },
     },
     watch: {
-      murren_password_1() {
-        this.newPasswordsMatch = true;
-        this.newPasswordTooCommon = false;
-      },
-      murren_password_2() {
-        this.newPasswordsMatch = true;
+      password() {
+        this.passwordIsTooCommon = false
       },
     },
     validations: {
-      murren_password_1: {
+      password: {
         required,
         minLength: minLength(6),
-        is_numeric: helpers.regex('alpha', /^(?=.*?[^0-9])/)
+        is_numeric: helpers.regex('alpha', /^(?=.*?[^0-9])/),
       },
-      murren_password_2: {
+      passwordRepeat: {
         required,
         minLength: minLength(6),
+        noMatch: sameAs('password'),
       },
     },
     components: {
       VueRecaptcha,
     },
-  };
+  }
 </script>
