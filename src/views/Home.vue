@@ -10,18 +10,20 @@
     <div>
       <p class="mb">Уже присоединились:</p>
 
-      <loader v-if="loading" />
+      <loader v-if="loading"/>
 
       <transition name="fade" mode="out-in">
         <div class="murrens-list" v-if="!loading">
           <ul>
-            <li v-for="murren in this.signUpMurrens"
+            <li v-for="murren in this.showSignUpMurrens"
                 :key="murren.id"
                 class="mb"
             >
               {{ murren.id }}. {{ murren.username }}
             </li>
           </ul>
+
+          <Observer @murrIntersect="fetchMurrenOnIntersected"/>
         </div>
       </transition>
 
@@ -30,16 +32,42 @@
 </template>
 
 <script>
+  import Observer from "@/components/common/Observer"
+
   export default {
     data: () => ({
-        loading: true,
-        signUpMurrens: []
+      loading: true,
+      showSignUpMurrens: [],
+      nextPageNumber: 1,
+      nextPageExists: null,
     }),
     async mounted() {
-      const result = await this.$store.dispatch('fetchMurrens')
-      this.signUpMurrens = result ? result.reverse() : []
+      await this.fetchMurren()
       this.loading = false
     },
+    methods: {
+      async fetchMurren(nextPageNumber = null) {
+        const {next, results} = await this.$store.dispatch('fetchMurrens', nextPageNumber)
+
+        this.showSignUpMurrens = [...this.showSignUpMurrens, ...results]
+        this.nextPageExists = next
+      },
+      async fetchMurrenOnIntersected() {
+        if (this.nextPageExists) {
+          await this.fetchMurren(this.nextPageNumber)
+        }
+      }
+    },
+    watch: {
+      nextPageExists(exists) {
+        if (exists) {
+          this.nextPageNumber++;
+        }
+      }
+    },
+    components: {
+      Observer
+    }
   }
 </script>
 
