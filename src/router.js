@@ -50,6 +50,12 @@ const router = new Router({
       meta: {layout: 'main-layout'},
       component: () => import('./views/murren/SetNewPassword.vue'),
     },
+    {
+      path: '*',
+      name: 'page_404',
+      meta: {layout: 'empty-layout'},
+      component: () => import('./views/common/Page404.vue'),
+    },
   ],
 });
 
