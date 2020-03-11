@@ -18,7 +18,7 @@ export default {
         return {
           error: true,
           accountActivated: !(e.response.data.detail ===
-              'No active account found with the given credentials'),
+            'No active account found with the given credentials'),
         }
       }
 
@@ -28,43 +28,54 @@ export default {
       }
     },
     async createMurren(_, payload) {
+      let results = {
+        murrenIsCreated: false,
+        uniqueName: false,
+        uniqueEmail: false,
+        passwordIsTooCommon: false,
+        recaptchaError: false,
+        passwordIsTooSimilarToUsername: false,
+        passwordIsTooSimilarToEmail: false,
+      }
       try {
-        let results = {
-          murrenIsCreated: false,
-          uniqueName: false,
-          uniqueEmail: false,
-          passwordIsTooCommon: false,
-          recaptchaError: false,
-        }
+        const {data} = await axios.post('/auth/users/', payload)
 
-        const {data} = await axios.post('/murren/register/', payload)
-
-        if (data.username && data.username[0] ===
-            'A user with that username already exists.') {
-          results.uniqueName = true
-        }
-
-        if (data.email && data.email[0] ===
-            'User with this Email already exists.') {
-          results.uniqueEmail = true
-        }
-
-        if (data.password && data.password[0] ===
-            'This password is too common.') {
-          results.passwordIsTooCommon = true
-        }
-
-        if (data.recaptcha_response_problem) {
-          results.recaptchaError = true
-        }
-
-        if (data.is_murren_created) {
+        if (data.email === payload.email) {
           results.murrenIsCreated = true
         }
 
         return results
       } catch (e) {
-        return {error: true, message: 'Ошибка на сервере'}
+        if (e.response.data.username && e.response.data.username[0] ===
+          'A user with that username already exists.') {
+          results.uniqueName = true
+        }
+
+        if (e.response.data.email && e.response.data.email[0] ===
+          'user with this email already exists.') {
+          results.uniqueEmail = true
+        }
+
+        if (e.response.data.password && e.response.data.password[0] ===
+          'This password is too common.') {
+          results.passwordIsTooCommon = true
+        }
+
+        if (e.response.data.password && e.response.data.password[0] ===
+          'The password is too similar to the username.') {
+          results.passwordIsTooSimilarToUsername = true
+        }
+
+        if (e.response.data.password && e.response.data.password[0] ===
+          'The password is too similar to the email.') {
+          results.passwordIsTooSimilarToEmail = true
+        }
+
+        if (e.response.data.recaptcha_response_problem) {
+          results.recaptchaError = true
+        }
+
+        return results
       }
     },
     async requestResetPassword(_, payload) {
@@ -73,50 +84,46 @@ export default {
           emailIsSent: false,
           notFoundMurren: false,
         }
-        const {data} = await axios.post('/murren/reset_password/', payload)
 
-        if (data.email_sent_successfully) {
+        const {data} = await axios.post('/auth/users/reset_password/', payload)
+
+        if (data.status === 204) {
           results.emailIsSent = true
-        }
-
-        if (data.error_on_backend && data.error_text === 'Murren matching query does not exist.') {
-          results.notFoundMurren = true
         }
 
         return results
       } catch (e) {
+
         return {error: true, message: 'Ошибка на сервере'}
       }
     },
     async setNewPassword(_, payload) {
-      try {
-        let results = {
-          passwordIsChanged: false,
-          passwordIsTooCommon: false,
-          otherError: false,
-        }
+      let results = {
+        passwordIsChanged: false,
+        passwordIsTooCommon: false,
+      }
 
-        const {data} = await axios.post('/murren/confirm_new_password/', {
-          murren_password_1: payload.password,
-          murren_password_2: payload.passwordRepeat,
-          murren_email: payload.token,
+      try {
+        const data = await axios.post('/auth/users/reset_password_confirm/', {
+          uid: payload.uid,
+          token: payload.token,
+          new_password: payload.password,
+          re_new_password: payload.passwordRepeat,
           recaptchaToken: payload.recaptchaToken,
         })
 
-        if (data.password_successfully_changed) {
+        if (data.status === 204) {
           results.passwordIsChanged = true
-        }
-
-        if (data.password && data.password[0] === 'This password is too common.') {
-          results.passwordIsTooCommon = true
-        }
-
-        if (data.error_on_backend) {
-          results.otherError = true
         }
 
         return results
       } catch (e) {
+
+        if (e.response.data.new_password && e.response.data.new_password[0] ===
+          'This password is too common.') {
+          results.passwordIsTooCommon = true
+          return results
+        }
         return {error: true, message: 'Ошибка на сервере'}
       }
     },
@@ -127,16 +134,13 @@ export default {
           otherError: false
         }
 
-        const {data} = await axios.post('/murren/activation/', {
-          murren_email: payload.token
+        const data = await axios.post('/auth/users/activation/', {
+          uid: payload.uid,
+          token: payload.token
         })
 
-        if (data.murren_is_active) {
+        if (data.status === 204) {
           results.isActivated = true
-        }
-
-        if (data.error_on_backend) {
-          results.otherError = true
         }
 
         return results

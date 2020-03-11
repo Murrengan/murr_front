@@ -74,7 +74,7 @@
 <script>
   import {mapActions} from 'vuex'
   import VueRecaptcha from 'vue-recaptcha'
-  import {required, minLength, helpers, sameAs} from 'vuelidate/lib/validators'
+  import {helpers, minLength, required, sameAs} from 'vuelidate/lib/validators'
   import {siteKey} from '@/devAndProdVariables'
 
   export default {
@@ -84,18 +84,24 @@
       passwordRepeat: '',
       passwordIsTooCommon: false,
       loading: false,
-      toke: null,
+      token: null,
+      uid: null
     }),
     created() {
-      if (!this.$route.query.activation_code) {
+
+      let uid = this.$route.query.murr_code.split('___')[1]
+      let token = this.$route.query.murr_code.split('___')[2]
+
+      if (!uid || !token) {
         this.notification({
-          message: 'Вы пришли без токена.', type: 'warning',
+          message: 'Нужны секретные данные!', type: 'warning',
         })
         this.$router.push('/')
         return
       }
 
-      this.token = this.$route.query.activation_code
+      this.uid = uid
+      this.token = token
     },
     methods: {
       ...mapActions({
@@ -107,17 +113,19 @@
           this.$v.$touch()
           return
         }
+        this.$refs.invisibleRecaptcha.reset()
 
         this.loading = true
         const result = await this.$store.dispatch('setNewPassword', {
           password: this.password,
           passwordRepeat: this.passwordRepeat,
           token: this.token,
+          uid: this.uid,
           recaptchaToken,
         })
         this.loading = false
 
-        if (result.otherError || result.error) {
+        if (result.error) {
           this.notification({
             message: 'Ошибка на сервере',
             type: 'error',
@@ -153,7 +161,7 @@
       },
       validPassword() {
         return this.validPasswordRequired || this.validPasswordMinLength ||
-            this.validPasswordIsNumeric || this.passwordIsTooCommon
+          this.validPasswordIsNumeric || this.passwordIsTooCommon
       },
       validPasswordRepeatRequired() {
         return this.$v.passwordRepeat.$dirty && !this.$v.passwordRepeat.required
@@ -166,7 +174,7 @@
       },
       validPasswordRepeat() {
         return this.validPasswordRepeatRequired || this.validPasswordRepeatMinLength ||
-            this.validPasswordRepeatNoMatch || this.passwordIsTooCommon
+          this.validPasswordRepeatNoMatch || this.passwordIsTooCommon
       },
     },
     watch: {

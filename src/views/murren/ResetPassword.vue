@@ -79,6 +79,8 @@
           return
         }
 
+        this.$refs.invisibleRecaptcha.reset()
+
         if (await this.isWaiting(5 * 60)) {
           this.notification({
             message: 'Попробуйте попытку чуть позже',
@@ -104,7 +106,7 @@
 
         this.notification({
           message: 'Вы получите письмо с востановлением данных на эту почту, ' +
-              'если она была подтверждена',
+            'если она была подтверждена',
           type: 'success',
         })
 

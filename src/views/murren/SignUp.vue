@@ -81,6 +81,12 @@
         <div v-else-if="passwordIsTooCommon" class="m-form__help">
           Пароль слишком простой
         </div>
+        <div v-else-if="passwordIsTooSimilarToUsername" class="m-form__help">
+          Пароль слишком похож на имя
+        </div>
+        <div v-else-if="passwordIsTooSimilarToEmail" class="m-form__help">
+          Пароль слишком похож на почту
+        </div>
       </div>
       <!-- Password field end -->
 
@@ -117,6 +123,8 @@
       uniqueEmail: false,
       uniqueName: false,
       passwordIsTooCommon: false,
+      passwordIsTooSimilarToUsername: false,
+      passwordIsTooSimilarToEmail: false,
       loading: false,
     }),
     methods: {
@@ -124,12 +132,15 @@
         createMurren: 'createMurren',
         notification: 'popUpMessage',
         goHome: 'changeShownSignUpForm_actions',
+        showCheckEmail: 'changeCheckEmail_actions',
       }),
       async signUp(recaptchaToken) {
         if (this.$v.$invalid) {
           this.$v.$touch()
           return
         }
+
+        this.$refs.invisibleRecaptcha.reset()
 
         this.loading = true
         const result = await this.createMurren({
@@ -154,12 +165,15 @@
             type: 'success',
           })
           this.goHome()
+          this.showCheckEmail()
           return
         }
 
         this.uniqueName = result.uniqueName
         this.uniqueEmail = result.uniqueEmail
         this.passwordIsTooCommon = result.passwordIsTooCommon
+        this.passwordIsTooSimilarToUsername = result.passwordIsTooSimilarToUsername
+        this.passwordIsTooSimilarToEmail = result.passwordIsTooSimilarToEmail
       },
     },
     computed: {
@@ -192,7 +206,7 @@
       },
       validPassword() {
         return this.validPasswordRequired || this.validPasswordMinLength || this.validPasswordIsNumeric ||
-            this.passwordIsTooCommon
+          this.passwordIsTooCommon || this.passwordIsTooSimilarToUsername || this.passwordIsTooSimilarToEmail
       },
     },
     watch: {
