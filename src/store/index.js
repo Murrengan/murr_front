@@ -50,9 +50,16 @@ export default new Vuex.Store({
     async changeShowResetPasswordForm_actions(context) {
       context.commit('changeShowResetPasswordForm_mutations');
     },
-    async fetchMurrens() {
+
+    async fetchMurrens(_, page = null) {
       try {
-        const {data} = await axios.get('/murren/all/')
+        let url = '/murren/all/'
+
+        if (page) {
+          url += `?page=${page}`
+        }
+
+        const {data} = await axios.get(url)
         return data
       } catch (error) {
         return {error: true, message: 'Ошибка на сервере'}
