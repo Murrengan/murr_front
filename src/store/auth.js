@@ -38,9 +38,9 @@ export default {
         passwordIsTooSimilarToEmail: false,
       }
       try {
-        const {data} = await axios.post('/auth/users/', payload)
+        const {status} = await axios.post('/auth/users/', payload)
 
-        if (data.email === payload.email) {
+        if (status === 201) {
           results.murrenIsCreated = true
         }
 
@@ -85,9 +85,9 @@ export default {
           notFoundMurren: false,
         }
 
-        const {data} = await axios.post('/auth/users/reset_password/', payload)
+        const {status} = await axios.post('/auth/users/reset_password/', payload)
 
-        if (data.status === 204) {
+        if (status === 204) {
           results.emailIsSent = true
         }
 
