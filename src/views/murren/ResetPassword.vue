@@ -74,12 +74,13 @@
         notification: 'popUpMessage',
       }),
       async handlerResetPassword(recaptchaToken) {
+
+        this.$refs.invisibleRecaptcha.reset()
+
         if (this.$v.$invalid) {
           this.$v.$touch()
           return
         }
-
-        this.$refs.invisibleRecaptcha.reset()
 
         if (await this.isWaiting(5 * 60)) {
           this.notification({

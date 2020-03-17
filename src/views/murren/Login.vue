@@ -110,12 +110,13 @@
         this.goSignUp();
       },
       async handlerLogin(recaptchaToken) {
+
+        this.$refs.invisibleRecaptcha.reset()
+
         if (this.$v.$invalid) {
           this.$v.$touch();
           return;
         }
-
-        this.$refs.invisibleRecaptcha.reset()
 
         this.loading = true;
 

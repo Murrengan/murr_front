@@ -109,11 +109,13 @@
         goLogin: 'changeShowLoginForm_actions',
       }),
       async setNewPassword(recaptchaToken) {
+
+        this.$refs.invisibleRecaptcha.reset()
+
         if (this.$v.$invalid) {
           this.$v.$touch()
           return
         }
-        this.$refs.invisibleRecaptcha.reset()
 
         this.loading = true
         const result = await this.$store.dispatch('setNewPassword', {
