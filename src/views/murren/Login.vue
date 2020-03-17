@@ -115,6 +115,8 @@
           return;
         }
 
+        this.$refs.invisibleRecaptcha.reset()
+
         this.loading = true;
 
         const result = await this.createToken({

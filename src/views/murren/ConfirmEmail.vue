@@ -25,19 +25,20 @@
 
   export default {
     async created() {
-      const token = this.$route.query.activation_code
+      let uid = this.$route.query.murr_code.split('___')[1]
+      let token = this.$route.query.murr_code.split('___')[2]
 
-      if (!token) {
+      if (!uid || !token) {
         this.notification({
-          message: 'Вы пришли без токена.', type: 'warning',
+          message: 'Нужны секретные данные!', type: 'warning',
         })
         await this.$router.push('/')
         return
       }
 
-      const result = await this.$store.dispatch('mailConfirmation', {token})
+      const result = await this.$store.dispatch('mailConfirmation', {uid, token})
 
-      if (result.otherError || result.error) {
+      if (result.error) {
         this.notification({
           message: 'Ошибка на сервере',
           type: 'error',
