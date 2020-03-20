@@ -33,12 +33,6 @@ const router = new Router({
       component: () => import('./views/murren/Murren.vue'),
     },
     {
-      path: '/check_email',
-      name: 'check_email',
-      meta: {layout: 'main-layout'},
-      component: () => import('./views/murren/CheckEmail.vue'),
-    },
-    {
       path: '/murren_email_activate',
       name: 'murren_email_activate',
       meta: {layout: 'main-layout'},
