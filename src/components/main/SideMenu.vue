@@ -30,7 +30,7 @@
         <a class="link mb" href="https://www.youtube.com/murrengan">Ютюб</a>
         <a class="link mb" href="https://vk.com/murrengan">Контач</a>
 
-        <small>0.0.12v</small>
+        <small>0.0.12b</small>
 
       </div>
 

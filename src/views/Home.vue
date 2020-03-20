@@ -1,13 +1,13 @@
 <template>
   <div class="home-main-container">
 
-    <h2 class="mb">Мурренган — это группа людей,<br> объединенная для достижения цели.</h2>
+    <h2 class="mb">Сайт Мурренган — опенсорс</h2>
 
-    <p class="mb">Это опенсор сайт. Хочешь получить опыт разработки?</p>
+    <p class="mb">Хочешь получить опыт программирования и веб-разработки?</p>
 
     <h1 class="mb">Присоединяйся!</h1>
 
-    <div>
+    <div class="mb">
       <p class="mb">Уже присоединились:</p>
 
       <loader v-if="loading"/>
@@ -28,6 +28,9 @@
       </transition>
 
     </div>
+
+    <p>И пиши в телегу - <a class="link mb" href="https://tlgg.ru/MurrenganChat">Телеграм</a></p>
+
   </div>
 </template>
 

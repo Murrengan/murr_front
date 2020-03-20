@@ -14,7 +14,6 @@ export default new Vuex.Store({
     showRegisterForm: false,
     showRightSideMenu: false,
     showLoginForm: false,
-    showCheckEmail: false,
     showResetPasswordForm: false,
   },
   mutations: {
@@ -26,9 +25,6 @@ export default new Vuex.Store({
     },
     changeShowLoginForm_mutations(state) {
       state.showLoginForm = !state.showLoginForm;
-    },
-    changeCheckEmail_mutations(state) {
-      state.showCheckEmail = !state.showCheckEmail;
     },
     changeShowResetPasswordForm_mutations(state) {
       state.showResetPasswordForm = !state.showResetPasswordForm;
@@ -43,9 +39,6 @@ export default new Vuex.Store({
     },
     async changeShowLoginForm_actions(context) {
       context.commit('changeShowLoginForm_mutations');
-    },
-    async changeCheckEmail_actions(context) {
-      context.commit('changeCheckEmail_mutations');
     },
     async changeShowResetPasswordForm_actions(context) {
       context.commit('changeShowResetPasswordForm_mutations');
@@ -86,9 +79,6 @@ export default new Vuex.Store({
     },
     showLoginForm_getters(state) {
       return state.showLoginForm;
-    },
-    showCheckEmail_getters(state) {
-      return state.showCheckEmail;
     },
     showResetPasswordForm_getters(state) {
       return state.showResetPasswordForm;

@@ -32,13 +32,6 @@
     <transition
         name="slide-fade-y"
         mode="out-in">
-      <CheckEmail
-          v-if="this.$store.getters.showCheckEmail_getters"/>
-    </transition>
-
-    <transition
-        name="slide-fade-y"
-        mode="out-in">
       <ResetPassword
           v-if="this.$store.getters.showResetPasswordForm_getters"/>
     </transition>
@@ -52,7 +45,6 @@
     import TopNavbar from '@/components/main/TopNavbar'
     import SignUp from "@/views/murren/SignUp";
     import Login from "@/views/murren/Login";
-    import CheckEmail from "@/views/murren/CheckEmail";
     import ResetPassword from "@/views/murren/ResetPassword";
 
     export default {
@@ -63,7 +55,6 @@
             TopNavbar,
             SignUp,
             Login,
-            CheckEmail,
             ResetPassword
         }
     }

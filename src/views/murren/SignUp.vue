@@ -132,7 +132,6 @@
         createMurren: 'createMurren',
         notification: 'popUpMessage',
         goHome: 'changeShownSignUpForm_actions',
-        showCheckEmail: 'changeCheckEmail_actions',
       }),
       async signUp(recaptchaToken) {
 
@@ -166,7 +165,6 @@
             type: 'success',
           })
           this.goHome()
-          this.showCheckEmail()
           return
         }
 
