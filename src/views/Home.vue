@@ -1,36 +1,32 @@
 <template>
   <div class="home-main-container">
 
-    <h2 class="mb">Сайт Мурренган — опенсорс</h2>
+    <h1 class="mb">may the force be with you</h1>
 
-    <p class="mb">Хочешь получить опыт программирования и веб-разработки?</p>
+    <loader v-if="loading"/>
 
-    <h1 class="mb">Присоединяйся!</h1>
+    <div class="container"
+         v-if="!loading">
 
-    <div class="mb">
-      <p class="mb">Уже присоединились:</p>
+      <masonry :cols="{default: 4, 1300: 3, 1000: 2, 700: 1}"
+               :gutter="{default: '30px', 700: '15px'}">
 
-      <loader v-if="loading"/>
+        <div v-for="murr in this.showMurrCards"
+             :key="murr.id"
+             class="murr-card mb2 pointer"
+             @click="openMurr(murr.id)">
 
-      <transition name="fade" mode="out-in">
-        <div class="murrens-list" v-if="!loading">
-          <ul>
-            <li v-for="murren in this.showSignUpMurrens"
-                :key="murren.id"
-                class="mb"
-            >
-              {{ murren.id }}. {{ murren.username }}
-            </li>
-          </ul>
+          <img v-if="murr.cover"
+               :src="murr.cover"
+               class="murr-cover">
 
-          <Observer @murrIntersect="fetchMurrenOnIntersected"/>
+          <p class="murr-card__description"> {{ murr.title }} </p>
         </div>
-      </transition>
 
+        <Observer @murrIntersect="fetchMurrCardsOnIntersected"/>
+
+      </masonry>
     </div>
-
-    <p>И пиши в телегу - <a class="link mb" href="https://tlgg.ru/MurrenganChat">Телеграм</a></p>
-
   </div>
 </template>
 
@@ -41,25 +37,37 @@
     data: () => ({
       loading: true,
       showSignUpMurrens: [],
+      showMurrCards: [],
       nextPageNumber: 1,
       nextPageExists: null,
+      murrCover: '',
+      murrTitle: '',
+      murrCards: ''
     }),
     async mounted() {
-      await this.fetchMurren()
+
+      await this.fetchMurrCard()
       this.loading = false
     },
     methods: {
-      async fetchMurren(nextPageNumber = null) {
-        const {next, results} = await this.$store.dispatch('fetchMurrens', nextPageNumber)
 
-        this.showSignUpMurrens = [...this.showSignUpMurrens, ...results]
+      async fetchMurrCardsOnIntersected() {
+
+        if (this.nextPageExists) {
+          await this.fetchMurrCard(this.nextPageNumber)
+        }
+      },
+      async fetchMurrCard(nextPageNumber = null) {
+
+        const {next, results} = await this.$store.dispatch('fetchMurrCards_actions', nextPageNumber)
+        this.showMurrCards = [...this.showMurrCards, ...results]
         this.nextPageExists = next
       },
-      async fetchMurrenOnIntersected() {
-        if (this.nextPageExists) {
-          await this.fetchMurren(this.nextPageNumber)
-        }
+
+      openMurr(murr_id) {
+        this.$router.push({path: `/murr_card/?murr_id=${murr_id}`})
       }
+
     },
     watch: {
       nextPageExists(exists) {
@@ -75,22 +83,26 @@
 </script>
 
 <style scoped>
-  .murrens-list {
-    width: 300px;
-    max-height: 40vh;
-    overflow: auto;
-    border: #AD00FF 1px solid;
-    border-radius: 5px;
-    padding-top: 1rem;
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+  }
+
+  .murr-cover {
+    width: 100%;
   }
 
   .home-main-container {
-    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 0 15px 5px;
+    padding: 0 15px;
     background-color: #1a2931;
   }
+
 </style>

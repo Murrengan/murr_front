@@ -6,21 +6,43 @@
         active-class="bottom_icon-active"
         class="bottom_icon"
         to="/">
-      <i class="el-icon-picture-outline-round"></i>
+      <i class="el-icon-view"></i>
     </router-link>
+
+    <span
+        class="bottom_icon pointer"
+        @click="openCreateMurr">
+      <i class="el-icon-edit-outline"></i>
+    </span>
 
     <router-link
         active-class="bottom_icon-active"
         class="bottom_icon"
         to="/murren">
-      <i class="el-icon-edit-outline"></i>
+      <i class="el-icon-picture-outline-round"></i>
     </router-link>
 
   </div>
 </template>
 
 <script>
-
+  export default {
+    methods: {
+      async openCreateMurr() {
+        if (this.$store.getters.accessToken_getters) {
+          await this.$store.dispatch('changeShowCreateMurr_actions')
+        } else {
+          const dataForPopUpMessage = {
+            message: 'Для создания мурра ребуется авторизация 😳',
+            customClass: 'element-ui-message__error',
+            type: 'warning'
+          };
+          await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
+          await this.$store.dispatch('changeShowLoginForm_actions');
+        }
+      }
+    }
+  }
 </script>
 
 <style scoped>

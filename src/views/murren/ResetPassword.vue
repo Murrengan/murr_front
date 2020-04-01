@@ -8,7 +8,7 @@
     </div>
 
     <div>
-      <img src="@/assets/img/logo_in_circle.png" alt="Logo" class="murrengan-logo mb">
+      <img src="@/assets/img/logo_pink.png" alt="Logo" class="murrengan-logo mb">
     </div>
 
     <h1 class="mb">Восстановить пароль</h1>
@@ -19,7 +19,7 @@
       <!-- Email field begin -->
       <div :class="{'m-form__group--invalid': validEmail}" class="m-form__group">
         <label class="m-form__label">
-          <input type="text" placeholder="Почта" class="m-form__control"
+          <input type="text" placeholder="Почта" class="m-form__control auth-input"
                  v-model.trim="email">
 
           <span v-if="validEmail && email.length"

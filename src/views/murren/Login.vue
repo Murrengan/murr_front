@@ -8,7 +8,7 @@
     </div>
 
     <div>
-      <img src="@/assets/img/logo_in_circle.png" alt="circle_logo" class="murrengan-logo mb">
+      <img src="@/assets/img/logo_pink.png" alt="circle_logo" class="murrengan-logo mb">
     </div>
 
     <h1 class="mb">Войти</h1>
@@ -19,7 +19,7 @@
       <!-- Username field begin -->
       <div :class="{'m-form__group--invalid': validUserName}" class="m-form__group">
         <label class="m-form__label">
-          <input type="text" placeholder="Имя в Мурренган" class="m-form__control"
+          <input type="text" placeholder="Имя в Мурренган" class="m-form__control auth-input"
                  v-model.trim="murren_username">
 
           <span v-if="validUserName && murren_username.length"
@@ -42,7 +42,7 @@
       <!-- Password field begin -->
       <div :class="{'m-form__group--invalid': validPassword}" class="m-form__group">
         <label class="m-form__label">
-          <input type="password" placeholder="Пароль" class="m-form__control"
+          <input type="password" placeholder="Пароль" class="m-form__control auth-input"
                  v-model.trim="murren_password">
         </label>
 
@@ -56,13 +56,13 @@
       <!-- Password field end -->
 
       <div class="m-form__group">
-        <a href="#" @click.prevent="handlerGoSignUp">
+        <a href="#" class="hide-a-decoration" @click.prevent="handlerGoSignUp">
           <small class="link">РЕГИСТРАЦИЯ</small>
         </a>
 
         <span> / </span>
 
-        <a href="#" @click.prevent="handlerGoResetPassword">
+        <a href="#" class="hide-a-decoration" @click.prevent="handlerGoResetPassword">
           <small class="link">ВОССТАНОВИТЬ ПАРОЛЬ</small>
         </a>
       </div>
@@ -82,7 +82,7 @@
 
 <script>
   import {mapActions} from "vuex"
-  import {required, maxLength, minLength} from 'vuelidate/lib/validators';
+  import {maxLength, minLength, required} from 'vuelidate/lib/validators';
   import VueRecaptcha from 'vue-recaptcha';
   import {siteKey} from '@/devAndProdVariables';
 
@@ -130,10 +130,18 @@
         this.accountActivated = result.accountActivated;
 
         if (!result.error) {
+
+          const dataForPopUpMessage = {
+            message: this.murren_username + ', добро пожаловать 😘',
+            customClass: 'element-ui-message__success',
+            type: 'success'
+          };
+          await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
+
           this.murren_username = '';
           this.murren_password = '';
+
           this.goHome();
-          await this.$router.push('/murren');
         }
       },
     },

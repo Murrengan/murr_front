@@ -8,7 +8,7 @@
     </div>
 
     <div>
-      <img src="@/assets/img/logo_in_circle.png" alt="circle_logo" class="murrengan-logo mb">
+      <img src="@/assets/img/logo_pink.png" alt="circle_logo" class="murrengan-logo mb">
     </div>
 
     <h1 class="mb">Новый пароль</h1>
@@ -19,7 +19,7 @@
       <!-- Password field begin -->
       <div :class="{'m-form__group--invalid': validPassword}" class="m-form__group">
         <label class="m-form__label">
-          <input type="password" placeholder="Новый пароль" class="m-form__control"
+          <input type="password" placeholder="Новый пароль" class="m-form__control auth-input"
                  v-model.trim="password">
         </label>
 
@@ -41,7 +41,7 @@
       <!-- PasswordConfirm field begin -->
       <div :class="{'m-form__group--invalid': validPasswordRepeat}" class="m-form__group">
         <label class="m-form__label">
-          <input type="password" placeholder="Повторить новый пароль" class="m-form__control"
+          <input type="password" placeholder="Повторить новый пароль" class="m-form__control auth-input"
                  v-model.trim="passwordRepeat">
         </label>
 
