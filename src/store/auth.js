@@ -8,7 +8,7 @@ export default {
   actions: {
     async createToken({commit}, payload) {
       try {
-        const {data} = await axios.post('/murren/token_create/', payload)
+        const {data} = await axios.post('/api/murren/token_create/', payload)
 
         if (data.access) {
           commit('setAccessToken_mutations', data.access)

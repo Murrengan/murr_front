@@ -9,10 +9,12 @@
           единомышленников и других штук</p>
         <div class="login-signup-bottom-div">
           <el-button class="murr-button"
-                     @click="openLoginFormFromSideMenu">Вход
+                     @click="openLoginFormFromSideMenu">
+            Вход
           </el-button>
           <el-button class="murr-button__primary"
-                     @click="openSignUpFromSideMenu">Регистрация
+                     @click="openSignUpFromSideMenu">
+            Регистрация
           </el-button>
         </div>
       </div>
@@ -26,15 +28,19 @@
 
       <div class="bottom-info">
 
-        <a class="link mb" href="https://tlgg.ru/MurrenganChat">Телеграм</a>
-        <a class="link mb" href="https://www.youtube.com/murrengan">Ютюб</a>
-        <a class="link mb" href="https://vk.com/murrengan">Контач</a>
+        <span class="mb link pointer"
+              @click="goToAboutPage">
+          О проекте</span>
 
-        <small>0.0.12b</small>
+        <small class="mb">v0.0.13</small>
 
+        <el-button
+            v-if="this.$store.getters.accessToken_getters"
+            class="murr-button__danger"
+            @click="logout">
+          Выйти
+        </el-button>
       </div>
-
-
     </div>
 
     <a href="#"
@@ -47,26 +53,42 @@
 
 <script>
 
-    export default {
+  export default {
 
-        methods: {
+    methods: {
+      async logout() {
 
-            switchRightSideMenu() {
-                this.$store.dispatch('changeShowRightSideMenu_actions')
-            },
-            openSignUpFromSideMenu() {
+        const dataForPopUpMessage = {
+          message: 'Ты разлогинился 😱',
+          customClass: 'element-ui-message__success',
+          type: 'success'
+        };
 
-                this.$store.dispatch('changeShowRightSideMenu_actions');
-                this.$store.dispatch('changeShownSignUpForm_actions')
-            },
-            openLoginFormFromSideMenu() {
+        await this.$store.dispatch('changeShowRightSideMenu_actions');
+        await this.$router.push('/');
+        await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
+        await this.$store.dispatch('logout');
+      },
 
-                this.$store.dispatch('changeShowRightSideMenu_actions');
-                this.$store.dispatch('changeShowLoginForm_actions');
+      switchRightSideMenu() {
+        this.$store.dispatch('changeShowRightSideMenu_actions')
+      },
+      openSignUpFromSideMenu() {
 
-            }
-        }
+        this.$store.dispatch('changeShowRightSideMenu_actions');
+        this.$store.dispatch('changeShownSignUpForm_actions')
+      },
+      openLoginFormFromSideMenu() {
+
+        this.$store.dispatch('changeShowRightSideMenu_actions');
+        this.$store.dispatch('changeShowLoginForm_actions');
+      },
+      goToAboutPage() {
+        this.$store.dispatch('changeShowRightSideMenu_actions')
+        this.$router.push('/about')
+      }
     }
+  }
 </script>
 
 <style scoped>
@@ -78,7 +100,6 @@
     display: flex;
     flex-direction: column;
   }
-
 
   .side-menu-for-logged-in-murren {
     max-width: 300px;
