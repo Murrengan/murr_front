@@ -7,7 +7,7 @@
     outline: none;
 }
 
-input {
+.auth-input {
     min-width: 300px;
     background-color: transparent;
     border: solid 3px #AD00FF;
@@ -23,8 +23,12 @@ ul {
     list-style-type: none;
 }
 
-a {
+.hide-a-decoration {
     text-decoration: none;
+}
+
+.pointer:hover {
+    cursor: pointer;
 }
 
 .grecaptcha-badge {
@@ -35,12 +39,28 @@ a {
     margin-bottom: 1rem;
 }
 
+.mb-half {
+    margin-bottom: 0.4rem;
+}
+
+.mb2 {
+    margin-bottom: 2rem;
+}
+
 .mr {
     margin-right: 1rem;
 }
 
+.text-center {
+    text-align: center;
+}
+
 .fs {
     font-size: 1.2rem;
+}
+
+.fs2 {
+    font-size: 1.4rem;
 }
 
 .error-text {
@@ -52,6 +72,16 @@ a {
 .invalid_field {
     border: orangered 3px solid;
     background-color: #680013;
+}
+
+.main-layout-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 15px 5px;
+    background-color: #1a2931;
 }
 
 
@@ -119,6 +149,46 @@ a {
     background-color: #EE4266;
 }
 
+.murr-button__success {
+    background-color: #61E294;
+}
+
+.murr-button__success > i {
+    color: white;
+}
+
+.murr-button__success > span {
+    color: white;
+}
+
+.murr-button__success:hover {
+    background-color: #53cb89;
+}
+
+.murr-button__success:active, .murr-button__success:focus {
+    background-color: #53efa9;
+}
+
+
+.murr-button__dark {
+    background-color: #071013;
+}
+
+.murr-button__dark > i {
+    color: white;
+}
+
+.murr-button__dark > span {
+    color: white;
+}
+
+.murr-button__dark:hover {
+    background-color: #0d2429;
+}
+
+.murr-button__dark:active, .murr-button__dark:focus {
+    background-color: #16333d;
+}
 
 .link {
     color: #69A2FF;
@@ -144,6 +214,7 @@ a {
     background-color: #430000;
     border-color: #f56c6c;
 }
+
 .murr-notification.murr-notification-error .el-message__content,
 .murr-notification.murr-notification-error .el-message__closeBtn,
 .murr-notification.murr-notification-error .el-message__icon {
@@ -155,6 +226,7 @@ a {
     background-color: #434300;
     border-color: #ffe88f;
 }
+
 .murr-notification.murr-notification-warning .el-message__content,
 .murr-notification.murr-notification-warning .el-message__closeBtn,
 .murr-notification.murr-notification-warning .el-message__icon {
@@ -166,6 +238,7 @@ a {
     background-color: #004300;
     border-color: #67C23A;
 }
+
 .murr-notification.murr-notification-success .el-message__content,
 .murr-notification.murr-notification-success .el-message__closeBtn,
 .murr-notification.murr-notification-success .el-message__icon {
@@ -175,12 +248,15 @@ a {
 .murr-notification.murr-notification-left .el-message__content {
     text-align: left;
 }
+
 .murr-notification.murr-notification-center .el-message__content {
     text-align: center;
 }
+
 .murr-notification.murr-notification-right .el-message__content {
     text-align: right;
 }
+
 .murr-notification.murr-notification-justify .el-message__content {
     text-align: justify;
 }
@@ -194,15 +270,52 @@ body, * {
 
 ::-webkit-scrollbar-track {
     opacity: 1;
+    background-color: black;
 }
 
 ::-webkit-scrollbar-thumb {
     -webkit-border-radius: 0;
-    border-radius: 0;
+    border-radius: 2px;
     background-color: #AD00FF;
 }
 
 ::-webkit-scrollbar {
     width: 5px;
     height: 5px;
+}
+
+/* MurrCard */
+
+.murr-card {
+
+    padding: 2px;
+    width: 100%;
+    max-width: 320px;
+    max-height: 350px;
+    background-color: #C3A1FF;
+    border-radius: 5px;
+    transition: 0.5s;
+
+}
+
+.murr-card:hover {
+    box-shadow: -2px -2px 30px 2px #AD00FF, 2px 2px 30px 2px blue;
+    transition: 0.2s;
+    transform: scale(1.01);
+}
+
+.murr-card__description {
+    color: #1a2931;
+    font-weight: bold;
+    word-break: break-word;
+    padding: 3px 5px 5px;
+}
+
+.el-popover{
+    background-color: #263b47 !important;
+    border: #AD00FF 1px solid !important;
+}
+
+.popper__arrow::after{
+    border-bottom-color: #AD00FF !important;
 }

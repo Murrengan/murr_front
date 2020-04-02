@@ -20,12 +20,9 @@
         name="slide-fade-x"
         mode="out-in">
 
-      <SideMenu
-          v-if="this.$store.getters.showRightSideMenu_getters"
-      />
+      <SideMenu v-if="this.$store.getters.showRightSideMenu_getters"/>
 
     </transition>
-
 
   </div>
 </template>
@@ -40,9 +37,7 @@
         data: () => ({
             show_showRightSideMenu: false,
         }),
-
         methods: {
-
             showRightSideMenu() {
                 this.$store.dispatch('changeShowRightSideMenu_actions');
             }
@@ -56,8 +51,6 @@
     height: 50px;
     position: fixed;
     width: 100%;
-    z-index: 1;
-    top: 0;
     background-color: #1a2931;
     border-bottom: 1px solid #AD00FF;
   }
@@ -81,6 +74,5 @@
     font-size: 30px;
     opacity: 0.8;
   }
-
 
 </style>

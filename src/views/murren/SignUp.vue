@@ -8,7 +8,7 @@
     </div>
 
     <div>
-      <img src="@/assets/img/logo_in_circle.png" alt="circle_logo" class="murrengan-logo mb">
+      <img src="@/assets/img/logo_pink.png" alt="circle_logo" class="murrengan-logo mb">
     </div>
 
     <h1 class="mb">Создать аккаунт</h1>
@@ -19,7 +19,7 @@
       <!-- Email field begin -->
       <div :class="{'m-form__group--invalid': validEmail}" class="m-form__group">
         <label class="m-form__label">
-          <input type="text" placeholder="Почта" class="m-form__control"
+          <input type="text" placeholder="Почта" class="m-form__control auth-input"
                  v-model.trim="email">
 
           <span v-if="validEmail && email.length"
@@ -42,7 +42,7 @@
       <!-- Username field begin -->
       <div :class="{'m-form__group--invalid': validUserName}" class="m-form__group">
         <label class="m-form__label">
-          <input type="text" placeholder="Имя в Мурренган" class="m-form__control"
+          <input type="text" placeholder="Имя в Мурренган" class="m-form__control auth-input"
                  v-model.trim="username">
 
           <span v-if="validUserName && username.length"
@@ -56,6 +56,12 @@
         <div v-if="uniqueName" class="m-form__help">
           Это имя уже используется
         </div>
+
+        <!--        <div v-if="" class="m-form__help">-->
+        <div v-if="validMurrenNameAlphaValidator" class="m-form__help">
+          Имя на латинице и вместо пробелов _
+        </div>
+
         <div v-if="validUserNameMaxLength" class="m-form__help">
           Имя максимум {{ $v.username.$params.maxLength.max }} символов
         </div>
@@ -65,7 +71,7 @@
       <!-- Password field begin -->
       <div :class="{'m-form__group--invalid': validPassword}" class="m-form__group">
         <label class="m-form__label">
-          <input type="password" placeholder="Пароль" class="m-form__control"
+          <input type="password" placeholder="Пароль" class="m-form__control auth-input"
                  v-model.trim="password">
         </label>
 
@@ -92,7 +98,12 @@
 
       <div class="m-form__group">
         <small>
-          Регистрирация подтверждает, что ты согласен с нашими <a href="#" class="link">правилами</a>
+          Регистрирация подтверждает, что ты согласен с нашими
+          <span
+              class="link pointer"
+              @click="goToAboutPage">
+            правилами
+          </span>
         </small>
       </div>
 
@@ -111,8 +122,10 @@
 <script>
   import {mapActions} from 'vuex'
   import VueRecaptcha from 'vue-recaptcha';
-  import {email, required, maxLength, minLength, helpers} from 'vuelidate/lib/validators';
+  import {email, helpers, maxLength, minLength, required} from 'vuelidate/lib/validators';
   import {siteKey} from '@/devAndProdVariables';
+
+  const murrenNameAlphaValidator = helpers.regex('murrenNameAlphaValidator', /^[\d\w]*$/);
 
   export default {
     data: () => ({
@@ -132,7 +145,6 @@
         createMurren: 'createMurren',
         notification: 'popUpMessage',
         goHome: 'changeShownSignUpForm_actions',
-        showCheckEmail: 'changeCheckEmail_actions',
       }),
       async signUp(recaptchaToken) {
 
@@ -166,7 +178,6 @@
             type: 'success',
           })
           this.goHome()
-          this.showCheckEmail()
           return
         }
 
@@ -176,6 +187,12 @@
         this.passwordIsTooSimilarToUsername = result.passwordIsTooSimilarToUsername
         this.passwordIsTooSimilarToEmail = result.passwordIsTooSimilarToEmail
       },
+
+      async goToAboutPage() {
+
+        await this.$store.dispatch('changeShownSignUpForm_actions');
+        await this.$router.push('/about')
+      }
     },
     computed: {
       validEmailRequired() {
@@ -193,8 +210,11 @@
       validUserNameMaxLength() {
         return this.$v.username.$dirty && !this.$v.username.maxLength;
       },
+      validMurrenNameAlphaValidator() {
+        return this.$v.username.$dirty && !this.$v.username.murrenNameAlphaValidator
+      },
       validUserName() {
-        return this.validUserNameRequired || this.validUserNameMaxLength || this.uniqueName
+        return this.validUserNameRequired || this.validUserNameMaxLength || this.uniqueName || this.validMurrenNameAlphaValidator
       },
       validPasswordRequired() {
         return this.$v.password.$dirty && !this.$v.password.required
@@ -223,7 +243,7 @@
     },
     validations: {
       email: {email, required},
-      username: {required, maxLength: maxLength(24)},
+      username: {required, maxLength: maxLength(24), murrenNameAlphaValidator},
       password: {
         required,
         minLength: minLength(6),

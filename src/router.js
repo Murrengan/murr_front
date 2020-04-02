@@ -3,8 +3,6 @@ import Router from 'vue-router';
 
 import store from '@/store/index';
 
-Vue.use(Router);
-
 const router = new Router({
   mode: 'history',
   routes: [
@@ -33,12 +31,6 @@ const router = new Router({
       component: () => import('./views/murren/Murren.vue'),
     },
     {
-      path: '/check_email',
-      name: 'check_email',
-      meta: {layout: 'main-layout'},
-      component: () => import('./views/murren/CheckEmail.vue'),
-    },
-    {
       path: '/murren_email_activate',
       name: 'murren_email_activate',
       meta: {layout: 'main-layout'},
@@ -49,6 +41,24 @@ const router = new Router({
       name: 'set_new_password',
       meta: {layout: 'main-layout'},
       component: () => import('./views/murren/SetNewPassword.vue'),
+    },
+    {
+      path: '/create_murr',
+      name: 'create_murr',
+      meta: {layout: 'empty-layout', accessTokenExpected: true},
+      component: () => import('./views/murr_card/CreateMurr.vue')
+    },
+    {
+      path: '/murr_card',
+      name: 'murr_card',
+      meta: {layout: 'main-layout'},
+      component: () => import('./views/murr_card/WatchOnMurr.vue')
+    },
+    {
+      path: '/about',
+      name: 'about',
+      meta: {layout: 'main-layout'},
+      component: () => import('./views/common/About.vue'),
     },
     {
       path: '*',
@@ -73,7 +83,19 @@ router.beforeEach((to, from, next) => {
     type: 'warning',
   });
 
+  router.push('/')
   store.dispatch('changeShowLoginForm_actions');
 });
 
 export default router;
+
+
+// workaround for push to "/some_url" when client on "/some_url"
+const originalPush = Router.prototype.push
+
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+//
+
+Vue.use(Router)

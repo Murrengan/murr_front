@@ -2,3 +2,8 @@
 	font-family: "JetBrainsMono-Regular";
 	src: url("fonts_ttf/JetBrainsMono-Regular.ttf");
 }
+
+@font-face {
+	font-family: "JetBrainsMono-Italic";
+	src: url("fonts_ttf/JetBrainsMono-Italic.ttf");
+}
