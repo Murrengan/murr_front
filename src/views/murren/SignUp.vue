@@ -164,7 +164,7 @@
         })
         this.loading = false
 
-        if (result.recaptchaError || result.error) {
+        if (result.recaptchaError) {
           this.notification({
             message: 'Ошибка на сервере',
             type: 'error',
