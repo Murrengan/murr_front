@@ -63,10 +63,15 @@
                 <i class="el-icon-arrow-left hide-icon__main-slide-fade-container"></i>
               </a>
               <div>
+
                 <el-button class="murr-button"
-                           @click="save">
+                           @click="() => $refs.invisibleRecaptcha.execute()">
                   Мурр готов!
                 </el-button>
+
+                <vue-recaptcha ref="invisibleRecaptcha" size="invisible"
+                               @verify="save"
+                               :sitekey="siteKey"/>
               </div>
             </div>
 
@@ -162,6 +167,9 @@
   import ResizableTextarea from '../../components/common/ResizableTextarea.js';
   import VueCropper from 'vue-cropperjs';
   import 'cropperjs/dist/cropper.css';
+  import VueRecaptcha from 'vue-recaptcha';
+  import {siteKey} from '@/devAndProdVariables';
+
 
   const Delimiter = require('@editorjs/delimiter')
   const List = require('@editorjs/list');
@@ -233,6 +241,7 @@
 
     data() {
       return {
+        siteKey,
         startCreateMurr: true,
         saveTimeOut: true,
         showEditMurrHeaderModal: false,
@@ -253,6 +262,8 @@
     methods: {
       ...mapActions({
         saveMurrContent: 'changeSaveMurrContent_action',
+        createMurrCard: 'createMurrCard_action',
+        notification: 'popUpMessage',
       }),
 
       changeShowAlmostDone() {
@@ -278,30 +289,45 @@
         this.cropImg = await this.$refs.cropper.getCroppedCanvas().toDataURL();
       },
 
-      async save() {
+      async save(recaptchaToken) {
+        this.$refs.invisibleRecaptcha.reset()
 
         let murr_content = await window.editor.save()
 
-        const murr_card_data = {
+        const murrCardData = {
+          recaptchaToken,
           cover: this.cropImg,
           title: this.murrHeader,
           content: await JSON.stringify(murr_content)
         }
 
         if (this.cropImg === '') {
-          delete murr_card_data.cover
+          delete murrCardData.cover
         }
 
-        const response = await axios.post('/api/murr_card/', murr_card_data,
-          {headers: {'Authorization': 'Bearer ' + this.$store.getters.accessToken_getters}});
+        try {
+          const response = await axios.post('/api/murr_card/', murrCardData,
+            {headers: {'Authorization': 'Bearer ' + this.$store.getters.accessToken_getters}})
 
-        if (response.status === 200) {
-
-          await this.$store.dispatch('changeShowCreateMurr_actions')
-          await this.$router.push({path: `/murr_card/?murr_id=${response.data.id}`})
-          this.startCreateMurr = false
-          this.saveTimeOut = false
-          await this.saveMurrContent({"murrContent": "", "murrHeader": ""})
+          if (response.status === 201) {
+            await this.$store.dispatch('changeShowCreateMurr_actions')
+            await this.$router.push({path: `/murr_card/?murr_id=${response.data.id}`})
+            this.startCreateMurr = false
+            this.saveTimeOut = false
+            await this.saveMurrContent({"murrContent": "", "murrHeader": ""})
+          }
+        } catch (e) {
+          if (e.response.data.recaptcha_response_problem) {
+            this.notification({
+              message: 'Ошибка c рекапчей',
+              type: 'error',
+            })
+            return
+          }
+          this.notification({
+            message: 'Ошибка на сервере',
+            type: 'error',
+          })
         }
       },
 
@@ -346,7 +372,8 @@
 
     components: {
       ResizableTextarea,
-      VueCropper
+      VueCropper,
+      VueRecaptcha
     },
   }
 </script>
