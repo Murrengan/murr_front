@@ -1,18 +1,24 @@
-import axios from 'axios';
+import axios from 'axios'
+
+const jwtDecode = require('jwt-decode')
 
 export default {
   state: {
     accessToken: null,
     murrenName: '',
+    isStaff: false
   },
   actions: {
     async createToken({commit}, payload) {
       try {
         const {data} = await axios.post('/api/murren/token_create/', payload)
+        const response = jwtDecode(data.access)
 
         if (data.access) {
           commit('setAccessToken_mutations', data.access)
           commit('setMurrenName_mutations', payload.username)
+          commit('setIsStaff_mutations', response.is_staff)
+
         }
       } catch (e) {
         return {
@@ -154,22 +160,29 @@ export default {
   },
   mutations: {
     setAccessToken_mutations(state, accessToken) {
-      state.accessToken = accessToken;
+      state.accessToken = accessToken
     },
     logout_mutations(state) {
-      state.accessToken = null;
-      state.murrenName = null;
+      state.accessToken = null
+      state.murrenName = null
+      state.isStaff = false
     },
     setMurrenName_mutations(state, username) {
-      state.murrenName = username;
+      state.murrenName = username
+    },
+    setIsStaff_mutations(state, isStaff) {
+      state.isStaff = isStaff
     },
   },
   getters: {
     accessToken_getters(state) {
-      return state.accessToken;
+      return state.accessToken
     },
     murrenName_getters(state) {
-      return state.murrenName;
+      return state.murrenName
     },
+    isStaff_getters(state) {
+      return state.isStaff
+    }
   },
-};
+}

@@ -311,11 +311,21 @@ body, * {
     padding: 3px 5px 5px;
 }
 
-.el-popover{
+.el-popover {
     background-color: #263b47 !important;
     border: #AD00FF 1px solid !important;
 }
 
-.popper__arrow::after{
+.popper__arrow::after {
     border-bottom-color: #AD00FF !important;
+}
+
+.el-message-box {
+    background-color: #0d2429 !important;
+    width: 300px !important;
+    text-align: center;
+}
+
+.el-message-box__btns {
+    text-align: center !important;
 }

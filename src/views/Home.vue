@@ -72,7 +72,7 @@
     watch: {
       nextPageExists(exists) {
         if (exists) {
-          this.nextPageNumber++;
+          this.nextPageNumber++
         }
       }
     },
