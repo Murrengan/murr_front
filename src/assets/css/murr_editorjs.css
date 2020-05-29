@@ -55,6 +55,7 @@
 
 .codex-editor__redactor {
     padding-bottom: 150px !important;
+    word-wrap: break-word !important;
 }
 
 .ce-inline-toolbar__buttons {

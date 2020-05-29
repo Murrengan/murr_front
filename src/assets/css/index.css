@@ -3,7 +3,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "JetBrainsMono-Regular", serif;
-    color: #B0BEC5;
+    color: white;
     outline: none;
 }
 
@@ -261,35 +261,13 @@ ul {
     text-align: justify;
 }
 
-/* ScrollBar */
-
-body, * {
-    scrollbar-color: #ad00ff #1a2931;
-    scrollbar-width: thin;
-}
-
-::-webkit-scrollbar-track {
-    opacity: 1;
-    background-color: black;
-}
-
-::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 0;
-    border-radius: 2px;
-    background-color: #AD00FF;
-}
-
-::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-}
-
 /* MurrCard */
 
 .murr-card {
 
     padding: 2px;
     width: 100%;
+    min-width: 320px;
     max-width: 320px;
     max-height: 350px;
     background-color: #C3A1FF;
@@ -311,11 +289,23 @@ body, * {
     padding: 3px 5px 5px;
 }
 
-.el-popover{
+.el-popover {
     background-color: #263b47 !important;
     border: #AD00FF 1px solid !important;
 }
 
-.popper__arrow::after{
+.popper__arrow::after {
     border-bottom-color: #AD00FF !important;
+}
+
+/* Containers */
+.home-main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1rem 15px 0;
+    background-color: #1a2931;
+    height: 100%;
+    min-height: 100vh;
 }

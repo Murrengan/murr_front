@@ -1,4 +1,5 @@
 <template>
+  <div class="home-main-container">
   <div class="about">
 
     <h2 class="mb2">Мурренган - это опенсорс сайт, цель которого найти единомышленников
@@ -52,6 +53,7 @@
       </div>
     </div>
   </div>
+    </div>
 </template>
 
 <script>
