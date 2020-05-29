@@ -1,22 +1,17 @@
 <template>
   <div class="home-main-container">
-
     <p class="mb font">Это личная страничка Муррена</p>
-
     <small>Доступно для авторизованного Муррена</small>
-
     <div v-if="tanochkaUrl">
       <img class="tanochka" alt="tanochka"
            :src="tanochkaUrl">
     </div>
-
     <div class="bottom-info">
       <el-button class="murr-button__danger"
                  @click="logout">
         Выйти
       </el-button>
     </div>
-
   </div>
 </template>
 
@@ -54,16 +49,6 @@
     padding-bottom: 60px;
     display: flex;
     flex-direction: column;
-  }
-
-  .home-main-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 0 15px;
-    background-color: #1a2931;
   }
 
   .tanochka {

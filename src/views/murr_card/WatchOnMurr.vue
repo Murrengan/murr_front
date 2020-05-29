@@ -1,5 +1,5 @@
 <template>
-  <div class="main-create-murr-container">
+  <div class="home-main-container">
 
     <div class="mb">
       <h1 class="murr-header fs2">{{ this.murrTitle }}</h1>
@@ -54,7 +54,8 @@
   export default {
 
     async beforeCreate() {
-
+      // Navbar hide murr_content
+      await window.scrollTo(0, -42)
       const murr_id = this.$route.query.murr_id
       const murrCardData = await axios.get('/api/murr_card/', {
         params: {
@@ -105,6 +106,7 @@
     max-height: 90%;
     max-width: 650px;
     margin: 0 auto;
+    word-wrap: break-word;
   }
 
   .murr-code-snippet {

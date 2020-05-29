@@ -32,7 +32,7 @@
               @click="goToAboutPage">
           О проекте</span>
 
-        <small class="mb">v0.0.13</small>
+        <small class="mb">v0.0.131</small>
 
         <el-button
             v-if="this.$store.getters.accessToken_getters"

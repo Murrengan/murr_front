@@ -8,7 +8,7 @@
 <h2 align="center">Murrengan provide core functionality for web applications:</h2>
 
 <ul>
-    <li>user registration (0.0.12b)</li>
+    <li>user registration (done)</li>
     <li>getting information from client (in dev)</li>
     <li>chat application (in plan)</li>
     <li>cart and payments (in plan)</li>

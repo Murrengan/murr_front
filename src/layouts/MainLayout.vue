@@ -5,68 +5,19 @@
     <div class="div-for-move-down__view-container"></div>
 
     <div class="view-container">
-
-      <transition
-          name="fade"
-          mode="out-in"
-      >
-        <router-view/>
-      </transition>
+      <router-view/>
     </div>
 
     <BottomNavbar/>
-
-    <transition
-        name="slide-fade-y"
-        mode="out-in">
-      <SignUp
-          v-if="this.$store.getters.showRegisterForm_getters"/>
-    </transition>
-
-    <transition
-        name="slide-fade-y"
-        mode="out-in">
-      <Login
-          v-if="this.$store.getters.showLoginForm_getters"/>
-    </transition>
-
-    <transition
-        name="slide-fade-y"
-        mode="out-in">
-      <ResetPassword
-          v-if="this.$store.getters.showResetPasswordForm_getters"/>
-    </transition>
-
-    <transition
-        name="slide-fade-y"
-        mode="out-in">
-      <CreateMurr
-          v-if="this.$store.getters.showCreateMurr_getters"/>
-    </transition>
 
   </div>
 </template>
 
 <script>
 
-  import BottomNavbar from '@/components/main/BottomNavbar'
-  import TopNavbar from '@/components/main/TopNavbar'
-  import SignUp from "@/views/murren/SignUp";
-  import Login from "@/views/murren/Login";
-  import ResetPassword from "@/views/murren/ResetPassword";
-  import CreateMurr from "../views/murr_card/CreateMurr";
-
   export default {
     name: 'main-layout',
     data: () => ({}),
-    components: {
-      BottomNavbar,
-      TopNavbar,
-      SignUp,
-      Login,
-      ResetPassword,
-      CreateMurr,
-    }
   }
 </script>
 

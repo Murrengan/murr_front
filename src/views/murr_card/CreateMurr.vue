@@ -158,34 +158,29 @@
 </template>
 
 <script>
-  import {mapActions} from "vuex"
-  import EditorJS from '@editorjs/editorjs';
-  import Header from '@editorjs/header';
-  import ImageTool from '@editorjs/image';
+  import { mapActions } from "vuex"
+  import EditorJS from '@editorjs/editorjs'
+  import Header from '@editorjs/header'
+  import ImageTool from '@editorjs/image'
   import axios from 'axios'
-  import {axios_defaults_baseURL} from "../../devAndProdVariables";
-  import ResizableTextarea from '../../components/common/ResizableTextarea.js';
-  import VueCropper from 'vue-cropperjs';
-  import 'cropperjs/dist/cropper.css';
-  import VueRecaptcha from 'vue-recaptcha';
-  import {siteKey} from '@/devAndProdVariables';
-
+  import { axios_defaults_baseURL } from "../../devAndProdVariables"
+  import ResizableTextarea from '../../components/common/ResizableTextarea.js'
+  import VueCropper from 'vue-cropperjs'
+  import 'cropperjs/dist/cropper.css'
+  import VueRecaptcha from 'vue-recaptcha'
+  import { siteKey } from '@/devAndProdVariables'
+  import { mapMutations } from 'vuex'
 
   const Delimiter = require('@editorjs/delimiter')
-  const List = require('@editorjs/list');
-  const CodeTool = require('@editorjs/code');
-
+  const List = require('@editorjs/list')
+  const CodeTool = require('@editorjs/code')
 
   export default {
-
     async mounted() {
-
       let murrContent = ''
-
       const r = this.$store.getters.showMurrContent_getters
 
       if (r.murrHeader !== '' && r.murrContent !== '') {
-
         const raw_data = await this.$store.getters.showMurrContent_getters
         murrContent = await JSON.parse(raw_data.murrContent)
         this.murrHeader = raw_data.murrHeader
@@ -217,7 +212,7 @@
           },
           paragraph: {
             config: {
-              placeholder: 'мурр'
+              placeholder: 'Кликни сюда и создай свой мурр...'
             }
           },
         },
@@ -226,7 +221,7 @@
 
       // auto save murrData in local storage
       while (this.startCreateMurr === true) {
-        await new Promise(r => setTimeout(r, 15000));
+        await new Promise(r => setTimeout(r, 15000))
         if (this.saveTimeOut === true) {
           let _raw_data = await window.editor.save()
           let newMurrContent = await JSON.stringify(_raw_data)
@@ -238,7 +233,6 @@
         }
       }
     },
-
     data() {
       return {
         siteKey,
@@ -252,69 +246,60 @@
         imgSrc: '',
         cropImg: '',
         visiblePopover: false
-      };
+      }
     },
-
     destroyed() {
       this.startCreateMurr = false
     },
-
     methods: {
       ...mapActions({
         saveMurrContent: 'changeSaveMurrContent_action',
         createMurrCard: 'createMurrCard_action',
         notification: 'popUpMessage',
       }),
-
+      ...mapMutations([
+        'clearMurrCards'
+      ]),
       changeShowAlmostDone() {
-
-        if (this.murrHeader === '') {
+        if (!this.murrHeader) {
           this.murrHeaderEmpty = true
           return
         }
         this.showAlmostDone = !this.showAlmostDone
       },
-
       cancelMurrCoverCropper() {
         this.imgSrc = ''
         this.showMurrCoverCropper = false
       },
-
       hideCreateMurr() {
         this.$store.dispatch('changeShowCreateMurr_actions')
       },
-
       async saveMurrCoverCropper() {
         this.showMurrCoverCropper = false
-        this.cropImg = await this.$refs.cropper.getCroppedCanvas().toDataURL();
+        this.cropImg = await this.$refs.cropper.getCroppedCanvas().toDataURL()
       },
-
       async save(recaptchaToken) {
         this.$refs.invisibleRecaptcha.reset()
-
         let murr_content = await window.editor.save()
-
         const murrCardData = {
           recaptchaToken,
           cover: this.cropImg,
           title: this.murrHeader,
           content: await JSON.stringify(murr_content)
         }
-
         if (this.cropImg === '') {
           delete murrCardData.cover
         }
-
         try {
           const response = await axios.post('/api/murr_card/', murrCardData,
-            {headers: {'Authorization': 'Bearer ' + this.$store.getters.accessToken_getters}})
-
+            { headers: { 'Authorization': 'Bearer ' + this.$store.getters.accessToken_getters } })
           if (response.status === 201) {
             await this.$store.dispatch('changeShowCreateMurr_actions')
-            await this.$router.push({path: `/murr_card/?murr_id=${response.data.id}`})
+            await this.$router.push({ path: `/murr_card/?murr_id=${response.data.id}` })
             this.startCreateMurr = false
             this.saveTimeOut = false
-            await this.saveMurrContent({"murrContent": "", "murrHeader": ""})
+            await this.saveMurrContent({ "murrContent": "", "murrHeader": "" })
+            this.clearMurrCards()
           }
         } catch (e) {
           if (e.response.data.recaptcha_response_problem) {
@@ -332,25 +317,20 @@
       },
 
       setImage(e) {
-
-        const file = e.target.files[0];
-
+        const file = e.target.files[0]
         if (file.type.indexOf('image/') === -1) {
-          alert('Please select an image file');
-          return;
+          alert('Please select an image file')
+          return
         }
-
         if (typeof FileReader === 'function') {
-          const reader = new FileReader();
-
+          const reader = new FileReader()
           reader.onload = (event) => {
-            this.imgSrc = event.target.result;
+            this.imgSrc = event.target.result
             this.showMurrCoverCropper = true
             // rebuild cropperjs with the updated source
-            this.$refs.cropper.replace(event.target.result);
-          };
-
-          reader.readAsDataURL(file);
+            this.$refs.cropper.replace(event.target.result)
+          }
+          reader.readAsDataURL(file)
         } else {
           alert('Sorry, FileReader API not supported')
         }
