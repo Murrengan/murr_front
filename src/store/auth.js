@@ -171,5 +171,5 @@ export default {
     murrenName_getters(state) {
       return state.murrenName;
     },
-  },
+  }
 };

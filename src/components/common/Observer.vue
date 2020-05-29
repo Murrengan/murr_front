@@ -8,11 +8,12 @@
       observer: null
     }),
     mounted() {
+      let options = { rootMargin: '600px' }
       this.observer = new IntersectionObserver(([entry]) => {
         if (entry && entry.isIntersecting) {
           this.$emit('murrIntersect')
         }
-      })
+      }, options)
 
       this.observer.observe(this.$el)
     },

@@ -1,18 +1,18 @@
 <template>
   <div class="home-main-container">
 
-    <h1 class="mb">may the force be with you</h1>
+    <h1 class="mb">Делаем сайт вместе!</h1>
 
     <loader v-if="loading"/>
 
     <div class="container"
          v-if="!loading">
 
-      <masonry :cols="{default: 4, 1300: 3, 1000: 2, 700: 1}"
+      <masonry :cols="{default: 4, 1450: 3, 1100: 2, 700: 1}"
                :gutter="{default: '30px', 700: '15px'}">
 
-        <div v-for="murr in this.showMurrCards"
-             :key="murr.id"
+        <div v-for="(murr, index) in this.murrCards"
+             :key="index"
              class="murr-card mb2 pointer"
              @click="openMurr(murr.id)">
 
@@ -24,7 +24,6 @@
         </div>
 
         <Observer @murrIntersect="fetchMurrCardsOnIntersected"/>
-
       </masonry>
     </div>
   </div>
@@ -32,49 +31,43 @@
 
 <script>
   import Observer from "@/components/common/Observer"
+  import { mapActions } from 'vuex'
+  import { mapGetters } from 'vuex'
 
   export default {
     data: () => ({
       loading: true,
       showSignUpMurrens: [],
-      showMurrCards: [],
       nextPageNumber: 1,
       nextPageExists: null,
       murrCover: '',
       murrTitle: '',
-      murrCards: ''
     }),
     async mounted() {
-
-      await this.fetchMurrCard()
+      if (!this.murrCards.length) {
+        await this.fetchMurrCards()
+      }
       this.loading = false
     },
-    methods: {
-
-      async fetchMurrCardsOnIntersected() {
-
-        if (this.nextPageExists) {
-          await this.fetchMurrCard(this.nextPageNumber)
-        }
-      },
-      async fetchMurrCard(nextPageNumber = null) {
-
-        const {next, results} = await this.$store.dispatch('fetchMurrCards_actions', nextPageNumber)
-        this.showMurrCards = [...this.showMurrCards, ...results]
-        this.nextPageExists = next
-      },
-
-      openMurr(murr_id) {
-        this.$router.push({path: `/murr_card/?murr_id=${murr_id}`})
-      }
-
+    computed: {
+      ...mapGetters([
+        'murrCards',
+        'nextMurrCardsPage_getters'
+      ])
     },
-    watch: {
-      nextPageExists(exists) {
-        if (exists) {
-          this.nextPageNumber++;
+    methods: {
+      ...mapActions([
+        'fetchMurrCards'
+      ]),
+      async fetchMurrCardsOnIntersected() {
+        if (this.nextMurrCardsPage_getters) {
+          await this.fetchMurrCards(this.nextMurrCardsPage_getters)
         }
+      },
+      openMurr(murr_id) {
+        this.$router.push({ path: `/murr_card/?murr_id=${murr_id}` })
       }
+
     },
     components: {
       Observer
@@ -94,15 +87,6 @@
 
   .murr-cover {
     width: 100%;
-  }
-
-  .home-main-container {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 0 15px;
-    background-color: #1a2931;
   }
 
 </style>
