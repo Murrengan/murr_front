@@ -8,8 +8,13 @@
     <div class="container"
          v-if="!loading">
 
-      <masonry :cols="{default: 4, 1450: 3, 1100: 2, 700: 1}"
-               :gutter="{default: '30px', 700: '15px'}">
+      <masonry
+          :cols="{
+          default: this.murrCards.length > 4? 4: this.murrCards.length,
+          1450: this.murrCards.length > 3? 3: this.murrCards.length,
+          1100: this.murrCards.length > 2? 2: this.murrCards.length,
+          700: 1}"
+          :gutter="{default: '30px'}">
 
         <div v-for="(murr, index) in this.murrCards"
              :key="index"
