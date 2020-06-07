@@ -1,6 +1,25 @@
 <template>
   <div class="home-main-container">
-
+    <div class="murr-panel">
+      <div class="more-btn"
+           @click="showMurrPanelButtons">
+        <i class="el-icon-more-outline pointer p"></i>
+      </div>
+      <transition
+          name="fade"
+          mode="out-it">
+        <div v-if="this.murrPanelButtons">
+          <el-button class="murr-button__primary p mr05">
+            <i class="el-icon-share"></i>
+          </el-button>
+          <el-button v-if="this.murrOwnerId === this.murrenId_getters"
+                     class="murr-button__danger p mr05"
+                     @click="deleteMurr">
+            <i class="el-icon-delete"></i>
+          </el-button>
+        </div>
+      </transition>
+    </div>
     <div class="mb">
       <h1 class="murr-header fs2">{{ this.murrTitle }}</h1>
     </div>
@@ -50,8 +69,14 @@
 <script>
 
   import axios from 'axios'
+  import { mapActions, mapGetters, mapMutations } from "vuex"
 
   export default {
+    computed: {
+      ...mapGetters([
+        'murrenId_getters'
+      ]),
+    },
 
     async beforeCreate() {
       // Navbar hide murr_content
@@ -61,23 +86,92 @@
         params: {
           murr_id: murr_id
         }
-      });
+      })
 
       this.murrTitle = murrCardData.data[0].title
-      this.murr_content = JSON.parse(murrCardData.data[0].content);
+      this.murr_content = JSON.parse(murrCardData.data[0].content)
+      this.murrOwnerId = murrCardData.data[0].owner
     },
 
     data: () => ({
-
       dataForMurr: '',
       murrTitle: '',
-      murr_content: ''
+      murr_content: '',
+      murrPanelButtons: false,
+      murrOwnerId: null
     }),
+    methods: {
+      ...mapActions({
+        notification: 'popUpMessage',
+      }),
+      ...mapMutations([
+        'clearMurrCards'
+      ]),
+      showMurrPanelButtons() {
+        this.murrPanelButtons = !this.murrPanelButtons
+      },
+      deleteMurr() {
+        this.$confirm('Точно удалить мурр?', 'Внимание!', {
+          confirmButtonText: 'Да',
+          cancelButtonText: 'Отмена',
+          cancelButtonClass: 'murr-button__primary',
+          confirmButtonClass: 'murr-button__danger',
+          customClass: 'modal-main',
+          type: 'warning'
+        }).then(async () => {
+
+            const data = {
+              murr_id: this.$route.query.murr_id,
+              owner_id: this.murrOwnerId
+            }
+            const response = await axios.delete('/api/murr_card/', {
+              headers: {
+                Authorization: 'Bearer ' + this.$store.getters.accessToken_getters
+              },
+              data: data
+            })
+            await this.clearMurrCards()
+            await this.$router.push('/')
+            if (response.status === 204) {
+              this.notification({
+                message: 'Мурр удален',
+                type: 'success',
+              })
+            } else {
+              this.notification({
+                message: 'Что-то пошло не по плану 😮',
+                type: 'warning',
+              })
+            }
+
+          }
+        ).catch(() => {
+          this.notification({
+            message: 'Действие отменено',
+            type: 'warning',
+          })
+        })
+      }
+    }
   }
 </script>
 
 <style scoped>
 
+  .more-btn:hover {
+    background-color: #8b8ac5;
+    border-radius: 2px;
+  }
+
+  .murr-panel {
+    max-width: 620px;
+    width: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    margin-bottom: 2px;
+  }
 
   .murr-header {
     max-width: 620px;
@@ -87,19 +181,6 @@
     word-break: break-word;
   }
 
-  .main-create-murr-container {
-    background-color: #1a2931;
-    width: 100%;
-    height: 100%;
-    bottom: 0;
-    left: 0;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    border-radius: 5px;
-    overflow: auto;
-    padding: 0 10px;
-  }
 
   .create-murr-area {
     width: 100%;

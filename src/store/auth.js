@@ -1,18 +1,23 @@
-import axios from 'axios';
+import axios from 'axios'
+
+const jwtDecode = require('jwt-decode')
 
 export default {
   state: {
     accessToken: null,
-    murrenName: '',
+    murrenName: null,
+    murrenId: null,
   },
   actions: {
-    async createToken({commit}, payload) {
+    async createToken({ commit }, payload) {
       try {
-        const {data} = await axios.post('/api/murren/token_create/', payload)
+        const { data } = await axios.post('/api/murren/token_create/', payload)
+        const response = jwtDecode(data.access)
 
         if (data.access) {
           commit('setAccessToken_mutations', data.access)
           commit('setMurrenName_mutations', payload.username)
+          commit('setMurrenId_mutations', response.user_id)
         }
       } catch (e) {
         return {
@@ -38,7 +43,7 @@ export default {
         passwordIsTooSimilarToEmail: false,
       }
       try {
-        const {status} = await axios.post('/auth/users/', payload)
+        const { status } = await axios.post('/auth/users/', payload)
 
         if (status === 201) {
           results.murrenIsCreated = true
@@ -85,7 +90,7 @@ export default {
           notFoundMurren: false,
         }
 
-        const {status} = await axios.post('/auth/users/reset_password/', payload)
+        const { status } = await axios.post('/auth/users/reset_password/', payload)
 
         if (status === 204) {
           results.emailIsSent = true
@@ -94,7 +99,7 @@ export default {
         return results
       } catch (e) {
 
-        return {error: true, message: 'Ошибка на сервере'}
+        return { error: true, message: 'Ошибка на сервере' }
       }
     },
     async setNewPassword(_, payload) {
@@ -124,7 +129,7 @@ export default {
           results.passwordIsTooCommon = true
           return results
         }
-        return {error: true, message: 'Ошибка на сервере'}
+        return { error: true, message: 'Ошибка на сервере' }
       }
     },
     async mailConfirmation(_, payload) {
@@ -145,31 +150,38 @@ export default {
 
         return results
       } catch (e) {
-        return {error: true, message: 'Ошибка на сервере'}
+        return { error: true, message: 'Ошибка на сервере' }
       }
     },
-    async logout({commit}) {
+    async logout({ commit }) {
       commit('logout_mutations')
     },
   },
   mutations: {
     setAccessToken_mutations(state, accessToken) {
-      state.accessToken = accessToken;
+      state.accessToken = accessToken
     },
     logout_mutations(state) {
-      state.accessToken = null;
-      state.murrenName = null;
+      state.accessToken = null
+      state.murrenName = null
+      state.murrenId = null
     },
     setMurrenName_mutations(state, username) {
-      state.murrenName = username;
+      state.murrenName = username
     },
+    setMurrenId_mutations(state, id) {
+      state.murrenId = id
+    }
   },
   getters: {
     accessToken_getters(state) {
-      return state.accessToken;
+      return state.accessToken
     },
     murrenName_getters(state) {
-      return state.murrenName;
+      return state.murrenName
+    },
+    murrenId_getters(state) {
+      return state.murrenId
     },
   }
-};
+}
