@@ -54,10 +54,10 @@
 </template>
 
 <script>
-  import {mapActions} from 'vuex'
+  import { mapActions } from 'vuex'
   import VueRecaptcha from 'vue-recaptcha'
-  import {email, required} from 'vuelidate/lib/validators'
-  import {siteKey} from '@/devAndProdVariables'
+  import { email, required } from 'vuelidate/lib/validators'
+  import { siteKey } from '@/devAndProdVariables'
 
   export default {
     data: () => ({
@@ -127,12 +127,12 @@
       },
     },
     validations: {
-      email: {email, required},
+      email: { email, required },
     },
     components: {
       VueRecaptcha,
     },
-  };
+  }
 </script>
 
 <style scoped>

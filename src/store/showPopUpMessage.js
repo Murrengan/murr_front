@@ -1,13 +1,13 @@
-import {Message} from 'element-ui';
+import { Message } from 'element-ui'
 
 export default {
   actions: {
-    async popUpMessage(context, {message, customClass, type, textAlign}) {
+    async popUpMessage(context, { message, customClass, type, textAlign }) {
       let className = [
         'murr-notification',
         `murr-notification-${type || `success`}`,
         `murr-notification-${textAlign || `center`}`
-      ];
+      ]
 
       if (customClass) {
         if (typeof customClass === 'object') {
@@ -23,7 +23,7 @@ export default {
         customClass: className.join(' '),
         type: type,
         showClose: true,
-      });
+      })
     },
   },
-};
+}

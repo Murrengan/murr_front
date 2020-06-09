@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import {mapActions} from 'vuex'
+  import { mapActions } from 'vuex'
 
   export default {
     async created() {
@@ -36,7 +36,7 @@
         return
       }
 
-      const result = await this.$store.dispatch('mailConfirmation', {uid, token})
+      const result = await this.$store.dispatch('mailConfirmation', { uid, token })
 
       if (result.error) {
         this.notification({
