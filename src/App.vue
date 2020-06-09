@@ -56,11 +56,11 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import SignUp from "@/views/murren/SignUp"
-  import Login from "@/views/murren/Login"
-  import ResetPassword from "@/views/murren/ResetPassword"
-  import CreateMurr from "@/views/murr_card/CreateMurr"
-  import SideMenu from "@/components/main/SideMenu"
+  import SignUp from "@/components/murren/SignUp"
+  import Login from "@/components/murren/Login"
+  import ResetPassword from "@/components/murren/ResetPassword"
+  import CreateMurr from "@/components/murr_card/CreateMurr"
+  import SideMenu from "@/views/common/SideMenu"
 
   export default {
     computed: {

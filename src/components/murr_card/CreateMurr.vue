@@ -158,18 +158,17 @@
 </template>
 
 <script>
-  import { mapActions } from "vuex"
+  import { mapActions, mapMutations } from "vuex"
   import EditorJS from '@editorjs/editorjs'
   import Header from '@editorjs/header'
   import ImageTool from '@editorjs/image'
   import axios from 'axios'
   import { axios_defaults_baseURL } from "../../devAndProdVariables"
-  import ResizableTextarea from '../../components/common/ResizableTextarea.js'
+  import ResizableTextarea from '../common/ResizableTextarea.js'
   import VueCropper from 'vue-cropperjs'
   import 'cropperjs/dist/cropper.css'
   import VueRecaptcha from 'vue-recaptcha'
   import { siteKey } from '@/devAndProdVariables'
-  import { mapMutations } from 'vuex'
 
   const Delimiter = require('@editorjs/delimiter')
   const List = require('@editorjs/list')
