@@ -81,10 +81,10 @@
 </template>
 
 <script>
-  import {mapActions} from "vuex"
-  import {maxLength, minLength, required} from 'vuelidate/lib/validators';
-  import VueRecaptcha from 'vue-recaptcha';
-  import {siteKey} from '@/devAndProdVariables';
+  import { mapActions } from "vuex"
+  import { maxLength, minLength, required } from 'vuelidate/lib/validators'
+  import VueRecaptcha from 'vue-recaptcha'
+  import { siteKey } from '@/devAndProdVariables'
 
   export default {
     data: () => ({
@@ -102,75 +102,66 @@
         createToken: 'createToken',
       }),
       handlerGoResetPassword() {
-        this.goHome();
-        this.goResetPassword();
+        this.goHome()
+        this.goResetPassword()
       },
       handlerGoSignUp() {
-        this.goHome();
-        this.goSignUp();
+        this.goHome()
+        this.goSignUp()
       },
       async handlerLogin(recaptchaToken) {
-
         this.$refs.invisibleRecaptcha.reset()
-
         if (this.$v.$invalid) {
-          this.$v.$touch();
-          return;
+          this.$v.$touch()
+          return
         }
-
-        this.loading = true;
-
+        this.loading = true
         const result = await this.createToken({
           recaptchaToken,
           username: this.murren_username,
           password: this.murren_password,
-        });
-
-        this.loading = false;
-        this.accountActivated = result.accountActivated;
-
+        })
+        this.loading = false
+        this.accountActivated = result.accountActivated
         if (!result.error) {
-
           const dataForPopUpMessage = {
             message: this.murren_username + ', добро пожаловать 😘',
             customClass: 'element-ui-message__success',
             type: 'success'
-          };
-          await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
-
-          this.murren_username = '';
-          this.murren_password = '';
-
-          this.goHome();
+          }
+          await this.$store.dispatch('popUpMessage', dataForPopUpMessage)
+          this.murren_username = ''
+          this.murren_password = ''
+          this.goHome()
         }
       },
     },
     computed: {
       validPasswordRequired() {
-        return this.$v.murren_password.$dirty && !this.$v.murren_password.required;
+        return this.$v.murren_password.$dirty && !this.$v.murren_password.required
       },
       validPasswordMinLength() {
-        return this.$v.murren_password.$dirty && !this.$v.murren_password.minLength;
+        return this.$v.murren_password.$dirty && !this.$v.murren_password.minLength
       },
       validPassword() {
-        return this.validPasswordRequired || this.validPasswordMinLength;
+        return this.validPasswordRequired || this.validPasswordMinLength
       },
       validUserNameRequired() {
-        return this.$v.murren_username.$dirty && !this.$v.murren_username.required;
+        return this.$v.murren_username.$dirty && !this.$v.murren_username.required
       },
       validUserNameMaxLength() {
-        return this.$v.murren_username.$dirty && !this.$v.murren_username.maxLength;
+        return this.$v.murren_username.$dirty && !this.$v.murren_username.maxLength
       },
       validUserName() {
-        return this.validUserNameRequired || this.validUserNameMaxLength || !this.accountActivated;
+        return this.validUserNameRequired || this.validUserNameMaxLength || !this.accountActivated
       },
     },
     validations: {
-      murren_username: {required, maxLength: maxLength(24)},
-      murren_password: {required, minLength: minLength(6)},
+      murren_username: { required, maxLength: maxLength(24) },
+      murren_password: { required, minLength: minLength(6) },
     },
     components: {
       VueRecaptcha
     },
-  };
+  }
 </script>

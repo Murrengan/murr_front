@@ -51,6 +51,10 @@ ul {
     margin-right: 1rem;
 }
 
+.mr05 {
+    margin-right: 0.5rem;
+}
+
 .text-center {
     text-align: center;
 }
@@ -61,6 +65,10 @@ ul {
 
 .fs2 {
     font-size: 1.4rem;
+}
+
+.p {
+    padding: 5px;
 }
 
 .error-text {
@@ -259,6 +267,10 @@ ul {
 
 .murr-notification.murr-notification-justify .el-message__content {
     text-align: justify;
+}
+
+.modal-main {
+    background-color: #071013;
 }
 
 /* MurrCard */

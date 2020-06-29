@@ -72,10 +72,10 @@
 </template>
 
 <script>
-  import {mapActions} from 'vuex'
+  import { mapActions } from 'vuex'
   import VueRecaptcha from 'vue-recaptcha'
-  import {helpers, minLength, required, sameAs} from 'vuelidate/lib/validators'
-  import {siteKey} from '@/devAndProdVariables'
+  import { helpers, minLength, required, sameAs } from 'vuelidate/lib/validators'
+  import { siteKey } from '@/devAndProdVariables'
 
   export default {
     data: () => ({

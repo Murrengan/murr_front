@@ -32,7 +32,7 @@
               @click="goToAboutPage">
           О проекте</span>
 
-        <small class="mb">v0.0.131</small>
+        <small class="mb">v0.0.132</small>
 
         <el-button
             v-if="this.$store.getters.accessToken_getters"
@@ -62,12 +62,12 @@
           message: 'Ты разлогинился 😱',
           customClass: 'element-ui-message__success',
           type: 'success'
-        };
+        }
 
-        await this.$store.dispatch('changeShowRightSideMenu_actions');
-        await this.$router.push('/');
-        await this.$store.dispatch('popUpMessage', dataForPopUpMessage);
-        await this.$store.dispatch('logout');
+        await this.$store.dispatch('changeShowRightSideMenu_actions')
+        await this.$router.push('/')
+        await this.$store.dispatch('popUpMessage', dataForPopUpMessage)
+        await this.$store.dispatch('logout')
       },
 
       switchRightSideMenu() {
@@ -75,13 +75,13 @@
       },
       openSignUpFromSideMenu() {
 
-        this.$store.dispatch('changeShowRightSideMenu_actions');
+        this.$store.dispatch('changeShowRightSideMenu_actions')
         this.$store.dispatch('changeShownSignUpForm_actions')
       },
       openLoginFormFromSideMenu() {
 
-        this.$store.dispatch('changeShowRightSideMenu_actions');
-        this.$store.dispatch('changeShowLoginForm_actions');
+        this.$store.dispatch('changeShowRightSideMenu_actions')
+        this.$store.dispatch('changeShowLoginForm_actions')
       },
       goToAboutPage() {
         this.$store.dispatch('changeShowRightSideMenu_actions')

@@ -120,12 +120,12 @@
 </template>
 
 <script>
-  import {mapActions} from 'vuex'
-  import VueRecaptcha from 'vue-recaptcha';
-  import {email, helpers, maxLength, minLength, required} from 'vuelidate/lib/validators';
-  import {siteKey} from '@/devAndProdVariables';
+  import { mapActions } from 'vuex'
+  import VueRecaptcha from 'vue-recaptcha'
+  import { email, helpers, maxLength, minLength, required } from 'vuelidate/lib/validators'
+  import { siteKey } from '@/devAndProdVariables'
 
-  const murrenNameAlphaValidator = helpers.regex('murrenNameAlphaValidator', /^[\d\w]*$/);
+  const murrenNameAlphaValidator = helpers.regex('murrenNameAlphaValidator', /^[\d\w]*$/)
 
   export default {
     data: () => ({
@@ -190,7 +190,7 @@
 
       async goToAboutPage() {
 
-        await this.$store.dispatch('changeShownSignUpForm_actions');
+        await this.$store.dispatch('changeShownSignUpForm_actions')
         await this.$router.push('/about')
       }
     },
@@ -208,7 +208,7 @@
         return this.$v.username.$dirty && !this.$v.username.required
       },
       validUserNameMaxLength() {
-        return this.$v.username.$dirty && !this.$v.username.maxLength;
+        return this.$v.username.$dirty && !this.$v.username.maxLength
       },
       validMurrenNameAlphaValidator() {
         return this.$v.username.$dirty && !this.$v.username.murrenNameAlphaValidator
@@ -242,8 +242,8 @@
       },
     },
     validations: {
-      email: {email, required},
-      username: {required, maxLength: maxLength(24), murrenNameAlphaValidator},
+      email: { email, required },
+      username: { required, maxLength: maxLength(24), murrenNameAlphaValidator },
       password: {
         required,
         minLength: minLength(6),
@@ -253,5 +253,5 @@
     components: {
       VueRecaptcha,
     },
-  };
+  }
 </script>

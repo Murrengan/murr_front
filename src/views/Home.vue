@@ -36,8 +36,7 @@
 
 <script>
   import Observer from "@/components/common/Observer"
-  import { mapActions } from 'vuex'
-  import { mapGetters } from 'vuex'
+  import { mapActions, mapGetters } from 'vuex'
 
   export default {
     data: () => ({
