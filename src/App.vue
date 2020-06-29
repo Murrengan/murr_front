@@ -146,7 +146,8 @@
     align-self: auto;
     text-align: center;
     font-size: 18px;
-    font-family: "JetBrainsMono-Bold", serif;
+    font-family: "JetBrainsMono-Regular", serif;
+    font-weight: 600;
   }
 
   .header-link:hover {
