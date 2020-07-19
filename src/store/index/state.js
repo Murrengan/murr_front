@@ -6,5 +6,5 @@ export const state = {
   showCreateMurr: false,
   murrContent: false,
   murrCards: [],
-  nextMurrCardsPage: null
-}
+  nextMurrCardsPage: null,
+};
