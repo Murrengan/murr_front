@@ -4,7 +4,6 @@
 
 <a href="../../../../"><img src="../img/russian_federation.png" align="right" height="25" width="30" title="Русский"></a>
 
-
 <h2 align="center">Murrengan provide core functionality for web applications:</h2>
 
 <ul>
@@ -29,18 +28,22 @@
 * [vuelidate](https://vuelidate.js.org/) as helper, for field validator
 * [axios](https://github.com/axios/axios) as HTTP client for the browser (post, get and etc requests)
 * [vue-recaptcha](https://www.npmjs.com/package/vue-recaptcha) for save our precious site from bots
-* [vue-router](https://router.vuejs.org/) for help on navigation and route defender 
+* [vue-router](https://router.vuejs.org/) for help on navigation and route defender
 
 ### Setup
+
 ```
 npm install
 ```
+
 ### Compiles and hot-reloads for development
+
 ```
 npm run serve
 ```
 
 ### Compiles and minifies for production
+
 ```
 npm run build
 ```
@@ -49,7 +52,8 @@ npm run build
 
 <h2 align="center">Download, train and take part in improving the functionality!❤</h2>
 
-# 🌟Support🌟 
+# 🌟Support🌟
+
 [click](http://bit.do/eWnnm)
 
 <h4>Contacts:</h4>

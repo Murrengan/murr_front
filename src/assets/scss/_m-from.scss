@@ -22,7 +22,7 @@
 
     &::before {
       display: block;
-      content: '×';
+      content: "×";
     }
   }
 
@@ -33,7 +33,7 @@
     font-size: 1rem;
     text-align: center;
     padding: 0.8rem 0;
-    transition: border .1s ease-in-out, background-color .1s ease-in-out;
+    transition: border 0.1s ease-in-out, background-color 0.1s ease-in-out;
   }
 
   &__help {
@@ -52,8 +52,7 @@
   }
 
   &__group--invalid &__clear {
-    transition: color .1s ease-in-out,
-                font-size .1s ease-in-out;
+    transition: color 0.1s ease-in-out, font-size 0.1s ease-in-out;
 
     &:hover {
       color: #b0bec5;

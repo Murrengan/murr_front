@@ -1,117 +1,118 @@
 .image-tool--withBackground .image-tool__image {
-    background-color: transparent !important;
-    padding: 5px !important;
+  background-color: transparent !important;
+  padding: 5px !important;
 }
 
 .cdx-input {
-    border: transparent !important;
-    text-align: center;
+  border: transparent !important;
+  text-align: center;
 }
 
 .cdx-input {
-    padding: 0 !important;
-    font-size: 0.8rem;
-    opacity: 0.9;
-    font-family: "JetBrainsMono-Italic", serif;
+  padding: 0 !important;
+  font-size: 0.8rem;
+  opacity: 0.9;
+  font-family: "JetBrainsMono-Italic", serif;
 }
 
 .ce-toolbox.ce-toolbox--opened {
-    background-color: #A36FFF;
-    border-radius: 5px;
+  background-color: #a36fff;
+  border-radius: 5px;
 }
 
 .ce-inline-tool-input--showed {
-    background-color: #A36FFF;
-    color: #B0BEC5;
+  background-color: #a36fff;
+  color: #b0bec5;
 }
 
 .ce-settings__default-zone {
-    display: flex;
-    background-color: #A36FFF;
+  display: flex;
+  background-color: #a36fff;
 }
 
 .ce-conversion-toolbar__tools {
-    background-color: #A36FFF;
-    color: #B0BEC5;
+  background-color: #a36fff;
+  color: #b0bec5;
 }
 
 .ce-toolbar.ce-toolbar--opened {
-    background-color: #A36FFF;
+  background-color: #a36fff;
 }
 
 .cdx-button {
-    background-color: #A36FFF;
-    color: #B0BEC5;
+  background-color: #a36fff;
+  color: #b0bec5;
 }
 
 .cdx-button:hover {
-    background-color: #9c64ff;
-    color: #B0BEC5;
+  background-color: #9c64ff;
+  color: #b0bec5;
 }
 
 .ce-settings__plugin-zone {
-    background-color: #A36FFF;
+  background-color: #a36fff;
 }
 
 .codex-editor__redactor {
-    padding-bottom: 150px !important;
-    word-wrap: break-word !important;
+  padding-bottom: 150px !important;
+  word-wrap: break-word !important;
 }
 
 .ce-inline-toolbar__buttons {
-    background-color: #9c64ff;
-    color: #B0BEC5;
+  background-color: #9c64ff;
+  color: #b0bec5;
 }
 
 .ce-toolbar__settings-btn {
-    background-color: #9c64ff;
-    border-radius: 5px;
+  background-color: #9c64ff;
+  border-radius: 5px;
 }
 
 .ce-block--selected .ce-block__content {
-    background: rgb(26, 41, 49);
-    background: linear-gradient(16deg, rgba(26, 41, 49, 1) 0%, rgba(156, 100, 255, 0.7175245098039216) 100%);
-    border-radius: 5px;
+  background: rgb(26, 41, 49);
+  background: linear-gradient(
+    16deg,
+    rgba(26, 41, 49, 1) 0%,
+    rgba(156, 100, 255, 0.7175245098039216) 100%
+  );
+  border-radius: 5px;
 }
 
 .ce-settings__plugin-zone {
-    display: none;
+  display: none;
 }
 
 .image-tool__image-picture {
-    margin: 0 auto;
-    text-align: center;
+  margin: 0 auto;
+  text-align: center;
 }
 
-
 .ce-toolbar.ce-toolbar--opened {
-    background-color: transparent !important;
-    border: none;
+  background-color: transparent !important;
+  border: none;
 }
 
 @media (max-width: 650px) {
-    .ce-toolbar__actions {
-        position: fixed !important;
-        right: 0 !important;
-
-    }
+  .ce-toolbar__actions {
+    position: fixed !important;
+    right: 0 !important;
+  }
 }
 
 .editorjs-main {
-    width: 100%;
-    max-width: 650px;
+  width: 100%;
+  max-width: 650px;
 
-    border-radius: 5px;
-    text-align: left;
-    padding: 0 10px 0;
+  border-radius: 5px;
+  text-align: left;
+  padding: 0 10px 0;
 }
 
 .ce-code__textarea {
-    background-color: #C3A1FF !important;
-    padding: 5px !important;
-    font-weight: bold;
-    font-size: 0.9rem !important;
-    text-align: left;
-    white-space: pre-wrap;
-
+  background-color: #c3a1ff !important;
+  padding: 5px !important;
+  font-weight: bold;
+  font-size: 0.9rem !important;
+  text-align: left;
+  white-space: pre-wrap;
 }
