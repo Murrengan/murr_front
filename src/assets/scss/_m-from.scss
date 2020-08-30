@@ -1,4 +1,13 @@
+@import "../../assets/scss/variables";
 .m-form {
+  margin-top: 10%;
+  h1 {
+    margin: 0.3em 0;
+  }
+  h4 {
+    margin-bottom: 0.8em;
+    color: $white-light;
+  }
   &__group {
     margin-bottom: 1.5rem;
   }
@@ -22,7 +31,7 @@
 
     &::before {
       display: block;
-      content: '×';
+      content: "×";
     }
   }
 
@@ -33,7 +42,7 @@
     font-size: 1rem;
     text-align: center;
     padding: 0.8rem 0;
-    transition: border .1s ease-in-out, background-color .1s ease-in-out;
+    transition: border 0.1s ease-in-out, background-color 0.1s ease-in-out;
   }
 
   &__help {
@@ -52,8 +61,7 @@
   }
 
   &__group--invalid &__clear {
-    transition: color .1s ease-in-out,
-                font-size .1s ease-in-out;
+    transition: color 0.1s ease-in-out, font-size 0.1s ease-in-out;
 
     &:hover {
       color: #b0bec5;
@@ -61,6 +69,34 @@
     }
     &:active {
       color: #8b8ac5;
+    }
+  }
+  &__oauth-item {
+    font-size: 3em;
+    padding: 0.4em 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid $white;
+    margin-bottom: 0.7rem;
+    &:hover {
+      opacity: 0.8;
+    }
+    &:active {
+      opacity: 0.9;
+    }
+    &:before {
+      content: "";
+      display: block;
+      margin: 0 auto;
+      width: 1em;
+      height: 1em;
+    }
+    &_google {
+      background-color: #db4339;
+
+      &:before {
+        background: url("../../assets/svg/gg.svg") 50% 50% / contain no-repeat;
+      }
     }
   }
 }

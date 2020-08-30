@@ -1,109 +1,110 @@
 /*Fade*/
 .fade-enter {
-    opacity: 0;
+  opacity: 0;
 }
 
 .fade-enter-active,
 .fade-leave-active {
-    transition: opacity 0.3s ease-out;
+  transition: opacity 0.3s ease-out;
 }
 
 .fade-leave-to {
-    opacity: 0;
+  opacity: 0;
 }
 
 /*Slide Y*/
 .slide-fade-y-enter {
-    transform: translateY(100%);
-    opacity: 0;
+  transform: translateY(100%);
+  opacity: 0;
 }
 
 .slide-fade-y-enter-active,
 .slide-fade-y-leave-active {
-    transition: all 0.5s ease;
+  transition: all 0.5s ease;
 }
 
 .slide-fade-y-leave-to {
-    transform: translateY(100%);
-    opacity: 0;
+  transform: translateY(100%);
+  opacity: 0;
 }
 
 /*Slide X*/
 .slide-fade-x-enter {
-    transform: translateX(-100%);
-    opacity: 0;
+  transform: translateX(-100%);
+  opacity: 0;
 }
 
 .slide-fade-x-enter-active,
 .slide-fade-x-leave-active {
-    transition: all 0.5s ease;
+  transition: all 0.5s ease;
 }
 
 .slide-fade-x-leave-to {
-    transform: translateX(-100%);
-    opacity: 0;
+  transform: translateX(-100%);
+  opacity: 0;
 }
 
 /*Slide -X*/
 .slide-fade-minus-x-enter {
-    transform: translateX(100%);
-    opacity: 0;
+  transform: translateX(100%);
+  opacity: 0;
 }
 
 .slide-fade-minus-x-enter-active,
 .slide-fade-minus-x-leave-active {
-    transition: all 0.5s ease;
+  transition: all 0.5s ease;
 }
 
 .slide-fade-minus-x-leave-to {
-    transform: translateX(100%);
-    opacity: 0;
+  transform: translateX(100%);
+  opacity: 0;
 }
 
 /*DIV FOR SLIDE-FADE*/
 .main-slide-fade-container {
-    position: fixed;
-    background-color: #1a2931;
-    width: 100%;
-    height: 100%;
-    bottom: 0;
-    left: 0;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border: #AD00FF 1px solid;
-    border-radius: 5px;
-    z-index: 1;
-    padding: 0 10px;
+  position: fixed;
+  background-color: #1a2931;
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  border: #ad00ff 1px solid;
+  border-radius: 5px;
+  z-index: 1;
+  padding: 0 10px;
+  overflow-x: hidden;
 }
 
 .hide__main-slide-fade-container {
-    position: absolute;
-    top: 0;
-    text-align: center;
+  position: absolute;
+  top: 0;
+  text-align: center;
 }
 
 .hide-icon__main-slide-fade-container {
-    font-size: 4rem;
-    color: #AD00FF;
-    transition: 0.5s;
+  font-size: 4rem;
+  color: #ad00ff;
+  transition: 0.5s;
 }
 
 .hide-icon__main-slide-fade-container:hover {
-    color: #B388FF;
-    transform: scale(1.25);
+  color: #b388ff;
+  transform: scale(1.25);
 }
 
 .hide-icon__main-slide-fade-container:active {
-    color: #C3A1FF;
+  color: #c3a1ff;
 }
 
 .murrengan-logo {
-    width: 100px;
-    opacity: 0.9;
+  width: 100px;
+  opacity: 0.9;
 }
 
 .murrengan-logo:hover {
-    opacity: 1;
+  opacity: 1;
 }
