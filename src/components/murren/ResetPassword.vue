@@ -6,25 +6,15 @@
       </a>
     </div>
 
-    <div>
-      <img
-        src="@/assets/img/logo_pink.png"
-        alt="Logo"
-        class="murrengan-logo mb"
-      />
-    </div>
-
-    <h1 class="mb">Восстановить пароль</h1>
-
     <form
       class="m-form"
       @submit.prevent="() => $refs.invisibleRecaptcha.execute()"
     >
+      <img src="@/assets/img/logo_pink.png" alt="Logo" class="murrengan-logo" />
+
+      <h1 class="mb">Восстановить пароль</h1>
       <!-- Email field begin -->
-      <div
-        :class="{ 'm-form__group--invalid': validEmail }"
-        class="m-form__group"
-      >
+      <div :class="{ 'm-form__group--invalid': validEmail }">
         <label class="m-form__label">
           <input
             type="text"
@@ -47,7 +37,6 @@
           Почта указана не верно
         </div>
       </div>
-      <!-- Email field end -->
 
       <div class="m-form__group">
         <small class="m-form__help"

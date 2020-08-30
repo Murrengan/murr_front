@@ -56,6 +56,7 @@
                 <el-button
                   class="murr-button"
                   @click="() => $refs.invisibleRecaptcha.execute()"
+                  :loading="loading"
                 >
                   Мурр готов!
                 </el-button>
@@ -222,7 +223,7 @@ export default {
 
     // auto save murrData in local storage
     while (this.startCreateMurr === true) {
-      await new Promise((r) => setTimeout(r, 15000));
+      await new Promise((r) => setTimeout(r, 5000));
       if (this.saveTimeOut === true) {
         let _raw_data = await window.editor.save();
         let newMurrContent = await JSON.stringify(_raw_data);
@@ -247,6 +248,7 @@ export default {
       imgSrc: "",
       cropImg: "",
       visiblePopover: false,
+      loading: false,
     };
   },
   destroyed() {
@@ -279,6 +281,7 @@ export default {
     },
     async save(recaptchaToken) {
       this.$refs.invisibleRecaptcha.reset();
+      this.loading = true;
       let murr_content = await window.editor.save();
       const murrCardData = {
         recaptchaToken,
@@ -304,6 +307,7 @@ export default {
           this.saveTimeOut = false;
           await this.saveMurrContent({ murrContent: "", murrHeader: "" });
           this.clearMurrCards();
+          this.loading = false;
         }
       } catch (e) {
         if (e.response.data.recaptcha_response_problem) {
@@ -317,6 +321,7 @@ export default {
           message: "Ошибка на сервере",
           type: "error",
         });
+        this.loading = false;
       }
     },
 

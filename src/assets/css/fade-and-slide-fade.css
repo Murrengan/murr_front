@@ -68,14 +68,15 @@
   height: 100%;
   bottom: 0;
   left: 0;
+  top: 0;
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   border: #ad00ff 1px solid;
   border-radius: 5px;
   z-index: 1;
   padding: 0 10px;
+  overflow-x: hidden;
 }
 
 .hide__main-slide-fade-container {

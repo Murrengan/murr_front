@@ -60,12 +60,12 @@ const router = new Router({
       meta: {},
       component: () => import("./views/common/About.vue"),
     },
-    {
-      path: "/murr_chat",
-      name: "murr_chat",
-      meta: {},
-      component: () => import("./components/murr_chat/MurrChat.vue"),
-    },
+    // {
+    //   path: "/murr_chat",
+    //   name: "murr_chat",
+    //   meta: {},
+    //   component: () => import("./components/murr_chat/MurrChat.vue"),
+    // },
     {
       path: "*",
       name: "page_404",

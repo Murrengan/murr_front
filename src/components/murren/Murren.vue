@@ -5,11 +5,9 @@
     <div v-if="tanochkaUrl">
       <img class="tanochka" alt="tanochka" :src="tanochkaUrl" />
     </div>
-    <div class="bottom-info">
-      <el-button class="murr-button__danger" @click="logout">
-        Выйти
-      </el-button>
-    </div>
+    <el-button class="murr-button__danger" @click="logout">
+      Выйти
+    </el-button>
   </div>
 </template>
 
@@ -41,13 +39,6 @@ export default {
 </script>
 
 <style scoped>
-.bottom-info {
-  position: absolute;
-  bottom: 0;
-  padding-bottom: 60px;
-  display: flex;
-  flex-direction: column;
-}
 
 .tanochka {
   max-width: 300px;

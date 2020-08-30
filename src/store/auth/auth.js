@@ -12,12 +12,11 @@ export default {
     async createToken({ commit }, payload) {
       try {
         const { data } = await axios.post("/api/murren/token_create/", payload);
-        const response = jwtDecode(data.access);
-
-        if (data.access) {
-          commit("setAccessToken_mutations", data.access);
-          commit("setMurrenName_mutations", payload.username);
-          commit("setMurrenId_mutations", response.user_id);
+        if (data.token) {
+          const jwtDecoded = jwtDecode(data.token);
+          commit("setAccessToken_mutations", data.token);
+          commit("setMurrenName_mutations", jwtDecoded.username);
+          commit("setMurrenId_mutations", jwtDecoded.user_id);
         }
       } catch (e) {
         return {

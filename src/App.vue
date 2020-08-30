@@ -25,13 +25,13 @@
         Мурры
       </router-link>
 
-      <router-link
-        active-class="active"
-        class="flex-item header-link"
-        to="/murr_chat"
-      >
-        Чат
-      </router-link>
+<!--      <router-link-->
+<!--        active-class="active"-->
+<!--        class="flex-item header-link"-->
+<!--        to="/murr_chat"-->
+<!--      >-->
+<!--        Чат-->
+<!--      </router-link>-->
 
       <router-link
         active-class="active"
@@ -105,7 +105,7 @@ export default {
         await this.$store.dispatch("changeShowCreateMurr_actions");
       } else {
         const dataForPopUpMessage = {
-          message: "Для создания мурра ребуется авторизация 😳",
+          message: "Для создания мурра требуется авторизация 😳",
           customClass: "element-ui-message__error",
           type: "warning",
         };

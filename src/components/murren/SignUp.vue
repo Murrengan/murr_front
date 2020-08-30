@@ -6,20 +6,24 @@
       </a>
     </div>
 
-    <div>
-      <img
-        src="@/assets/img/logo_pink.png"
-        alt="circle_logo"
-        class="murrengan-logo mb"
-      />
-    </div>
-
-    <h1 class="mb">Создать аккаунт</h1>
-
     <form
       class="m-form"
       @submit.prevent="() => $refs.invisibleRecaptcha.execute()"
     >
+      <img
+        src="@/assets/img/logo_pink.png"
+        alt="circle_logo"
+        class="murrengan-logo"
+      />
+      <h1>Регистрация</h1>
+      <h4>Через социальные сети</h4>
+
+      <div class="flex-centered">
+        <GoogleOauth @success="goHome" />
+      </div>
+
+      <h4>С паролем</h4>
+
       <!-- Email field begin -->
       <div
         :class="{ 'm-form__group--invalid': validEmail }"
@@ -50,7 +54,6 @@
           Эта почта уже используется
         </div>
       </div>
-      <!-- Email field end -->
 
       <!-- Username field begin -->
       <div
@@ -79,7 +82,6 @@
           Это имя уже используется
         </div>
 
-        <!--        <div v-if="" class="m-form__help">-->
         <div v-if="validMurrenNameAlphaValidator" class="m-form__help">
           Имя на латинице и вместо пробелов _
         </div>
@@ -88,7 +90,6 @@
           Имя максимум {{ $v.username.$params.maxLength.max }} символов
         </div>
       </div>
-      <!-- Username field end -->
 
       <!-- Password field begin -->
       <div
@@ -123,7 +124,6 @@
           Пароль слишком похож на почту
         </div>
       </div>
-      <!-- Password field end -->
 
       <div class="m-form__group">
         <small>
@@ -151,6 +151,7 @@
 <script>
 import { mapActions } from "vuex";
 import VueRecaptcha from "vue-recaptcha";
+import GoogleOauth from "./oauth/GoogleOauth";
 import {
   email,
   helpers,
@@ -304,6 +305,7 @@ export default {
   },
   components: {
     VueRecaptcha,
+    GoogleOauth,
   },
 };
 </script>

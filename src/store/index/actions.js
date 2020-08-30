@@ -13,9 +13,6 @@ export const actions = {
   async changeShowResetPasswordForm_actions(context) {
     context.commit("changeShowResetPasswordForm_mutations");
   },
-  async callSetClearState_actions(context) {
-    context.commit("setClearState_mutations");
-  },
   async changeShowCreateMurr_actions(context) {
     context.commit("changeShowCreateMurr_mutations");
   },

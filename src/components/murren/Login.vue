@@ -6,20 +6,23 @@
       </a>
     </div>
 
-    <div>
+    <form
+      class="m-form"
+      @submit.prevent="() => $refs.invisibleRecaptcha.execute()"
+    >
       <img
         src="@/assets/img/logo_pink.png"
         alt="circle_logo"
-        class="murrengan-logo mb"
+        class="murrengan-logo"
       />
-    </div>
+      <h1>Войти</h1>
+      <h4>Через социальные сети</h4>
 
-    <h1 class="mb">Войти</h1>
+      <div class="flex-centered">
+        <GoogleOauth @success="goHome" />
+      </div>
 
-    <form
-      class="m-from"
-      @submit.prevent="() => $refs.invisibleRecaptcha.execute()"
-    >
+      <h4>С паролем</h4>
       <!-- Username field begin -->
       <div
         :class="{ 'm-form__group--invalid': validUserName }"
@@ -50,7 +53,6 @@
           Активный Муррен с указанными данными не найден
         </div>
       </div>
-      <!-- Username field end -->
 
       <!-- Password field begin -->
       <div
@@ -73,7 +75,6 @@
           Пароль минимум {{ $v.murren_password.$params.minLength.min }} символов
         </div>
       </div>
-      <!-- Password field end -->
 
       <div class="m-form__group">
         <a href="#" class="hide-a-decoration" @click.prevent="handlerGoSignUp">
@@ -110,6 +111,7 @@ import { mapActions } from "vuex";
 import { maxLength, minLength, required } from "vuelidate/lib/validators";
 import VueRecaptcha from "vue-recaptcha";
 import { siteKey } from "@/devAndProdVariables";
+import GoogleOauth from "./oauth/GoogleOauth";
 
 export default {
   data: () => ({
@@ -199,6 +201,7 @@ export default {
   },
   components: {
     VueRecaptcha,
+    GoogleOauth,
   },
 };
 </script>

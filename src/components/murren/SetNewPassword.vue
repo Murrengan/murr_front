@@ -6,20 +6,17 @@
       </a>
     </div>
 
-    <div>
+    <form
+      class="m-form"
+      @submit.prevent="() => $refs.invisibleRecaptcha.execute()"
+    >
       <img
         src="@/assets/img/logo_pink.png"
         alt="circle_logo"
         class="murrengan-logo mb"
       />
-    </div>
 
-    <h1 class="mb">Новый пароль</h1>
-
-    <form
-      class="m-form"
-      @submit.prevent="() => $refs.invisibleRecaptcha.execute()"
-    >
+      <h1 class="mb">Новый пароль</h1>
       <!-- Password field begin -->
       <div
         :class="{ 'm-form__group--invalid': validPassword }"
@@ -47,7 +44,6 @@
           Пароль слишком простой
         </div>
       </div>
-      <!-- Password field end -->
 
       <!-- PasswordConfirm field begin -->
       <div
@@ -73,7 +69,6 @@
           Пароли не совпадают
         </div>
       </div>
-      <!-- PasswordConfirm field end -->
 
       <vue-recaptcha
         ref="invisibleRecaptcha"

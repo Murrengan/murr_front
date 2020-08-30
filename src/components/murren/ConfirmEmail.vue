@@ -1,5 +1,5 @@
 <template>
-  <div class="main-slide-fade-container">
+  <div class="main-slide-fade-container justify-content-center">
     <div class="hide__main-slide-fade-container">
       <a href="#" @click.prevent="switchMurrenEmailActivate">
         <i class="el-icon-arrow-down hide-icon__main-slide-fade-container"></i>
