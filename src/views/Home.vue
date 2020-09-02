@@ -63,7 +63,7 @@ export default {
       }
     },
     openMurr(murr_id) {
-      this.$router.push({ path: `/murr_card/?murr_id=${murr_id}` });
+      this.$router.push({ path: `/murr_card/${murr_id}` });
     },
   },
   components: {

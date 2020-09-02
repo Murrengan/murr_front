@@ -83,16 +83,12 @@ export default {
   async beforeCreate() {
     // fix for navbar hide murr_content
     await window.scrollTo(0, -42);
-    const murr_id = this.$route.query.murr_id;
-    const murrCardData = await axios.get("/api/murr_card/", {
-      params: {
-        murr_id: murr_id,
-      },
-    });
+    const murr_id = this.$route.params.id;
+    const murrCardData = await axios.get(`/api/murr_card/${murr_id}`);
 
-    this.murrTitle = murrCardData.data[0].title;
-    this.murr_content = JSON.parse(murrCardData.data[0].content);
-    this.murrOwnerId = murrCardData.data[0].owner;
+    this.murrTitle = murrCardData.data.title;
+    this.murr_content = JSON.parse(murrCardData.data.content);
+    this.murrOwnerId = murrCardData.data.owner;
   },
 
   data: () => ({
