@@ -91,7 +91,7 @@
               <div class="modal-mask" v-show="showMurrCoverCropper">
                 <vue-cropper
                   ref="cropper"
-                  :aspect-ratio="16 / 9"
+                  :view-mode="1"
                   :src="imgSrc"
                   preview=".preview"
                   class="cropper_div mb"
@@ -416,9 +416,10 @@ input[type="file"] {
 }
 
 .preview {
-  height: calc(320px * (9 / 16));
+  height: calc(320px);
   overflow: hidden;
   border-radius: 5px;
+  margin: 0 auto;
 }
 
 .bottom {

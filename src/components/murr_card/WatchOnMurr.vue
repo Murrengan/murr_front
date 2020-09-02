@@ -133,7 +133,7 @@ export default {
             murr_id: this.$route.query.murr_id,
             owner_id: this.murrOwnerId,
           };
-          const response = await axios.delete("/api/murr_card/", {
+          const response = await axios.delete(`/api/murr_card/${this.$route.params.id}`, {
             headers: {
               Authorization:
                 "Bearer " + this.$store.getters.accessToken_getters,

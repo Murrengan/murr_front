@@ -81,7 +81,4 @@ export default {
   width: 100%;
 }
 
-.murr-cover {
-  width: 100%;
-}
 </style>
