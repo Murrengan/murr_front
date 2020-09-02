@@ -301,7 +301,7 @@ export default {
         if (response.status === 201) {
           await this.$store.dispatch("changeShowCreateMurr_actions");
           await this.$router.push({
-            path: `/murr_card/?murr_id=${response.data.id}`,
+            path: `/murr_card/${response.data.id}`,
           });
           this.startCreateMurr = false;
           this.saveTimeOut = false;

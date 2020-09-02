@@ -21,7 +21,7 @@ export const actions = {
   },
   async fetchMurrCards(context, page = null) {
     try {
-      let url = "/api/murr_card/all/";
+      let url = "/api/murr_card/";
       if (page) {
         url += `?page=${page}`;
       }
