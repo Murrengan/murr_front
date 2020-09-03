@@ -49,7 +49,7 @@ const router = new Router({
       component: () => import("./components/murr_card/CreateMurr.vue"),
     },
     {
-      path: "/murr_card",
+      path: "/murr_card/:id",
       name: "murr_card",
       meta: {},
       component: () => import("./components/murr_card/WatchOnMurr.vue"),

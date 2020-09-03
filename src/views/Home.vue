@@ -63,7 +63,7 @@ export default {
       }
     },
     openMurr(murr_id) {
-      this.$router.push({ path: `/murr_card/?murr_id=${murr_id}` });
+      this.$router.push({ path: `/murr_card/${murr_id}` });
     },
   },
   components: {
@@ -80,8 +80,7 @@ export default {
   align-items: center;
   width: 100%;
 }
-
 .murr-cover {
-  width: 100%;
+  max-width: 100%;
 }
 </style>

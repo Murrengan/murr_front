@@ -67,6 +67,8 @@
         </div>
       </div>
     </div>
+
+    <comments />
   </div>
 </template>
 
@@ -74,27 +76,22 @@
 import axios from "axios";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import { axios_defaults_baseFrontURL } from "@/devAndProdVariables";
+import Comments from "../murr_comment/Comments.vue";
 
 export default {
   computed: {
     ...mapGetters(["murrenId_getters"]),
   },
-
   async beforeCreate() {
     // fix for navbar hide murr_content
     await window.scrollTo(0, -42);
-    const murr_id = this.$route.query.murr_id;
-    const murrCardData = await axios.get("/api/murr_card/", {
-      params: {
-        murr_id: murr_id,
-      },
-    });
+    const murr_id = this.$route.params.id;
+    const murrCardData = await axios.get(`/api/murr_card/${murr_id}/`);
 
-    this.murrTitle = murrCardData.data[0].title;
-    this.murr_content = JSON.parse(murrCardData.data[0].content);
-    this.murrOwnerId = murrCardData.data[0].owner;
+    this.murrTitle = murrCardData.data.title;
+    this.murr_content = JSON.parse(murrCardData.data.content);
+    this.murrOwnerId = murrCardData.data.owner;
   },
-
   data: () => ({
     dataForMurr: "",
     murrTitle: "",
@@ -137,13 +134,16 @@ export default {
             murr_id: this.$route.query.murr_id,
             owner_id: this.murrOwnerId,
           };
-          const response = await axios.delete("/api/murr_card/", {
-            headers: {
-              Authorization:
-                "Bearer " + this.$store.getters.accessToken_getters,
-            },
-            data: data,
-          });
+          const response = await axios.delete(
+            `/api/murr_card/${this.$route.params.id}`,
+            {
+              headers: {
+                Authorization:
+                  "Bearer " + this.$store.getters.accessToken_getters,
+              },
+              data: data,
+            }
+          );
           await this.clearMurrCards();
           await this.$router.push("/");
           if (response.status === 204) {
@@ -165,6 +165,9 @@ export default {
           });
         });
     },
+  },
+  components: {
+    Comments,
   },
 };
 </script>
