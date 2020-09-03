@@ -1,0 +1,129 @@
+@import "variables";
+@import "form";
+
+.murr-comment {
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+
+  &__list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  &__item {
+    position: relative;
+    margin-bottom: 5px;
+  }
+  &__panel {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    padding: $comment-panel-padding;
+  }
+  &__author {
+    position: relative;
+  }
+  &__photo {
+    width: 30px;
+    height: 30px;
+    overflow: hidden;
+    border-radius: 50%;
+    background-color: #747474;
+  }
+  &__photo-img {
+    display: block;
+    width: 100%;
+  }
+  &__status {
+    position: absolute;
+    bottom: 0;
+    display: block;
+    width: 6px;
+    height: 6px;
+    border: 1px solid $comment-status-border-color;
+    &.offline {
+      background-color: $comment-status-offline;
+    }
+    &.online {
+      background-color: $comment-status-online;
+    }
+  }
+  &__author-name {
+    font-size: 14px;
+    margin-left: 5px;
+    color: $comment-panel-text-color;
+    text-align: left;
+  }
+  &__date {
+    margin-left: 5px;
+    text-align: left;
+    font-size: 9px;
+    color: $comment-panel-text-color;
+  }
+
+  &__body,
+  &__reply {
+    margin-left: calc(30px + 15px);
+  }
+  &__body {
+    font-size: 14px;
+    text-align: left;
+    padding: $comment-body-padding;
+    background-color: $comment-body-background-color;
+    color: $comment-body-text-color;
+  }
+  &__actions {
+    text-align: left;
+  }
+  &__reply {
+    padding: 2px 0;
+    &,
+    &-icon {
+      cursor: pointer;
+      font-size: 11px;
+      color: darken($comment-body-text-color, 20%);
+    }
+
+    &:hover,
+    &:hover &-icon {
+      color: darken($comment-body-text-color, 10%);
+    }
+  }
+
+  // Children
+  &__list--children {
+    margin-top: 10px;
+    padding-left: 5%;
+  }
+  &__children-line-vertical {
+    position: absolute;
+    top: 45px;
+    left: 24px;
+    bottom: 0;
+    border-left: 1px $comment-children-line-style $comment-children-line-color;
+    width: 10px;
+    cursor: pointer;
+  }
+  &__item:last-child > div > &__children-line-vertical {
+    bottom: 0;
+  }
+
+  &__children-line-vertical:hover {
+    border-left-color: lighten($comment-children-line-color, 30%);
+  }
+
+  &__hidden {
+    color: $comment-body-text-color;
+    margin-top: 10px;
+    margin-left: calc(30px + -21px);
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+
+    &-icon {
+      color: $comment-body-text-color;
+    }
+  }
+}

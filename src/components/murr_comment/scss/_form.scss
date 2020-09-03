@@ -1,0 +1,70 @@
+.comment-form {
+  padding: 10px 0 10px 47px;
+
+  &__text {
+    width: 100%;
+    color: $comment-form-textarea-text;
+    background-color: $comment-form-textarea-background;
+    border-radius: 0;
+    border: $comment-form-textarea-border;
+    min-height: 80px;
+    padding: 10px;
+    font-size: 16px;
+    resize: none;
+
+    transition: border 0.3s ease;
+
+    &::placeholder {
+      color: darken($comment-form-textarea-text, 20%);
+      transition: color 0.3s ease;
+    }
+
+    &:focus {
+      border-color: lighten($comment-form-textarea-border-color, 10%);
+
+      &::placeholder {
+        color: transparent;
+      }
+    }
+  }
+
+  &__panel {
+    display: flex;
+    margin: 10px 0;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  &__information {
+    font-size: 9px;
+    color: $comment-panel-text-color;
+  }
+
+  &__button {
+    background-color: $comment-form-button-background;
+    color: $comment-form-button-color;
+    border: 0;
+    margin-left: 10px;
+
+    transition: background-color 0.3 ease, color 0.3s ease;
+
+    &[disabled] {
+      background-color: darken($comment-form-button-background, 7%);
+      color: $comment-form-button-color;
+      border: 0;
+
+      &:hover {
+        background-color: darken($comment-form-button-background, 3%);
+        color: $comment-form-button-color;
+      }
+    }
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: lighten($comment-form-button-background, 3%);
+      color: $comment-form-button-color;
+      border: 0;
+    }
+  }
+}

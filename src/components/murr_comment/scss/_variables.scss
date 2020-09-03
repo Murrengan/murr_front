@@ -1,0 +1,25 @@
+$comment-body-padding: 5px 10px;
+$comment-body-background-color: darken(#365566, 12%);
+$comment-body-text-color: lighten($comment-body-background-color, 40%);
+
+$comment-panel-padding: 5px 10px;
+$comment-panel-background-color: darken($comment-body-background-color, 3%);
+$comment-panel-text-color: lighten($comment-panel-background-color, 20%);
+$comment-panel-delimiter-color: darken($comment-body-background-color, 5%);
+
+$comment-status-offline: #ff4d00;
+$comment-status-online: #19b485;
+$comment-status-border-color: $comment-panel-background-color;
+
+$comment-children-line-color: lighten($comment-panel-background-color, 20%);
+$comment-children-line-style: solid;
+
+$comment-form-textarea-text: #759fb6;
+$comment-form-textarea-background: #1a2931;
+$comment-form-textarea-border-color: lighten(
+  $comment-form-textarea-background,
+  10%
+);
+$comment-form-textarea-border: 1px solid $comment-form-textarea-border-color;
+$comment-form-button-background: #406477;
+$comment-form-button-color: #759fb6;
