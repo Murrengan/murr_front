@@ -80,5 +80,7 @@ export default {
   align-items: center;
   width: 100%;
 }
-
+.murr-cover {
+  max-width: 100%;
+}
 </style>
