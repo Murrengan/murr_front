@@ -86,7 +86,7 @@ export default {
     // fix for navbar hide murr_content
     await window.scrollTo(0, -42);
     const murr_id = this.$route.params.id;
-    const murrCardData = await axios.get(`/api/murr_card/${murr_id}`);
+    const murrCardData = await axios.get(`/api/murr_card/${murr_id}/`);
 
     this.murrTitle = murrCardData.data.title;
     this.murr_content = JSON.parse(murrCardData.data.content);

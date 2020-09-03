@@ -95,7 +95,7 @@ export default {
           text,
           recaptchaToken,
           murrId: this.$route.params.id,
-          parent_id: this.item.id,
+          parent: this.item.id,
         }
       );
 
