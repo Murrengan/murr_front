@@ -183,5 +183,6 @@ export default {
   height: 100%;
   min-height: 100vh;
   background-color: #1a2931;
+  min-width: 320px
 }
 </style>
