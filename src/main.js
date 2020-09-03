@@ -1,21 +1,25 @@
 import Vue from "vue";
-import App from "./App.vue";
 import Vuelidate from "vuelidate";
+import VueMasonry from "vue-masonry-css";
 import router from "@/router";
 import store from "@/store";
 import axios from "axios";
-import "normalize.css";
-import { axios_defaults_baseURL } from "./devAndProdVariables";
 import ElementUI from "element-ui";
 import GSignInButton from "vue-google-signin-button";
+import { formatDistance } from "date-fns";
+import { ru } from "date-fns/locale";
+
+import App from "./App.vue";
+import Loader from "./components/common/Loader";
+import { axios_defaults_baseURL } from "./devAndProdVariables";
+
+import "normalize.css";
 import "element-ui/lib/theme-chalk/index.css";
 import "@/assets/css/index.css";
 import "@/assets/css/fade-and-slide-fade.css";
 import "@/assets/css/fonts.css";
 import "@/assets/scss/main.scss";
 import "@/assets/css/murr_editorjs.css";
-import Loader from "./components/common/Loader";
-import VueMasonry from "vue-masonry-css";
 
 Vue.use(VueMasonry);
 Vue.use(ElementUI);
@@ -49,6 +53,10 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+Vue.filter("dateFormatHumanDiff", (value) => {
+  return formatDistance(new Date(value), new Date(), { locale: ru });
+});
 
 new Vue({
   router,

@@ -8,6 +8,7 @@ import { actions } from "./index/actions";
 import { mutations } from "./index/mutations";
 import { state } from "./index/state";
 import { getters } from "./index/getters";
+import comments from "../components/murr_comment/store";
 
 Vue.use(Vuex);
 
@@ -25,5 +26,6 @@ export default new Vuex.Store({
     auth,
     showPopUpMessage,
     restrictedAccess,
+    comments,
   },
 });
