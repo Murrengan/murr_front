@@ -289,6 +289,7 @@ ul {
   background-color: #c3a1ff;
   border-radius: 5px;
   transition: 0.5s;
+  border: #851cff 1px solid ;
 }
 
 .murr-card:hover {
