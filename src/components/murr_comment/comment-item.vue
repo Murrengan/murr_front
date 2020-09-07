@@ -3,7 +3,7 @@
     <comment-show
       v-show="!isHidden"
       :item="item"
-      :handlerToggleTree="handlerToggleTree"
+      :onToggleTreeComment="onToggleTreeComment"
     >
       <template v-if="item.children.length" v-slot:children>
         <ul class="murr-comment__list murr-comment__list--children">
@@ -19,7 +19,7 @@
     <comment-hide
       v-show="isHidden"
       :item="item"
-      :handlerToggleTree="handlerToggleTree"
+      :onToggleTreeComment="onToggleTreeComment"
     />
   </li>
 </template>
@@ -40,7 +40,7 @@ export default {
     isHidden: false,
   }),
   methods: {
-    handlerToggleTree() {
+    onToggleTreeComment() {
       this.isHidden = !this.isHidden;
     },
   },

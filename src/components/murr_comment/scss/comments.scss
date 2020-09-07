@@ -64,12 +64,12 @@
   }
 
   &__body,
-  &__reply {
+  &__actions {
     margin-left: calc(30px + 15px);
   }
   &__body {
-    word-break: break-word;
     font-size: 14px;
+    word-break: break-word;
     text-align: left;
     padding: $comment-body-padding;
     background-color: $comment-body-background-color;
@@ -104,20 +104,53 @@
     }
   }
   &__actions {
-    text-align: left;
-  }
-  &__reply {
-    padding: 2px 0;
-    &,
-    &-icon {
-      cursor: pointer;
-      font-size: 11px;
-      color: darken($comment-body-text-color, 20%);
-    }
+    display: flex;
+    &-item {
+      padding: 5px 0;
 
-    &:hover,
-    &:hover &-icon {
-      color: darken($comment-body-text-color, 10%);
+      & + & {
+        margin-left: 2px;
+      }
+
+      > span {
+        color: $comment-body-text-color;
+      }
+      > i {
+        color: $comment-panel-text-color;
+      }
+
+      &.increment,
+      &.decrement {
+        > i {
+          font-size: 18px;
+        }
+        &:hover > i {
+          color: $comment-body-text-color;
+        }
+      }
+
+      &.counter {
+        cursor: inherit;
+        > span {
+          font-size: 14px;
+          font-family: "Open Sans", sans-serif;
+        }
+      }
+
+      &.reply {
+        margin-left: 5px;
+        > span {
+          font-size: 14px;
+          font-family: "Open Sans", sans-serif;
+        }
+        > span {
+          color: $comment-panel-text-color;
+        }
+        &:hover > span,
+        &:hover > i {
+          color: $comment-body-text-color;
+        }
+      }
     }
   }
 

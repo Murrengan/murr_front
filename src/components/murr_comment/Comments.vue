@@ -3,7 +3,10 @@
     <loader v-if="isLoading" />
 
     <template v-else>
-      <comment-form v-if="token" @submitComment="handlerSubmit" />
+      <comment-form
+        v-if="isMurrenAuthorized"
+        @onSubmitComment="onSubmitComment"
+      />
 
       <ul v-if="comments.length" class="murr-comment__list">
         <comment-item v-for="item in comments" :key="item.id" :item="item" />
@@ -38,7 +41,10 @@ export default {
     const data = await this.$store.dispatch(type.ACTIONS_FETCH_COMMENTS, {
       murrId: this.murrId,
     });
-    this.nextPage = data.next;
+
+    if (data) {
+      this.nextPage = data.next;
+    }
 
     this.isLoading = false;
   },
@@ -47,6 +53,9 @@ export default {
       comments: "filterComments",
       token: "accessToken_getters",
     }),
+    isMurrenAuthorized() {
+      return this.token && this.token !== "";
+    },
   },
   methods: {
     async fetchNextComments() {
@@ -54,30 +63,30 @@ export default {
         return;
       }
 
-      try {
-        const nextNumberPage = ++this.page;
+      const nextNumberPage = ++this.page;
 
-        const data = await this.$store.dispatch(
-          type.ACTIONS_FETCH_NEXT_PAGE_COMMENTS,
-          {
-            murrId: this.murrId,
-            page: nextNumberPage,
-          }
-        );
+      const data = await this.$store.dispatch(
+        type.ACTIONS_FETCH_NEXT_PAGE_COMMENTS,
+        {
+          murrId: this.murrId,
+          page: nextNumberPage,
+        }
+      );
 
+      if (data) {
         this.nextPage = data.next;
-      } catch (error) {
-        this.nextPage = null;
       }
     },
-    async handlerSubmit({ recaptchaToken, text, resetForm }) {
-      await this.$store.dispatch(type.ACTIONS_ADD_COMMENT, {
+    async onSubmitComment({ recaptchaToken, text, resetForm }) {
+      const newComment = await this.$store.dispatch(type.ACTIONS_ADD_COMMENT, {
         text,
         recaptchaToken,
         murrId: this.murrId,
       });
 
-      resetForm();
+      if (newComment) {
+        resetForm();
+      }
     },
   },
   components: {

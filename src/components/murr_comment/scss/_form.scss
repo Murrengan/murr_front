@@ -1,6 +1,10 @@
 .comment-form {
   padding: 10px 0 10px 47px;
 
+  &__typing-area {
+    position: relative;
+  }
+
   &__text {
     width: 100%;
     color: $comment-form-textarea-text;
@@ -8,7 +12,7 @@
     border-radius: 0;
     border: $comment-form-textarea-border;
     min-height: 80px;
-    padding: 10px;
+    padding: 10px 10px 20px;
     font-size: 16px;
     resize: none;
 
@@ -25,6 +29,23 @@
       &::placeholder {
         color: transparent;
       }
+    }
+
+    &.warning {
+      border-color: red;
+    }
+  }
+
+  &__typing-lenght {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+
+    font-size: 9px;
+    color: $comment-panel-text-color;
+
+    &.warning {
+      color: red;
     }
   }
 
