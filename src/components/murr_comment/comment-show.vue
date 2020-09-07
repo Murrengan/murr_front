@@ -19,9 +19,19 @@
       </div>
     </div>
 
-    <div class="murr-comment__body">
-      {{ comment.text }}
+    <div
+      v-if="isCompactBody"
+      :class="{ compact: isHiddenOriginalBody }"
+      class="murr-comment__body murr-comment__body--toggle"
+      ref="text-body"
+    >
+      <div v-html="compiledMarkdown"></div>
+      <div
+        class="murr-comment__body--toggle-action"
+        @click="hednalerToggleCompact"
+      ></div>
     </div>
+    <div v-else class="murr-comment__body" v-html="compiledMarkdown"></div>
 
     <div class="murr-comment__actions" v-if="token">
       <span
@@ -51,6 +61,8 @@
 
 <script>
 import { mapGetters } from "vuex";
+import marked from "marked";
+import sanitizeHtml from "sanitize-html";
 import CommentForm from "./comment-form.vue";
 import * as type from "./store/type.js";
 
@@ -71,6 +83,7 @@ export default {
   data: () => ({
     isShowReply: false,
     isLoading: false,
+    isHiddenOriginalBody: true,
   }),
   mounted() {
     // Subscribe to the event closing all forms
@@ -79,12 +92,19 @@ export default {
         this.isShowReply = false;
       }
     });
+    // Stup markdawn
+    marked.setOptions({
+      breaks: true,
+    });
   },
   methods: {
     handlerReplyComment(comment) {
       this.isShowReply = !this.isShowReply;
       // Send an event to all forms so that they close if open
       eventEmitter.$emit("commentHideForms", comment);
+    },
+    hednalerToggleCompact() {
+      this.isHiddenOriginalBody = !this.isHiddenOriginalBody;
     },
     async handlerSubmit({ resetForm, text, recaptchaToken }) {
       this.isLoading = true;
@@ -114,6 +134,12 @@ export default {
     }),
     comment() {
       return this.item;
+    },
+    isCompactBody() {
+      return this.comment.text.length > 1500;
+    },
+    compiledMarkdown() {
+      return sanitizeHtml(marked(this.comment.text));
     },
   },
   components: {
