@@ -81,6 +81,7 @@ export default {
           this.text = "";
           this.isLoading = false;
           this.$refs["textarea"].focus();
+          this.$refs["textarea"].style.height = "auto";
         },
       });
     },
