@@ -6,6 +6,25 @@
   max-width: 650px;
   margin: 0 auto;
 
+  &__guest {
+    min-height: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+    padding: 10px 0;
+    border: $comment-form-textarea-border;
+
+    &-info {
+      margin-bottom: 10px;
+    }
+
+    &-action {
+      text-transform: uppercase;
+    }
+  }
+
   &__list {
     list-style-type: none;
     padding: 0;
@@ -83,7 +102,7 @@
       position: relative;
 
       &.compact {
-        height: 250px;
+        height: 120px;
         overflow-y: hidden;
       }
 

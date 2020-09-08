@@ -208,7 +208,7 @@ export default {
       return this.item;
     },
     isCompactBody() {
-      return this.comment.text.length > 1500;
+      return this.comment.text.length > 200;
     },
     compiledMarkdown() {
       return sanitizeHtml(marked(this.comment.text));

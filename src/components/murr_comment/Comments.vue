@@ -7,6 +7,7 @@
         v-if="isMurrenAuthorized"
         @onSubmitComment="onSubmitComment"
       />
+      <comment-guest v-else />
 
       <ul v-if="comments.length" class="murr-comment__list">
         <comment-item v-for="item in comments" :key="item.id" :item="item" />
@@ -24,6 +25,7 @@ import * as type from "./store/type.js";
 
 import CommentItem from "./comment-item.vue";
 import CommentForm from "./comment-form.vue";
+import CommentGuest from "./comment-guest.vue";
 
 import "./scss/comments.scss";
 
@@ -92,6 +94,7 @@ export default {
   components: {
     CommentItem,
     CommentForm,
+    CommentGuest,
     Observer,
   },
 };
