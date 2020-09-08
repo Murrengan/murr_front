@@ -28,7 +28,7 @@
       <div v-html="compiledMarkdown"></div>
       <div
         class="murr-comment__body--toggle-action"
-        @click="hednalerToggleCompact"
+        @click="onToggleCompact"
       ></div>
     </div>
     <div v-else class="murr-comment__body" v-html="compiledMarkdown"></div>
