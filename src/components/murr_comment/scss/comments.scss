@@ -100,10 +100,12 @@
 
     &--toggle {
       position: relative;
+      padding-bottom: 10px;
 
       &.compact {
         height: 120px;
         overflow-y: hidden;
+        padding-bottom: 5px;
       }
 
       &-action {
