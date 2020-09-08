@@ -6,6 +6,25 @@
   max-width: 650px;
   margin: 0 auto;
 
+  &__guest {
+    min-height: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+    padding: 10px 0;
+    border: $comment-form-textarea-border;
+
+    &-info {
+      margin-bottom: 10px;
+    }
+
+    &-action {
+      text-transform: uppercase;
+    }
+  }
+
   &__list {
     list-style-type: none;
     padding: 0;
@@ -64,31 +83,95 @@
   }
 
   &__body,
-  &__reply {
+  &__actions {
     margin-left: calc(30px + 15px);
   }
   &__body {
     font-size: 14px;
+    word-break: break-word;
     text-align: left;
     padding: $comment-body-padding;
     background-color: $comment-body-background-color;
     color: $comment-body-text-color;
-  }
-  &__actions {
-    text-align: left;
-  }
-  &__reply {
-    padding: 2px 0;
-    &,
-    &-icon {
-      cursor: pointer;
-      font-size: 11px;
-      color: darken($comment-body-text-color, 20%);
+
+    * {
+      color: $comment-body-text-color;
     }
 
-    &:hover,
-    &:hover &-icon {
-      color: darken($comment-body-text-color, 10%);
+    &--toggle {
+      position: relative;
+      padding-bottom: 10px;
+
+      &.compact {
+        height: 120px;
+        overflow-y: hidden;
+        padding-bottom: 5px;
+      }
+
+      &-action {
+        cursor: pointer;
+        height: 25px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: $comment-body-background-color;
+        background: linear-gradient(
+          180deg,
+          rgba($comment-body-background-color, 0) 0%,
+          rgba($comment-body-background-color, 1) 100%
+        );
+      }
+    }
+  }
+  &__actions {
+    display: flex;
+    &-item {
+      padding: 5px 0;
+
+      & + & {
+        margin-left: 2px;
+      }
+
+      > span {
+        color: $comment-body-text-color;
+      }
+      > i {
+        color: $comment-panel-text-color;
+      }
+
+      &.increment,
+      &.decrement {
+        > i {
+          font-size: 18px;
+        }
+        &:hover > i {
+          color: $comment-body-text-color;
+        }
+      }
+
+      &.counter {
+        cursor: inherit;
+        > span {
+          font-size: 14px;
+          font-family: "Open Sans", sans-serif;
+        }
+      }
+
+      &.reply {
+        margin-left: 5px;
+        > span {
+          font-size: 14px;
+          font-family: "Open Sans", sans-serif;
+        }
+        > span {
+          color: $comment-panel-text-color;
+        }
+        &:hover > span,
+        &:hover > i {
+          color: $comment-body-text-color;
+        }
+      }
     }
   }
 

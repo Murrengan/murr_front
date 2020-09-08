@@ -1,18 +1,27 @@
 <template>
   <div class="comment-form">
     <form @submit.prevent="() => $refs.invisibleRecaptcha.execute()">
-      <resizable-textarea>
-        <textarea
-          class="comment-form__text"
-          placeholder="Оставь комментарий..."
-          maxlength="224"
-          v-model.trim="text"
-          ref="textarea"
-          @keyup.ctrl.enter="() => $refs.invisibleRecaptcha.execute()"
-          @focus="handlerFocused($event)"
-          @blur="handlerFocused($event)"
-        ></textarea>
-      </resizable-textarea>
+      <div class="comment-form__typing-area">
+        <resizable-textarea>
+          <textarea
+            class="comment-form__text"
+            :class="{ warning: isWarningMaxLength }"
+            placeholder="Оставь комментарий..."
+            :maxlength="maxLengthComment"
+            v-model.trim="text"
+            ref="textarea"
+            @keyup.ctrl.enter="() => $refs.invisibleRecaptcha.execute()"
+            @focus="onFocused($event)"
+            @blur="onFocused($event)"
+          ></textarea>
+        </resizable-textarea>
+        <div
+          class="comment-form__typing-lenght"
+          :class="{ warning: isWarningMaxLength }"
+        >
+          {{ charactersLeft }}/{{ maxLengthComment }}
+        </div>
+      </div>
 
       <div v-if="isFocused" class="comment-form__panel">
         <div class="comment-form__information">
@@ -23,7 +32,7 @@
           native-type="submit"
           class="comment-form__button"
           :loading="isLoading"
-          :disabled="readyIsSend"
+          :disabled="readySend"
           size="small"
         >
           Отправить
@@ -33,7 +42,7 @@
       <vue-recaptcha
         ref="invisibleRecaptcha"
         size="invisible"
-        @verify="handlerSubmint"
+        @verify="onSubmitComment"
         :sitekey="siteKey"
       />
     </form>
@@ -62,6 +71,7 @@ export default {
     text: "",
     isLoading: false,
     isFocused: false,
+    maxLengthComment: 1500,
   }),
   mounted() {
     if (this.focusAfterShow) {
@@ -70,21 +80,28 @@ export default {
     this.isFocused = !this.hideButton;
   },
   methods: {
-    handlerSubmint(recaptchaToken) {
+    onSubmitComment(recaptchaToken) {
       this.$refs.invisibleRecaptcha.reset();
+
+      if (this.text.length > this.maxLengthComment) {
+        return;
+      }
+
       this.isLoading = true;
 
-      this.$emit("submitComment", {
+      // Send event parent component
+      this.$emit("onSubmitComment", {
         text: this.text,
         recaptchaToken,
         resetForm: () => {
           this.text = "";
           this.isLoading = false;
           this.$refs["textarea"].focus();
+          this.$refs["textarea"].style.height = "auto";
         },
       });
     },
-    handlerFocused({ type }) {
+    onFocused({ type }) {
       if (!this.hideButton) {
         return;
       }
@@ -96,8 +113,14 @@ export default {
     },
   },
   computed: {
-    readyIsSend() {
+    readySend() {
       return !this.text.length;
+    },
+    charactersLeft() {
+      return this.maxLengthComment - this.text.length;
+    },
+    isWarningMaxLength() {
+      return this.charactersLeft <= 100;
     },
   },
   components: {

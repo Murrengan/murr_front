@@ -68,7 +68,7 @@
       </div>
     </div>
 
-    <comments />
+    <comments v-if="murrOwnerId" />
   </div>
 </template>
 

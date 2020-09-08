@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="murr-comment__hidden" @click="() => handlerToggleTree(item)">
+    <div class="murr-comment__hidden" @click="onToggleTreeComment">
       <div class="murr-comment__panel">
         <div class="murr-comment__author-name">
           <el-icon class="murr-comment__hidden-icon" name="plus" />
@@ -14,7 +14,7 @@
 
     <div
       class="murr-comment__children-line-vertical"
-      @click="() => handlerToggleTree(item)"
+      @click="onToggleTreeComment"
     ></div>
   </div>
 </template>
@@ -27,7 +27,7 @@ export default {
       required: true,
       type: Object,
     },
-    handlerToggleTree: {
+    onToggleTreeComment: {
       required: true,
       type: Function,
     },
