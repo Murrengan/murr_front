@@ -2,15 +2,13 @@ import axios from "axios";
 
 export const STATUS_OK = 200;
 export const STATUS_CREATED = 201;
+export const STATUS_NO_CONTENT = 204;
 export const STATUS_UNAUTHORIZED = 401;
 export const STATUS_INTERNAL_SERVER_ERROR = 500;
 
 /**
- * Fetch all comment
- *
- * @param {Number} murrId
- * @param {Number} page
- * @return {Promise}
+ * @param {Number} murrId Murren card id
+ * @param {Number} page Number page
  */
 export const fetchComments = async (murrId, page) => {
   try {
@@ -18,22 +16,15 @@ export const fetchComments = async (murrId, page) => {
       `/api/murr_comments/?murr=${murrId}&page=${page}`
     );
 
-    if (status === STATUS_OK) {
-      return Promise.resolve(data);
-    }
-
-    return Promise.reject(data);
-  } catch (error) {
-    return Promise.reject(error.response);
+    return { success: true, status, data };
+  } catch ({ message, response: { status } }) {
+    return { success: false, status, message };
   }
 };
 
 /**
- * Add comment
- *
- * @param {String} token
- * @param {Object} formData
- * @return {Promise}
+ * @param {String} token Authorization jwt token
+ * @param {Object} formData Object data form
  */
 export const addComment = async (token, formData) => {
   try {
@@ -44,12 +35,54 @@ export const addComment = async (token, formData) => {
       },
     });
 
-    if (status === STATUS_CREATED) {
-      return Promise.resolve(data);
-    }
+    return { success: true, status, data };
+  } catch ({ message, response: { status } }) {
+    return { success: false, status, message };
+  }
+};
 
-    return Promise.reject(data);
-  } catch (error) {
-    return Promise.reject(error.response);
+/**
+ * @param {String} token Authorization jwt token
+ * @param {Number} commentId Comment id
+ */
+export const likeComment = async (token, commentId) => {
+  try {
+    const { data, status } = await axios.post(
+      `/api/murr_comments/${commentId}/like/`,
+      {},
+      {
+        // todo: Fix - send to global instance of axios
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return { success: true, status, data };
+  } catch ({ message, response: { status } }) {
+    return { success: false, status, message };
+  }
+};
+
+/**
+ * @param {String} token Authorization jwt token
+ * @param {Number} commentId Comment id
+ */
+export const unlikeComment = async (token, commentId) => {
+  try {
+    const { data, status } = await axios.post(
+      `/api/murr_comments/${commentId}/dislike/`,
+      {},
+      {
+        // todo: Fix - send to global instance of axios
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return { success: true, status, data };
+  } catch ({ message, response: { status } }) {
+    return { success: false, status, message };
   }
 };
