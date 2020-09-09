@@ -50,6 +50,10 @@
         <div v-if="validEmailIsEmail" class="m-form__help">
           Почта указана не верно
         </div>
+        <div v-if="emailWhitelistAbort" class="m-form__help">
+          Ваш почтовый провайдер не входит в whitelist. <br> Попробуйте войти через
+          социальные сети
+        </div>
         <div v-if="uniqueEmail" class="m-form__help">
           Эта почта уже используется
         </div>
@@ -160,6 +164,7 @@ import {
   required,
 } from "vuelidate/lib/validators";
 import { siteKey } from "@/devAndProdVariables";
+import { whitelistEmails } from "./whitelistEmails";
 
 const murrenNameAlphaValidator = helpers.regex(
   "murrenNameAlphaValidator",
@@ -178,6 +183,7 @@ export default {
     passwordIsTooSimilarToUsername: false,
     passwordIsTooSimilarToEmail: false,
     loading: false,
+    emailWhitelistAbort: false,
   }),
   methods: {
     ...mapActions({
@@ -187,6 +193,12 @@ export default {
     }),
     async signUp(recaptchaToken) {
       this.$refs.invisibleRecaptcha.reset();
+
+      if (!whitelistEmails.includes(this.$v.email.$model.split("@")[1])) {
+        this.emailWhitelistAbort = true;
+        this.$v.$touch();
+        return;
+      }
 
       if (this.$v.$invalid) {
         this.$v.$touch();
@@ -239,9 +251,12 @@ export default {
     validEmailIsEmail() {
       return this.$v.email.$dirty && !this.$v.email.email;
     },
+    emailInWhiteList() {
+      return this.$v.email.$dirty && this.emailWhitelistAbort;
+    },
     validEmail() {
       return (
-        this.validEmailRequired || this.validEmailIsEmail || this.uniqueEmail
+        this.validEmailRequired || this.validEmailIsEmail || this.uniqueEmail || this.emailInWhiteList
       );
     },
     validUserNameRequired() {
@@ -286,6 +301,7 @@ export default {
   watch: {
     email() {
       this.uniqueEmail = false;
+      this.emailWhitelistAbort = false;
     },
     username() {
       this.uniqueName = false;
