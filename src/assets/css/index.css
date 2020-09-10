@@ -282,25 +282,21 @@ ul {
 /* MurrCard */
 
 .murr-card {
-  padding: 2px;
   width: 100%;
   min-width: 320px;
   max-width: 320px;
-  max-height: 350px;
-  background-color: #c3a1ff;
-  border-radius: 5px;
-  transition: 0.5s;
-  border: #851cff 1px solid;
+  background-color: #c457fa;
+  border-radius: 3px;
+  transition: box-shadow 250ms;
+  border: #ab25f9 1px solid;
 }
 
 .murr-card:hover {
-  box-shadow: -2px -2px 30px 2px #ad00ff, 2px 2px 30px 2px blue;
-  transition: 0.2s;
-  transform: scale(1.01);
+  box-shadow: -1px -1px 20px 1px #ab25f9, 1px 1px 20px 1px #ab25f9;
 }
 
 .murr-card__description {
-  color: #1a2931;
+  color: #ffffff;
   font-weight: bold;
   word-break: break-word;
   padding: 3px 5px 5px;
