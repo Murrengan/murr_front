@@ -1,3 +1,25 @@
+body,
+* {
+  scrollbar-color: #ad00ff #fff;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar-track {
+  opacity: 1;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 20px;
+  border-radius: 20px;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  background-color: #ad00ff;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
 * {
   margin: 0;
   padding: 0;
