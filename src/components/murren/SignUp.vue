@@ -6,10 +6,7 @@
       </a>
     </div>
 
-    <form
-      class="m-form"
-      @submit.prevent="() => $refs.invisibleRecaptcha.execute()"
-    >
+    <form class="m-form" @submit.prevent="$refs.recaptcha.execute">
       <img
         src="@/assets/img/logo_pink.png"
         alt="circle_logo"
@@ -51,8 +48,8 @@
           Почта указана не верно
         </div>
         <div v-if="emailWhitelistAbort" class="m-form__help">
-          Ваш почтовый провайдер не входит в whitelist. <br> Попробуйте войти через
-          социальные сети
+          Ваш почтовый провайдер не входит в whitelist. <br />
+          Попробуйте войти через социальные сети
         </div>
         <div v-if="uniqueEmail" class="m-form__help">
           Эта почта уже используется
@@ -138,12 +135,7 @@
         </small>
       </div>
 
-      <vue-recaptcha
-        ref="invisibleRecaptcha"
-        size="invisible"
-        @verify="signUp"
-        :sitekey="siteKey"
-      />
+      <recaptcha ref="recaptcha" @verify="signUp" />
 
       <el-button class="murr-button mb" native-type="submit" :loading="loading">
         Создать
@@ -154,8 +146,8 @@
 
 <script>
 import { mapActions } from "vuex";
-import VueRecaptcha from "vue-recaptcha";
 import GoogleOauth from "./oauth/GoogleOauth";
+import Recaptcha from "../common/Recaptcha";
 import {
   email,
   helpers,
@@ -163,7 +155,6 @@ import {
   minLength,
   required,
 } from "vuelidate/lib/validators";
-import { siteKey } from "@/devAndProdVariables";
 import { whitelistEmails } from "./whitelistEmails";
 
 const murrenNameAlphaValidator = helpers.regex(
@@ -173,7 +164,6 @@ const murrenNameAlphaValidator = helpers.regex(
 
 export default {
   data: () => ({
-    siteKey,
     email: "",
     username: "",
     password: "",
@@ -192,8 +182,6 @@ export default {
       goHome: "changeShownSignUpForm_actions",
     }),
     async signUp(recaptchaToken) {
-      this.$refs.invisibleRecaptcha.reset();
-
       if (!whitelistEmails.includes(this.$v.email.$model.split("@")[1])) {
         this.emailWhitelistAbort = true;
         this.$v.$touch();
@@ -256,7 +244,10 @@ export default {
     },
     validEmail() {
       return (
-        this.validEmailRequired || this.validEmailIsEmail || this.uniqueEmail || this.emailInWhiteList
+        this.validEmailRequired ||
+        this.validEmailIsEmail ||
+        this.uniqueEmail ||
+        this.emailInWhiteList
       );
     },
     validUserNameRequired() {
@@ -320,7 +311,7 @@ export default {
     },
   },
   components: {
-    VueRecaptcha,
+    Recaptcha,
     GoogleOauth,
   },
 };

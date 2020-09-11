@@ -55,18 +55,13 @@
               <div>
                 <el-button
                   class="murr-button"
-                  @click="() => $refs.invisibleRecaptcha.execute()"
+                  @click="() => $refs.recaptcha.execute()"
                   :loading="loading"
                 >
                   Мурр готов!
                 </el-button>
 
-                <vue-recaptcha
-                  ref="invisibleRecaptcha"
-                  size="invisible"
-                  @verify="save"
-                  :sitekey="siteKey"
-                />
+                <recaptcha ref="recaptcha" @verify="save" />
               </div>
             </div>
 
@@ -168,8 +163,7 @@ import { axios_defaults_baseURL } from "../../devAndProdVariables";
 import ResizableTextarea from "../common/ResizableTextarea.js";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
-import VueRecaptcha from "vue-recaptcha";
-import { siteKey } from "@/devAndProdVariables";
+import Recaptcha from "../common/Recaptcha";
 
 const Delimiter = require("@editorjs/delimiter");
 const List = require("@editorjs/list");
@@ -237,7 +231,6 @@ export default {
   },
   data() {
     return {
-      siteKey,
       startCreateMurr: true,
       saveTimeOut: true,
       showEditMurrHeaderModal: false,
@@ -280,7 +273,6 @@ export default {
       this.cropImg = await this.$refs.cropper.getCroppedCanvas().toDataURL();
     },
     async save(recaptchaToken) {
-      this.$refs.invisibleRecaptcha.reset();
       this.loading = true;
       let murr_content = await window.editor.save();
       const murrCardData = {
@@ -362,7 +354,7 @@ export default {
   components: {
     ResizableTextarea,
     VueCropper,
-    VueRecaptcha,
+    Recaptcha,
   },
 };
 </script>
