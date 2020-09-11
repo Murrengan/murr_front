@@ -12,3 +12,4 @@ export const axios_defaults_baseFrontURL =
 export const siteKey = "6Lc0qP4UAAAAADXDdZYU_wnfeDJfTRKRPVU9h046";
 export const murrOauthGoogle =
   "688686297345-1g9g2n42dko32vlt11gofep9dfu4bcq1.apps.googleusercontent.com";
+export const DISABLE_RECAPTCHA = process.env.NODE_ENV !== "production";

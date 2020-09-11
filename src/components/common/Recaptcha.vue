@@ -1,6 +1,7 @@
 <template>
   <div>
     <vue-recaptcha
+      v-if="!DISABLE_RECAPTCHA"
       ref="invisibleRecaptcha"
       size="invisible"
       @verify="onVerify"
@@ -11,7 +12,7 @@
 
 <script>
 import VueRecaptcha from "vue-recaptcha";
-import { siteKey } from "../../devAndProdVariables.js";
+import { siteKey, DISABLE_RECAPTCHA } from "../../devAndProdVariables.js";
 
 export default {
   name: "Recaptcha",
@@ -20,13 +21,21 @@ export default {
   },
   data: () => ({
     siteKey,
+    DISABLE_RECAPTCHA,
   }),
   methods: {
     execute() {
-      this.$refs.invisibleRecaptcha.execute();
+      if (!this.DISABLE_RECAPTCHA) {
+        this.$refs.invisibleRecaptcha.execute();
+      } else {
+        this.onVerify();
+      }
     },
-    async onVerify(token) {
-      await this.$refs.invisibleRecaptcha.reset();
+    async onVerify(token = null) {
+      if (!this.DISABLE_RECAPTCHA) {
+        await this.$refs.invisibleRecaptcha.reset();
+      }
+
       this.$emit("verify", token);
     },
   },
