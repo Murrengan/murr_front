@@ -1,17 +1,17 @@
 <template>
   <div class="home-main-container">
     <div class="murr-panel">
-      <div class="more-btn" @click="showMurrPanelButtons">
-        <i class="el-icon-more-outline pointer p"></i>
-      </div>
+      <el-button class="more-btn murr-button" @click="showMurrPanelButtons">
+        <i class="el-icon-more-outline pointer"></i>
+      </el-button>
       <transition name="fade" mode="out-in">
         <div v-if="this.murrPanelButtons">
-          <el-button class="murr-button__primary p mr05" @click="copyMurrLink">
+          <el-button class="murr-button__primary" @click="copyMurrLink">
             <i class="el-icon-share"></i>
           </el-button>
           <el-button
             v-if="this.murrOwnerId === this.murrenId_getters"
-            class="murr-button__danger p mr05"
+            class="murr-button__danger"
             @click="deleteMurr"
           >
             <i class="el-icon-delete"></i>
@@ -19,55 +19,50 @@
         </div>
       </transition>
     </div>
-    <div class="mb">
-      <h1 class="murr-header fs2">{{ this.murrTitle }}</h1>
-    </div>
+    <h1 class="murr-header input-murr-header-area fs2">{{ this.murrTitle }}</h1>
+    <!--    <div>-->
+    <div class="create-murr-area input-murr-header-area">
+      <div
+        v-for="(i, index) in this.murr_content.blocks"
+        :key="index"
+        class="mb-half"
+      >
+        <h2 v-if="i.type === 'header'">{{ i.data.text }}</h2>
 
-    <div class="create-murr-area">
-      <div class="editorjs-main">
-        <div
-          v-for="(i, index) in this.murr_content.blocks"
-          :key="index"
-          class="mb-half"
+        <p v-if="i.type === 'paragraph'" v-html="i.data.text" class="mb"></p>
+
+        <img
+          v-if="i.type === 'image'"
+          :src="i.data.file.url"
+          class="image-tool__image-picture"
+          alt=""
+        />
+
+        <p v-if="i.data.caption" class="cdx-input mb">
+          {{ i.data.caption }}
+        </p>
+
+        <div v-if="i.type === 'delimiter'" class="ce-delimiter cdx-block"></div>
+
+        <ul
+          v-if="i.type === 'class'"
+          class="cdx-block cdx-list cdx-list--ordered"
         >
-          <h2 v-if="i.type === 'header'">{{ i.data.text }}</h2>
-
-          <p v-if="i.type === 'paragraph'" v-html="i.data.text" class="mb"></p>
-
-          <img
-            v-if="i.type === 'image'"
-            :src="i.data.file.url"
-            class="image-tool__image-picture"
-            alt=""
-          />
-
-          <p v-if="i.data.caption" class="cdx-input mb">{{ i.data.caption }}</p>
-
-          <div
-            v-if="i.type === 'delimiter'"
-            class="ce-delimiter cdx-block"
-          ></div>
-
-          <ul
-            v-if="i.type === 'class'"
-            class="cdx-block cdx-list cdx-list--ordered"
+          <li
+            v-for="(element, index) in i.data.items"
+            :key="index"
+            class="cdx-list__item"
           >
-            <li
-              v-for="(element, index) in i.data.items"
-              :key="index"
-              class="cdx-list__item"
-            >
-              {{ element }}
-            </li>
-          </ul>
+            {{ element }}
+          </li>
+        </ul>
 
-          <pre class="murr-code-snippet mb" v-if="i.type === 'code'">{{
-            i.data.code
-          }}</pre>
-        </div>
+        <pre class="murr-code-snippet mb" v-if="i.type === 'code'">{{
+          i.data.code
+        }}</pre>
       </div>
     </div>
-
+    <!--    </div>-->
     <comments v-if="murrOwnerId" />
   </div>
 </template>
@@ -114,6 +109,7 @@ export default {
       tempInput.select();
       document.execCommand("copy");
       document.body.removeChild(tempInput);
+      this.murrPanelButtons = !this.murrPanelButtons;
       this.notification({
         message: `Линка на мурр скопирована 😊`,
         type: "success",
@@ -172,10 +168,14 @@ export default {
 };
 </script>
 
-<style scoped>
-.more-btn:hover {
-  background-color: #8b8ac5;
-  border-radius: 2px;
+<style scoped lang="scss">
+@import "../../assets/scss/variables";
+h1 {
+  margin: 0;
+}
+
+.more-btn {
+  margin-left: 10px;
 }
 
 .murr-panel {
@@ -185,32 +185,16 @@ export default {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-  margin-bottom: 2px;
-}
-
-.murr-header {
-  max-width: 620px;
-  width: 100%;
-  margin: 0 auto;
-  font-family: JetBrainsMono-Italic, sans-serif;
-  word-break: break-word;
-}
-
-.create-murr-area {
-  width: 100%;
-  max-height: 90%;
-  max-width: 650px;
-  margin: 0 auto;
-  word-wrap: break-word;
+  margin-bottom: 5px;
 }
 
 .murr-code-snippet {
-  background-color: #c3a1ff;
+  background-color: $main-active;
   padding: 5px;
   font-weight: bold;
   font-size: 0.9rem;
-  color: #41314e;
   white-space: pre-wrap;
   border-radius: 5px;
+  word-break: break-word;
 }
 </style>

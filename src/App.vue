@@ -9,6 +9,7 @@
         alt=""
         class="murr-logo"
         @mouseover="changeColorOnHover"
+        @click="goHomePage"
       />
     </header>
 
@@ -41,7 +42,7 @@
         <span class="flex-item" v-if="this.murrenName_getters">{{
           this.murrenName_getters
         }}</span>
-        <span class="flex-item" v-else>Войти</span>
+        <span class="flex-item" v-else>Войти </span>
       </router-link>
       <span class="flex-item header-link" @click.prevent="showRightSideMenu"
         >Меню</span
@@ -113,6 +114,9 @@ export default {
         await this.$store.dispatch("changeShowLoginForm_actions");
       }
     },
+    goHomePage() {
+       this.$router.push("/");
+    }
   },
 };
 </script>

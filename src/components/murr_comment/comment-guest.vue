@@ -1,7 +1,7 @@
 <template>
   <div class="murr-comment__guest">
     <div class="murr-comment__guest-info">
-      Комментировать могут только авторизованные.
+      Войди и можно общаться!
     </div>
 
     <div class="murr-comment__guest-action">

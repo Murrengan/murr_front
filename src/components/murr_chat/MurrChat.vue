@@ -100,19 +100,3 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.murr-header {
-  width: 100%;
-  max-width: 620px;
-  border: none;
-  background-color: #1a2931;
-  text-align: center;
-  height: 40px;
-  resize: none;
-  padding: 5px;
-  overflow: hidden;
-  font-family: JetBrainsMono-Italic, sans-serif;
-  border-radius: 5px;
-  word-break: break-word;
-}
-</style>

@@ -29,7 +29,7 @@
       <div class="create-murr-area">
         <resizable-textarea>
           <textarea
-            class="murr-header fs"
+            class="murr-header fw900 input-murr-header-area"
             :class="{ 'murr-header__error': murrHeaderEmpty }"
             placeholder="Заголовок"
             v-model="murrHeader"
@@ -171,8 +171,6 @@ import "cropperjs/dist/cropper.css";
 import VueRecaptcha from "vue-recaptcha";
 import { siteKey } from "@/devAndProdVariables";
 
-const Delimiter = require("@editorjs/delimiter");
-const List = require("@editorjs/list");
 const CodeTool = require("@editorjs/code");
 
 export default {
@@ -189,8 +187,6 @@ export default {
     window.editor = new EditorJS({
       tools: {
         header: Header,
-        delimiter: Delimiter,
-        class: List,
         code: {
           class: CodeTool,
           config: {
@@ -263,6 +259,10 @@ export default {
     ...mapMutations(["clearMurrCards"]),
     changeShowAlmostDone() {
       if (!this.murrHeader) {
+        this.murrHeaderEmpty = true;
+        return;
+      }
+      if (this.murrHeader.trim().length === 0) {
         this.murrHeaderEmpty = true;
         return;
       }
@@ -367,7 +367,8 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../../../src/assets/scss/variables";
 .murr-header__error {
   background-color: #680013 !important;
   border: 3px solid orangered !important;
@@ -475,30 +476,8 @@ input[type="file"] {
   overflow-x: hidden;
 }
 
-.create-murr-area {
-  width: 100%;
-  max-height: 90%;
-  max-width: 650px;
-  margin: 0 auto;
-}
-
 .textarea-wrapper {
   width: 100%;
-}
-
-.murr-header {
-  width: 100%;
-  max-width: 620px;
-  border: none;
-  background-color: #1a2931;
-  text-align: center;
-  height: 40px;
-  resize: none;
-  padding: 5px;
-  overflow: hidden;
-  font-family: JetBrainsMono-Italic, sans-serif;
-  border-radius: 5px;
-  word-break: break-word;
 }
 
 .operation-icon {
