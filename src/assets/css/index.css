@@ -1,3 +1,23 @@
+body,
+* {
+  scrollbar-color: #1A2931 #ad00ff ;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar-track {
+  opacity: 1;
+  background-color: #ad00ff;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background-color: #1A2931;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
 * {
   margin: 0;
   padding: 0;

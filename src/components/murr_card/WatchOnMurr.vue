@@ -20,7 +20,6 @@
       </transition>
     </div>
     <h1 class="murr-header input-murr-header-area fs2">{{ this.murrTitle }}</h1>
-    <!--    <div>-->
     <div class="create-murr-area input-murr-header-area">
       <div
         v-for="(i, index) in this.murr_content.blocks"
@@ -41,28 +40,11 @@
         <p v-if="i.data.caption" class="cdx-input mb">
           {{ i.data.caption }}
         </p>
-
-        <div v-if="i.type === 'delimiter'" class="ce-delimiter cdx-block"></div>
-
-        <ul
-          v-if="i.type === 'class'"
-          class="cdx-block cdx-list cdx-list--ordered"
-        >
-          <li
-            v-for="(element, index) in i.data.items"
-            :key="index"
-            class="cdx-list__item"
-          >
-            {{ element }}
-          </li>
-        </ul>
-
         <pre class="murr-code-snippet mb" v-if="i.type === 'code'">{{
           i.data.code
         }}</pre>
       </div>
     </div>
-    <!--    </div>-->
     <comments v-if="murrOwnerId" />
   </div>
 </template>
