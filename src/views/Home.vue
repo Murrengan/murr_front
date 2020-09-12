@@ -91,6 +91,8 @@ export default {
   max-width: 100%;
   padding: 0 2px;
   border-radius: 3px;
+  display: flex;
+  margin: 0 auto;
 }
 .murr-card__info {
   display: flex;
