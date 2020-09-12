@@ -16,6 +16,7 @@
     <div
       class="sticky-wrapper flex-container murr-heading-wrapper"
       :style="{ backgroundColor: this.colorOnHover }"
+      :class="{ 'navbar--hidden': !showNavbar }"
     >
       <router-link
         exact
@@ -26,13 +27,13 @@
         Мурры
       </router-link>
 
-<!--      <router-link-->
-<!--        active-class="active"-->
-<!--        class="flex-item header-link"-->
-<!--        to="/murr_chat"-->
-<!--      >-->
-<!--        Чат-->
-<!--      </router-link>-->
+      <!--      <router-link-->
+      <!--        active-class="active"-->
+      <!--        class="flex-item header-link"-->
+      <!--        to="/murr_chat"-->
+      <!--      >-->
+      <!--        Чат-->
+      <!--      </router-link>-->
 
       <router-link
         active-class="active"
@@ -89,8 +90,22 @@ export default {
   data: () => ({
     show_showRightSideMenu: false,
     colorOnHover: false,
+    showNavbar: true,
+    lastScrollPosition: 0,
   }),
   methods: {
+    onScroll() {
+      const currentScrollPosition =
+        window.pageYOffset || document.documentElement.scrollTop;
+      if (currentScrollPosition < 0) {
+        return;
+      }
+      if (Math.abs(currentScrollPosition - this.lastScrollPosition) < 60) {
+        return;
+      }
+      this.showNavbar = currentScrollPosition < this.lastScrollPosition;
+      this.lastScrollPosition = currentScrollPosition;
+    },
     changeColorOnHover() {
       this.colorOnHover = `rgb(${Math.floor(
         Math.random() * (220 - 50) + 50
@@ -118,10 +133,21 @@ export default {
        this.$router.push("/");
     }
   },
+  mounted() {
+    window.addEventListener("scroll", this.onScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.onScroll);
+  },
 };
 </script>
 
 <style>
+.murr-heading-wrapper.navbar--hidden {
+  box-shadow: none;
+  transform: translate3d(0, -100%, 0);
+}
+
 .murr-heading-wrapper {
   background-color: #ad00ff;
 }
@@ -187,6 +213,6 @@ export default {
   height: 100%;
   min-height: 100vh;
   background-color: #1a2931;
-  min-width: 320px
+  min-width: 320px;
 }
 </style>
