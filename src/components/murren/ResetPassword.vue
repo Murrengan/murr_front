@@ -6,10 +6,7 @@
       </a>
     </div>
 
-    <form
-      class="m-form"
-      @submit.prevent="() => $refs.invisibleRecaptcha.execute()"
-    >
+    <form class="m-form" @submit.prevent="$refs.recaptcha.execute">
       <img src="@/assets/img/logo_pink.png" alt="Logo" class="murrengan-logo" />
 
       <h1 class="mb">Восстановить пароль</h1>
@@ -44,12 +41,7 @@
         >
       </div>
 
-      <vue-recaptcha
-        ref="invisibleRecaptcha"
-        size="invisible"
-        @verify="handlerResetPassword"
-        :sitekey="siteKey"
-      />
+      <recaptcha ref="recaptcha" @verify="handlerResetPassword" />
 
       <el-button class="murr-button mb" native-type="submit" :loading="loading">
         Жду письмо
@@ -60,13 +52,11 @@
 
 <script>
 import { mapActions } from "vuex";
-import VueRecaptcha from "vue-recaptcha";
 import { email, required } from "vuelidate/lib/validators";
-import { siteKey } from "@/devAndProdVariables";
+import Recaptcha from "../common/Recaptcha";
 
 export default {
   data: () => ({
-    siteKey,
     email: "",
     loading: false,
   }),
@@ -79,8 +69,6 @@ export default {
       notification: "popUpMessage",
     }),
     async handlerResetPassword(recaptchaToken) {
-      this.$refs.invisibleRecaptcha.reset();
-
       if (this.$v.$invalid) {
         this.$v.$touch();
         return;
@@ -135,9 +123,7 @@ export default {
     email: { email, required },
   },
   components: {
-    VueRecaptcha,
+    Recaptcha,
   },
 };
 </script>
-
-<style scoped></style>

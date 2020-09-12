@@ -29,7 +29,7 @@
       <div class="create-murr-area">
         <resizable-textarea>
           <textarea
-            class="murr-header fs"
+            class="murr-header fw900 input-murr-header-area"
             :class="{ 'murr-header__error': murrHeaderEmpty }"
             placeholder="Заголовок"
             v-model="murrHeader"
@@ -55,18 +55,13 @@
               <div>
                 <el-button
                   class="murr-button"
-                  @click="() => $refs.invisibleRecaptcha.execute()"
+                  @click="() => $refs.recaptcha.execute()"
                   :loading="loading"
                 >
                   Мурр готов!
                 </el-button>
 
-                <vue-recaptcha
-                  ref="invisibleRecaptcha"
-                  size="invisible"
-                  @verify="save"
-                  :sitekey="siteKey"
-                />
+                <recaptcha ref="recaptcha" @verify="save" />
               </div>
             </div>
 
@@ -168,11 +163,8 @@ import { axios_defaults_baseURL } from "../../devAndProdVariables";
 import ResizableTextarea from "../common/ResizableTextarea.js";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
-import VueRecaptcha from "vue-recaptcha";
-import { siteKey } from "@/devAndProdVariables";
+import Recaptcha from "../common/Recaptcha";
 
-const Delimiter = require("@editorjs/delimiter");
-const List = require("@editorjs/list");
 const CodeTool = require("@editorjs/code");
 
 export default {
@@ -189,8 +181,6 @@ export default {
     window.editor = new EditorJS({
       tools: {
         header: Header,
-        delimiter: Delimiter,
-        class: List,
         code: {
           class: CodeTool,
           config: {
@@ -237,7 +227,6 @@ export default {
   },
   data() {
     return {
-      siteKey,
       startCreateMurr: true,
       saveTimeOut: true,
       showEditMurrHeaderModal: false,
@@ -266,6 +255,10 @@ export default {
         this.murrHeaderEmpty = true;
         return;
       }
+      if (this.murrHeader.trim().length === 0) {
+        this.murrHeaderEmpty = true;
+        return;
+      }
       this.showAlmostDone = !this.showAlmostDone;
     },
     cancelMurrCoverCropper() {
@@ -280,7 +273,6 @@ export default {
       this.cropImg = await this.$refs.cropper.getCroppedCanvas().toDataURL();
     },
     async save(recaptchaToken) {
-      this.$refs.invisibleRecaptcha.reset();
       this.loading = true;
       let murr_content = await window.editor.save();
       const murrCardData = {
@@ -362,12 +354,13 @@ export default {
   components: {
     ResizableTextarea,
     VueCropper,
-    VueRecaptcha,
+    Recaptcha,
   },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../../../src/assets/scss/variables";
 .murr-header__error {
   background-color: #680013 !important;
   border: 3px solid orangered !important;
@@ -475,30 +468,8 @@ input[type="file"] {
   overflow-x: hidden;
 }
 
-.create-murr-area {
-  width: 100%;
-  max-height: 90%;
-  max-width: 650px;
-  margin: 0 auto;
-}
-
 .textarea-wrapper {
   width: 100%;
-}
-
-.murr-header {
-  width: 100%;
-  max-width: 620px;
-  border: none;
-  background-color: #1a2931;
-  text-align: center;
-  height: 40px;
-  resize: none;
-  padding: 5px;
-  overflow: hidden;
-  font-family: JetBrainsMono-Italic, sans-serif;
-  border-radius: 5px;
-  word-break: break-word;
 }
 
 .operation-icon {

@@ -19,15 +19,22 @@
         <div
           v-for="(murr, index) in this.murrCards"
           :key="index"
-          class="murr-card mb2 pointer"
           @click="openMurr(murr.id)"
+          class="murr-card mb2 pointer"
         >
+          <div class="murr-card__info">
+            <img src="@/assets/img/logo_pink.png"  class="avatar" alt="">
+            <div class="author">
+              {{ murr.owner_name }}
+            </div>
+          </div>
+
           <img v-if="murr.cover" :src="murr.cover" class="murr-cover" />
 
           <p class="murr-card__description">{{ murr.title }}</p>
         </div>
 
-        <Observer @murrIntersect="fetchMurrCardsOnIntersected" />
+        <observer @murrIntersect="fetchMurrCardsOnIntersected" />
       </masonry>
     </div>
   </div>
@@ -82,5 +89,26 @@ export default {
 }
 .murr-cover {
   max-width: 100%;
+  padding: 0 2px;
+  border-radius: 3px;
+}
+.murr-card__info {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px;
+  font-size: 13px;
+  text-align: right;
+}
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #FFBF00;
+  padding: 1px;
+}
+.author {
+  color: #dadada;
+  margin-left: 5px;
 }
 </style>

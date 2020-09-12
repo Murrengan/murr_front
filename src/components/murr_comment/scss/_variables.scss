@@ -1,3 +1,4 @@
+@import "../../../assets/scss/variables";
 $comment-body-padding: 5px 10px;
 $comment-body-background-color: darken(#365566, 12%);
 $comment-body-text-color: lighten($comment-body-background-color, 40%);
@@ -20,6 +21,6 @@ $comment-form-textarea-border-color: lighten(
   $comment-form-textarea-background,
   10%
 );
-$comment-form-textarea-border: 1px solid $comment-form-textarea-border-color;
+$comment-form-textarea-border: 1px dashed $main;
 $comment-form-button-background: #406477;
 $comment-form-button-color: #759fb6;

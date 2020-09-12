@@ -19,7 +19,7 @@ import "@/assets/css/index.css";
 import "@/assets/css/fade-and-slide-fade.css";
 import "@/assets/css/fonts.css";
 import "@/assets/scss/main.scss";
-import "@/assets/css/murr_editorjs.css";
+import "@/assets/css/murr_editorjs.scss";
 
 Vue.use(VueMasonry);
 Vue.use(ElementUI);

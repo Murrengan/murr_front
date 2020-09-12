@@ -1,12 +1,12 @@
 <template>
   <div class="murr-comment__guest">
     <div class="murr-comment__guest-info">
-      Комментировать могут только авторизованные.
+      Войди и можно общаться!
     </div>
 
     <div class="murr-comment__guest-action">
-      <span class="link" @click.prevent="goSignIn">Войти</span> |
-      <span class="link" @click.prevent="goSignUp">Регистрация</span>
+      <small class="link" @click.prevent="goSignIn">Войти</small> /
+      <small class="link" @click.prevent="goSignUp">Регистрация</small>
     </div>
   </div>
 </template>

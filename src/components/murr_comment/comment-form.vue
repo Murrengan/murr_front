@@ -1,6 +1,6 @@
 <template>
   <div class="comment-form">
-    <form @submit.prevent="() => $refs.invisibleRecaptcha.execute()">
+    <form @submit.prevent="$refs.recaptcha.execute">
       <div class="comment-form__typing-area">
         <resizable-textarea>
           <textarea
@@ -10,7 +10,7 @@
             :maxlength="maxLengthComment"
             v-model.trim="text"
             ref="textarea"
-            @keyup.ctrl.enter="() => $refs.invisibleRecaptcha.execute()"
+            @keyup.ctrl.enter="$refs.recaptcha.execute"
             @focus="onFocused($event)"
             @blur="onFocused($event)"
           ></textarea>
@@ -39,20 +39,14 @@
         </el-button>
       </div>
 
-      <vue-recaptcha
-        ref="invisibleRecaptcha"
-        size="invisible"
-        @verify="onSubmitComment"
-        :sitekey="siteKey"
-      />
+      <recaptcha ref="recaptcha" @verify="onSubmitComment" />
     </form>
   </div>
 </template>
 
 <script>
 import ResizableTextarea from "../common/ResizableTextarea.js";
-import VueRecaptcha from "vue-recaptcha";
-import { siteKey } from "../../devAndProdVariables.js";
+import Recaptcha from "../common/Recaptcha";
 
 export default {
   name: "CommentForm",
@@ -67,7 +61,6 @@ export default {
     },
   },
   data: () => ({
-    siteKey,
     text: "",
     isLoading: false,
     isFocused: false,
@@ -81,8 +74,6 @@ export default {
   },
   methods: {
     onSubmitComment(recaptchaToken) {
-      this.$refs.invisibleRecaptcha.reset();
-
       if (this.text.length > this.maxLengthComment) {
         return;
       }
@@ -125,7 +116,7 @@ export default {
   },
   components: {
     ResizableTextarea,
-    VueRecaptcha,
+    Recaptcha,
   },
 };
 </script>

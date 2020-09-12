@@ -6,10 +6,7 @@
       </a>
     </div>
 
-    <form
-      class="m-form"
-      @submit.prevent="() => $refs.invisibleRecaptcha.execute()"
-    >
+    <form class="m-form" @submit.prevent="$refs.recaptcha.execute">
       <img
         src="@/assets/img/logo_pink.png"
         alt="circle_logo"
@@ -92,12 +89,7 @@
         </a>
       </div>
 
-      <vue-recaptcha
-        ref="invisibleRecaptcha"
-        size="invisible"
-        @verify="handlerLogin"
-        :sitekey="siteKey"
-      />
+      <recaptcha ref="recaptcha" @verify="handlerLogin" />
 
       <el-button class="murr-button mb" native-type="submit" :loading="loading">
         Войти
@@ -109,13 +101,11 @@
 <script>
 import { mapActions } from "vuex";
 import { maxLength, minLength, required } from "vuelidate/lib/validators";
-import VueRecaptcha from "vue-recaptcha";
-import { siteKey } from "@/devAndProdVariables";
 import GoogleOauth from "./oauth/GoogleOauth";
+import Recaptcha from "../common/Recaptcha";
 
 export default {
   data: () => ({
-    siteKey,
     murren_username: "",
     murren_password: "",
     accountActivated: true,
@@ -137,7 +127,6 @@ export default {
       this.goSignUp();
     },
     async handlerLogin(recaptchaToken) {
-      this.$refs.invisibleRecaptcha.reset();
       if (this.$v.$invalid) {
         this.$v.$touch();
         return;
@@ -200,7 +189,7 @@ export default {
     murren_password: { required, minLength: minLength(6) },
   },
   components: {
-    VueRecaptcha,
+    Recaptcha,
     GoogleOauth,
   },
 };

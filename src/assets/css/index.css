@@ -1,3 +1,23 @@
+body,
+* {
+  scrollbar-color: #1A2931 #ad00ff ;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar-track {
+  opacity: 1;
+  background-color: #ad00ff;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background-color: #1A2931;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -69,6 +89,10 @@ ul {
 
 .fs2 {
   font-size: 1.4rem;
+}
+
+.fw900 {
+  font-weight: 900;
 }
 
 .p {
@@ -282,28 +306,27 @@ ul {
 /* MurrCard */
 
 .murr-card {
-  padding: 2px;
   width: 100%;
   min-width: 320px;
   max-width: 320px;
-  max-height: 350px;
-  background-color: #c3a1ff;
-  border-radius: 5px;
-  transition: 0.5s;
-  border: #851cff 1px solid;
+  background-color: #c457fa;
+  border-radius: 3px;
+  transition: 0.3s;
+  border: #ab25f9 1px solid;
 }
 
 .murr-card:hover {
-  box-shadow: -2px -2px 30px 2px #ad00ff, 2px 2px 30px 2px blue;
   transition: 0.2s;
-  transform: scale(1.01);
+  transform: scale(1.005);
+  box-shadow: -1px -1px 20px 1px #ab25f9, 1px 1px 20px 1px #ab25f9;
 }
 
 .murr-card__description {
-  color: #1a2931;
+  color: #ffffff;
   font-weight: bold;
   word-break: break-word;
   padding: 3px 5px 5px;
+  text-align: left;
 }
 
 .el-popover {
@@ -320,7 +343,7 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
+  text-align: left;
   padding: 1rem 15px 1em;
 }
 
@@ -331,4 +354,29 @@ ul {
 
 .justify-content-center {
   justify-content: center;
+}
+.murr-header {
+  width: 100%;
+  max-width: 620px;
+  border: none;
+  background-color: #1a2931;
+  text-align: left;
+  resize: none;
+  overflow: hidden;
+  border-radius: 5px;
+  word-break: break-word;
+  font-size: 1.5em;
+  padding-bottom: 1.1em;
+}
+
+.create-murr-area {
+  width: 100%;
+  max-height: 90%;
+  max-width: 650px;
+  margin: 0 auto;
+  padding-left: 10px;
+}
+
+.el-message-box.modal-main {
+  max-width: 320px;
 }
