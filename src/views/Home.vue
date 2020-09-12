@@ -23,7 +23,7 @@
           class="murr-card mb2 pointer"
         >
           <div class="murr-card__info">
-            <div class="avatar"></div>
+            <img src="@/assets/img/logo_pink.png"  class="avatar" alt="">
             <div class="author">
               {{ murr.owner_name }}
             </div>
@@ -90,7 +90,7 @@ export default {
 .murr-cover {
   max-width: 100%;
   padding: 0 2px;
-  border-radius: 5px 5px 0 0;
+  border-radius: 3px;
 }
 .murr-card__info {
   display: flex;
@@ -104,7 +104,8 @@ export default {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: #c4c4c4;
+  background-color: #FFBF00;
+  padding: 1px;
 }
 .author {
   color: #dadada;

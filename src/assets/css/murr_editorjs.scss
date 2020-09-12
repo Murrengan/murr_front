@@ -1,3 +1,4 @@
+@import "../../assets/scss/variables";
 .image-tool--withBackground .image-tool__image {
   background-color: transparent !important;
   padding: 5px !important;
@@ -13,11 +14,6 @@
   font-size: 0.8rem;
   opacity: 0.9;
   font-family: "JetBrainsMono-Italic", serif;
-}
-
-.ce-toolbox.ce-toolbox--opened {
-  background-color: #a36fff;
-  border-radius: 5px;
 }
 
 .ce-inline-tool-input--showed {
@@ -41,7 +37,7 @@
 
 .cdx-button {
   background-color: #a36fff;
-  color: #b0bec5;
+  color: #ffffff;
 }
 
 .cdx-button:hover {
@@ -78,8 +74,38 @@
   border-radius: 5px;
 }
 
+.icon--plus {
+  width: 30px !important;
+  height: 30px !important;
+}
+.ce-toolbox__button {
+  width: 60px;
+  height: 80px;
+  border: 1px rgba(255, 255, 255, 1) dashed;
+  border-radius: 3px;
+  margin-right: 5px;
+  background-color: rgba(173, 0, 255, 0.9);
+  margin-top: 50px;
+}
+.ce-toolbox__button:hover {
+  background-color: #AD00FF;;
+}
+.ce-toolbox__button:active {
+  background-color: rgba(165, 0, 255, 0.95);
+}
+.ce-header{
+  font-size: 1.1em !important;
+}
 .ce-settings__plugin-zone {
   display: none;
+}
+.ce-paragraph{
+
+  border-bottom: rgba(255, 255, 255, 0.5) 1px dashed;
+}
+.ce-paragraph:focus{
+
+  border-bottom: none;
 }
 
 .image-tool__image-picture {
@@ -97,22 +123,43 @@
     position: fixed !important;
     right: 0 !important;
   }
+
+}
+.ce-toolbox {
+  overflow-x: visible;
+  background-color: transparent !important;
 }
 
 .editorjs-main {
-  width: 100%;
   max-width: 650px;
-
-  border-radius: 5px;
+  border-radius: 5px 5px 0 0;
   text-align: left;
   padding: 0 10px 0;
+  border: rgba(173, 0, 255, 0.9) dashed 1px;
+  border-bottom: none;
 }
 
 .ce-code__textarea {
-  background-color: #c3a1ff !important;
+  background-color: #c457fa !important;
+  color: white !important;
   padding: 5px !important;
   font-weight: bold;
   font-size: 0.9rem !important;
   text-align: left;
   white-space: pre-wrap;
+}
+.ce-code__textarea::placeholder {
+  color: $dark;
+}
+
+.input-murr-header-area{
+  border:  1px dashed $main;
+  border-bottom: none;
+  padding: 10px;
+}
+.input-murr-header-area::placeholder{
+  color: $white-light;
+}
+.ce-paragraph.cdx-block::before {
+  color: $white-light !important;
 }

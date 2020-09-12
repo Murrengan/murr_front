@@ -32,7 +32,7 @@
       <div class="bottom-info">
         <span class="mb link pointer" @click="goToAboutPage"> О проекте</span>
 
-        <small class="mb">v0.0.200</small>
+        <small class="mb">v0.0.203</small>
 
         <el-button
           v-if="this.$store.getters.accessToken_getters"

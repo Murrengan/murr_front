@@ -1,19 +1,17 @@
 body,
 * {
-  scrollbar-color: #ad00ff #fff;
+  scrollbar-color: #1A2931 #ad00ff ;
   scrollbar-width: thin;
 }
 
 ::-webkit-scrollbar-track {
   opacity: 1;
+  background-color: #ad00ff;
 }
 
 ::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 20px;
-  border-radius: 20px;
-  -webkit-border-radius: 0;
-  border-radius: 0;
-  background-color: #ad00ff;
+  border-radius: 2px;
+  background-color: #1A2931;
 }
 
 ::-webkit-scrollbar {
@@ -91,6 +89,10 @@ ul {
 
 .fs2 {
   font-size: 1.4rem;
+}
+
+.fw900 {
+  font-weight: 900;
 }
 
 .p {
@@ -309,11 +311,13 @@ ul {
   max-width: 320px;
   background-color: #c457fa;
   border-radius: 3px;
-  transition: box-shadow 250ms;
+  transition: 0.3s;
   border: #ab25f9 1px solid;
 }
 
 .murr-card:hover {
+  transition: 0.2s;
+  transform: scale(1.005);
   box-shadow: -1px -1px 20px 1px #ab25f9, 1px 1px 20px 1px #ab25f9;
 }
 
@@ -322,6 +326,7 @@ ul {
   font-weight: bold;
   word-break: break-word;
   padding: 3px 5px 5px;
+  text-align: left;
 }
 
 .el-popover {
@@ -338,7 +343,7 @@ ul {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
+  text-align: left;
   padding: 1rem 15px 1em;
 }
 
@@ -349,4 +354,29 @@ ul {
 
 .justify-content-center {
   justify-content: center;
+}
+.murr-header {
+  width: 100%;
+  max-width: 620px;
+  border: none;
+  background-color: #1a2931;
+  text-align: left;
+  resize: none;
+  overflow: hidden;
+  border-radius: 5px;
+  word-break: break-word;
+  font-size: 1.5em;
+  padding-bottom: 1.1em;
+}
+
+.create-murr-area {
+  width: 100%;
+  max-height: 90%;
+  max-width: 650px;
+  margin: 0 auto;
+  padding-left: 10px;
+}
+
+.el-message-box.modal-main {
+  max-width: 320px;
 }
