@@ -100,7 +100,7 @@ export default {
       if (currentScrollPosition < 0) {
         return;
       }
-      if (Math.abs(currentScrollPosition - this.lastScrollPosition) < 60) {
+      if (Math.abs(currentScrollPosition - this.lastScrollPosition) < 150) {
         return;
       }
       this.showNavbar = currentScrollPosition < this.lastScrollPosition;
@@ -146,10 +146,12 @@ export default {
 .murr-heading-wrapper.navbar--hidden {
   box-shadow: none;
   transform: translate3d(0, -100%, 0);
+  transition: 0.5s;
 }
 
 .murr-heading-wrapper {
   background-color: #ad00ff;
+  transition: 0.5s;
 }
 
 .sticky-wrapper {
