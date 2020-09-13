@@ -1,6 +1,6 @@
 body,
 * {
-  scrollbar-color: #1A2931 #ad00ff ;
+  scrollbar-color: #1a2931 #ad00ff;
   scrollbar-width: thin;
 }
 
@@ -11,7 +11,7 @@ body,
 
 ::-webkit-scrollbar-thumb {
   border-radius: 2px;
-  background-color: #1A2931;
+  background-color: #1a2931;
 }
 
 ::-webkit-scrollbar {
@@ -23,8 +23,18 @@ body,
   padding: 0;
   box-sizing: border-box;
   font-family: "JetBrainsMono-Regular", serif;
-  color: white;
   outline: none;
+}
+
+body {
+  color: white;
+}
+
+a,
+a:hover,
+a:active,
+a:focus {
+  color: white;
 }
 
 .auth-input {

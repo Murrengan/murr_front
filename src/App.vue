@@ -65,6 +65,8 @@
       <ResetPassword v-if="this.$store.getters.showResetPasswordForm_getters" />
       <CreateMurr v-if="this.$store.getters.showCreateMurr_getters" />
     </transition>
+
+    <modal />
   </div>
 </template>
 
@@ -75,6 +77,7 @@ import Login from "@/components/murren/Login";
 import ResetPassword from "@/components/murren/ResetPassword";
 import CreateMurr from "@/components/murr_card/CreateMurr";
 import SideMenu from "@/views/common/SideMenu";
+import Modal from "@/components/modal/Modal";
 
 export default {
   computed: {
@@ -86,6 +89,7 @@ export default {
     ResetPassword,
     CreateMurr,
     SideMenu,
+    Modal,
   },
   data: () => ({
     show_showRightSideMenu: false,
@@ -130,8 +134,8 @@ export default {
       }
     },
     goHomePage() {
-       this.$router.push("/");
-    }
+      this.$router.push("/");
+    },
   },
   mounted() {
     window.addEventListener("scroll", this.onScroll);
