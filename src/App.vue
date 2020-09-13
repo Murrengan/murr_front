@@ -27,37 +27,33 @@
         Мурры
       </router-link>
 
-      <!--      <router-link-->
-      <!--        active-class="active"-->
-      <!--        class="flex-item header-link"-->
-      <!--        to="/murr_chat"-->
-      <!--      >-->
-      <!--        Чат-->
-      <!--      </router-link>-->
-
       <router-link
         active-class="active"
         class="flex-item header-link"
         to="/murren"
       >
-        <span class="flex-item" v-if="this.murrenName_getters">{{
-          this.murrenName_getters
-        }}</span>
-        <span class="flex-item" v-else>Войти </span>
+        <template v-if="murrenName_getters">
+          {{ murrenName_getters }}
+        </template>
+        <template v-else>
+          Войти
+        </template>
       </router-link>
-      <span class="flex-item header-link" @click.prevent="showRightSideMenu"
-        >Меню</span
+
+      <span class="flex-item header-link" @click="onOpenMenu">
+        Меню
+      </span>
+
+      <span
+        v-if="murrenName_getters"
+        class="flex-item header-link"
+        @click="openCreateMurr"
       >
-      <span class="flex-item header-link" @click.prevent="openCreateMurr"
-        >Создать</span
-      >
+        Создать
+      </span>
     </div>
 
     <router-view />
-
-    <transition name="slide-fade-x" mode="out-in">
-      <SideMenu v-if="this.$store.getters.showRightSideMenu_getters" />
-    </transition>
 
     <transition name="slide-fade-y" mode="out-in">
       <SignUp v-if="this.$store.getters.showRegisterForm_getters" />
@@ -88,7 +84,6 @@ export default {
     Login,
     ResetPassword,
     CreateMurr,
-    SideMenu,
     Modal,
   },
   data: () => ({
@@ -98,6 +93,14 @@ export default {
     lastScrollPosition: 0,
   }),
   methods: {
+    onOpenMenu() {
+      this.$store.commit("modal/open", {
+        transition: "el-zoom-in-center",
+        component: {
+          render: SideMenu,
+        },
+      });
+    },
     onScroll() {
       const currentScrollPosition =
         window.pageYOffset || document.documentElement.scrollTop;
