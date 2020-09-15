@@ -14,7 +14,7 @@ jobs:
           node-version: '12'
       
       - name: npm install stage
-        run: npm ci
+        run: npm i
 
       - name: npm_run_build stage
         run: npm run build
