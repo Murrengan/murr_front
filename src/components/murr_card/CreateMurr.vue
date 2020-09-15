@@ -159,7 +159,7 @@ import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import ImageTool from "@editorjs/image";
 import axios from "axios";
-import { axios_defaults_baseURL } from "../../devAndProdVariables";
+import {axios_defaults_baseURL, newMurrInReleaseStatus} from "../../devAndProdVariables";
 import ResizableTextarea from "../common/ResizableTextarea.js";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
@@ -288,6 +288,9 @@ export default {
         const response = await axios.post("/api/murr_card/", murrCardData, {
           headers: {
             Authorization: "Bearer " + this.$store.getters.accessToken_getters,
+          },
+          data: {
+              status: newMurrInReleaseStatus
           },
         });
         if (response.status === 201) {
