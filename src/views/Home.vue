@@ -88,7 +88,7 @@ export default {
   width: 100%;
 }
 .murr-cover {
-  max-width: 100%;
+  width: 100%;
   padding: 0 2px;
   border-radius: 3px;
   display: flex;
