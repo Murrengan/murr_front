@@ -22,8 +22,8 @@ export default {
         return {
           error: true,
           accountActivated: !(
-            e.response.data.detail ===
-            "No active account found with the given credentials"
+            e.response.data.non_field_errors[0] ===
+            "Unable to log in with provided credentials."
           ),
         };
       }

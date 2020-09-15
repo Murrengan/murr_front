@@ -47,7 +47,7 @@
           Имя максимум {{ $v.murren_username.$params.maxLength.max }} символов
         </div>
         <div v-if="!accountActivated" class="m-form__help">
-          Активный Муррен с указанными данными не найден
+          Невозможно войти с предоставленными данными
         </div>
       </div>
 

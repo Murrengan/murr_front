@@ -1,4 +1,4 @@
-name: CI murr_front
+name: Update murr_front on prod
 on:
   push:
     branches: [ master ]
@@ -17,9 +17,10 @@ jobs:
       - name: npm install stage
         run: npm i
 
-      - name: npm_run_build stage
+      - name: npm run build stage
         run: npm run build
         
+      - name: Copy dist to prod stand
       - uses: horochx/deploy-via-scp@master
         with:
           local: dist
@@ -29,7 +30,7 @@ jobs:
           user: murrengan_test
           key: ${{ secrets.PRIVATE_KEY }}
       
-      - name: TEST SSH CONNECTION
+      - name: Restart docker-compose on prod
         uses: appleboy/ssh-action@master
         with:
           host: 35.228.83.205
