@@ -1,0 +1,44 @@
+name: CI murr_front
+on:
+  push:
+    branches: [ master ]
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      
+      - name: npm install stage
+        run: npm ci
+
+      - name: npm_run_build stage
+        run: npm run build
+      
+      # Setup key
+      - run: set -eu
+      - run: mkdir "$HOME/.ssh"
+      - run: echo "${{ secrets.PRIVATE_KEY }}" > "$HOME/.ssh/key"
+      - run: chmod 600 "$HOME/.ssh/key"
+      # Deploy
+      - run: rsync -e "ssh -i $HOME/.ssh/key -o StrictHostKeyChecking=no" --archive --compress --delete dist murrengan_test@35.228.83.205:~/murr_back
+        
+#       - name: copy dist to prod
+#         run: |
+#           scp -i ~/.ssh/id_rsa.pub USER@SERVER:/home/USER/FILENAME /home/USER/FILENAME
+        
+#       - name: TEST SSH CONNECTION
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: 35.228.83.205
+#           username: murrengan_test
+#           key: ${{ secrets.PRIVATE_KEY }}
+#           port: 22
+#           script: |
+#            cd ~/murr_back
+#            docker-compose -f docker-compose-prod.yml down
+#            docker-compose -f docker-compose-prod.yml up --build -d
