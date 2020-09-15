@@ -1,13 +1,12 @@
-name: Update murr_front on prod
+name: Update_murr_front_on_prod
+
 on:
   push:
     branches: [ master ]
 
-
 jobs:
-  build:
+  build_new_murr_front:
     runs-on: ubuntu-latest
-    
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -21,7 +20,7 @@ jobs:
         run: npm run build
         
       - name: Copy dist to prod stand
-      - uses: horochx/deploy-via-scp@master
+        uses: horochx/deploy-via-scp@master
         with:
           local: dist
           remote: /home/murrengan_test/murr_back
