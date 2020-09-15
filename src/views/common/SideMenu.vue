@@ -1,5 +1,5 @@
 <template>
-  <div class="murren_menu_left">
+  <div>
     <div class="side-menu-panel">
       <div v-if="this.$store.getters.accessToken_getters === null">
         <i class="el-icon-user-solid avatar-place mb"></i>
@@ -43,10 +43,6 @@
         </el-button>
       </div>
     </div>
-
-    <a href="#" @click.prevent="switchRightSideMenu">
-      <i class="el-icon-arrow-left hide-popup_icon"></i>
-    </a>
   </div>
 </template>
 
