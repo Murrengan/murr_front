@@ -9,6 +9,7 @@ import { mutations } from "./index/mutations";
 import { state } from "./index/state";
 import { getters } from "./index/getters";
 import comments from "../components/murr_comment/store";
+import modal from "../components/modal/store";
 
 Vue.use(Vuex);
 
@@ -27,5 +28,6 @@ export default new Vuex.Store({
     showPopUpMessage,
     restrictedAccess,
     comments,
+    modal,
   },
 });

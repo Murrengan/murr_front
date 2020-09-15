@@ -27,37 +27,33 @@
         Мурры
       </router-link>
 
-      <!--      <router-link-->
-      <!--        active-class="active"-->
-      <!--        class="flex-item header-link"-->
-      <!--        to="/murr_chat"-->
-      <!--      >-->
-      <!--        Чат-->
-      <!--      </router-link>-->
-
       <router-link
         active-class="active"
         class="flex-item header-link"
         to="/murren"
       >
-        <span class="flex-item" v-if="this.murrenName_getters">{{
-          this.murrenName_getters
-        }}</span>
-        <span class="flex-item" v-else>Войти </span>
+        <template v-if="murrenName_getters">
+          {{ murrenName_getters }}
+        </template>
+        <template v-else>
+          Войти
+        </template>
       </router-link>
-      <span class="flex-item header-link" @click.prevent="showRightSideMenu"
-        >Меню</span
+
+      <span class="flex-item header-link" @click="onOpenMenu">
+        Меню
+      </span>
+
+      <span
+        v-if="murrenName_getters"
+        class="flex-item header-link"
+        @click="openCreateMurr"
       >
-      <span class="flex-item header-link" @click.prevent="openCreateMurr"
-        >Создать</span
-      >
+        Создать
+      </span>
     </div>
 
     <router-view />
-
-    <transition name="slide-fade-x" mode="out-in">
-      <SideMenu v-if="this.$store.getters.showRightSideMenu_getters" />
-    </transition>
 
     <transition name="slide-fade-y" mode="out-in">
       <SignUp v-if="this.$store.getters.showRegisterForm_getters" />
@@ -65,6 +61,8 @@
       <ResetPassword v-if="this.$store.getters.showResetPasswordForm_getters" />
       <CreateMurr v-if="this.$store.getters.showCreateMurr_getters" />
     </transition>
+
+    <modal />
   </div>
 </template>
 
@@ -75,6 +73,7 @@ import Login from "@/components/murren/Login";
 import ResetPassword from "@/components/murren/ResetPassword";
 import CreateMurr from "@/components/murr_card/CreateMurr";
 import SideMenu from "@/views/common/SideMenu";
+import Modal from "@/components/modal/Modal";
 
 export default {
   computed: {
@@ -85,7 +84,7 @@ export default {
     Login,
     ResetPassword,
     CreateMurr,
-    SideMenu,
+    Modal,
   },
   data: () => ({
     show_showRightSideMenu: false,
@@ -94,6 +93,14 @@ export default {
     lastScrollPosition: 0,
   }),
   methods: {
+    onOpenMenu() {
+      this.$store.commit("modal/open", {
+        transition: "el-zoom-in-center",
+        component: {
+          render: SideMenu,
+        },
+      });
+    },
     onScroll() {
       const currentScrollPosition =
         window.pageYOffset || document.documentElement.scrollTop;
@@ -130,8 +137,8 @@ export default {
       }
     },
     goHomePage() {
-       this.$router.push("/");
-    }
+      this.$router.push("/");
+    },
   },
   mounted() {
     window.addEventListener("scroll", this.onScroll);
