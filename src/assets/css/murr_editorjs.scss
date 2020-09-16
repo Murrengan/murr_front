@@ -160,6 +160,10 @@
 .input-murr-header-area::placeholder{
   color: $white-light;
 }
+
+.input-murr-header-area:focus::placeholder {
+  color: transparent;
+}
 .ce-paragraph.cdx-block::before {
   color: $white-light !important;
 }
