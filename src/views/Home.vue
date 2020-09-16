@@ -88,11 +88,11 @@ export default {
   width: 100%;
 }
 .murr-cover {
-  width: 100%;
   padding: 0 2px;
   border-radius: 3px;
   display: flex;
   margin: 0 auto;
+  max-height: 350px;
 }
 .murr-card__info {
   display: flex;
