@@ -86,14 +86,12 @@
 }
 
 .hide-icon__main-slide-fade-container {
-  font-size: 4rem;
+  font-size: 3em;
   color: #ad00ff;
-  transition: 0.5s;
 }
 
 .hide-icon__main-slide-fade-container:hover {
   color: #b388ff;
-  transform: scale(1.25);
 }
 
 .hide-icon__main-slide-fade-container:active {
