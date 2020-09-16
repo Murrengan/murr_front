@@ -68,6 +68,9 @@ ul {
 .mb {
   margin-bottom: 1rem;
 }
+.absolute {
+  position: absolute;
+}
 
 .mb-half {
   margin-bottom: 0.4rem;
@@ -156,7 +159,10 @@ ul {
 .murr-button__primary {
   background-color: #65a3ca;
 }
-
+.bigBtn {
+  width: 100px;
+  height: 100px;
+}
 .murr-button__primary > i {
   color: white;
 }
@@ -319,10 +325,11 @@ ul {
   width: 100%;
   min-width: 320px;
   max-width: 320px;
-  background-color: blue;
+  background-color: #1d4552;
   border-radius: 3px;
   transition: 0.3s;
   border: #ab25f9 1px solid;
+  padding-top: 2px;
 }
 
 .murr-card:hover {
@@ -377,6 +384,7 @@ ul {
   word-break: break-word;
   font-size: 1.5em;
   padding-bottom: 1.1em;
+  color: white;
 }
 
 .create-murr-area {

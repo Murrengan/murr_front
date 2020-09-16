@@ -1,6 +1,6 @@
 <template>
   <div class="home-main-container">
-    <div class="murr-panel">
+    <div class="murr-panel mb">
       <el-button class="more-btn murr-button" @click="showMurrPanelButtons">
         <i class="el-icon-more-outline pointer"></i>
       </el-button>
@@ -19,8 +19,15 @@
         </div>
       </transition>
     </div>
-    <h1 class="murr-header input-murr-header-area fs2">{{ this.murrTitle }}</h1>
-    <div class="create-murr-area input-murr-header-area">
+    <div class="mb">
+      <h1 class="murr-header input-murr-header-area fs2">
+        {{ this.murrTitle }}
+      </h1>
+    </div>
+    <div
+      class="create-murr-area input-murr-header-area"
+      v-if="this.murr_content.blocks.length > 1"
+    >
       <div
         v-for="(i, index) in this.murr_content.blocks"
         :key="index"
@@ -102,8 +109,8 @@ export default {
       this.$confirm("Точно удалить мурр?", "Внимание!", {
         confirmButtonText: "Да",
         cancelButtonText: "Отмена",
-        cancelButtonClass: "murr-button__primary",
-        confirmButtonClass: "murr-button__danger",
+        cancelButtonClass: "murr-button__primary bigBtn",
+        confirmButtonClass: "murr-button__danger bigBtn",
         customClass: "modal-main",
         type: "warning",
       })
@@ -167,7 +174,6 @@ h1 {
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
-  margin-bottom: 5px;
 }
 
 .murr-code-snippet {

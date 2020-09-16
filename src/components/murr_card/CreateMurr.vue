@@ -1,27 +1,16 @@
 <template>
   <div class="main-create-murr-container">
-    <div class="header-buttons">
+    <div class="header-buttons mb">
       <a href="#" @click.prevent="hideCreateMurr">
-        <i class="el-icon-arrow-down hide-icon__main-slide-fade-container"></i>
+        <i class="el-icon-close hide-icon__main-slide-fade-container"></i>
       </a>
 
-      <el-popover placement="bottom" trigger="manual" v-model="visiblePopover">
-        <i
-          class="el-icon-s-operation operation-icon pointer"
-          slot="reference"
-          @click="visiblePopover = !visiblePopover"
-        ></i>
-        <el-button class="murr-button__danger" @click.prevent="clearMurrData">
-          Очистить мурр?
-        </el-button>
-      </el-popover>
-
       <div>
-        <a href="#" @click="changeShowAlmostDone">
-          <i
-            class="el-icon-arrow-right hide-icon__main-slide-fade-container"
-          ></i>
-        </a>
+        <i
+          class="el-icon-check hide-icon__main-slide-fade-container pointer"
+          @click="() => $refs.recaptcha.execute()"
+        ></i>
+        <recaptcha ref="recaptcha" @verify="save" />
       </div>
     </div>
 
@@ -31,115 +20,98 @@
           <textarea
             class="murr-header fw900 input-murr-header-area"
             :class="{ 'murr-header__error': murrHeaderEmpty }"
-            placeholder="Заголовок"
+            placeholder="Несколько слов"
             v-model="murrHeader"
             maxlength="224"
           ></textarea>
         </resizable-textarea>
         <div v-if="murrHeaderEmpty" class="m-form__help error-text">
-          У каждого мурра есть заголовок
+          У каждого мурра есть несколько слов
         </div>
 
-        <div class="editorjs-main mb">
-          <div id="editorjs"></div>
-        </div>
+        <input
+          ref="input"
+          type="file"
+          name="image"
+          accept="image/*"
+          @change="setImage"
+        />
 
-        <transition name="slide-fade-minus-x" mode="out-in">
-          <div v-if="showAlmostDone" class="almost-done-popup">
-            <div class="header-buttons">
-              <a href="#" @click="changeShowAlmostDone">
-                <i
-                  class="el-icon-arrow-left hide-icon__main-slide-fade-container"
-                ></i>
-              </a>
-              <div>
-                <el-button
-                  class="murr-button"
-                  @click="() => $refs.recaptcha.execute()"
-                  :loading="loading"
-                >
-                  Мурр готов!
-                </el-button>
+        <div class="actions">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="Очистить мурр"
+            placement="top"
+          >
+            <i
+              class="el-icon-delete hide-icon__main-slide-fade-container pointer mr"
+              @click.prevent="clearMurrData"
+            ></i>
+          </el-tooltip>
 
-                <recaptcha ref="recaptcha" @verify="save" />
-              </div>
-            </div>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="Добавить мурру обложку"
+            placement="top"
+          >
+            <i
+              class="el-icon-picture-outline hide-icon__main-slide-fade-container pointer mb mr"
+              @click="showFileChooser"
+            ></i>
+          </el-tooltip>
 
-            <input
-              ref="input"
-              type="file"
-              name="image"
-              accept="image/*"
-              @change="setImage"
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="Предпросмотр мурра"
+            placement="top"
+            v-if="imgSrc"
+          >
+            <i
+              class="el-icon-view hide-icon__main-slide-fade-container pointer mb mr"
+              @click="showMurrPreview = !showMurrPreview"
+            ></i>
+          </el-tooltip>
+
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="Очистить обложку мурра"
+            placement="top"
+            v-if="imgSrc"
+          >
+            <i
+              class="el-icon-circle-close hide-icon__main-slide-fade-container pointer mb mr"
+              @click="imgSrc = ''"
+            ></i>
+          </el-tooltip>
+
+          <div class="modal-mask" v-show="showMurrCoverCropper">
+            <vue-cropper
+              ref="cropper"
+              :view-mode="1"
+              :src="imgSrc"
+              preview=".preview"
+              class="cropper_div mb"
             />
 
-            <h2 class="mb">Подготовка к выпуску:</h2>
+            <el-button
+              class="murr-button__danger"
+              @click="cancelMurrCoverCropper"
+            >
+              Отмена
+            </el-button>
 
-            <div class="actions">
-              <el-button
-                class="murr-button__primary mb"
-                @click="showFileChooser"
-              >
-                Загрузить обложку
-              </el-button>
+            <el-button
+              class="murr-button__success"
+              @click="saveMurrCoverCropper"
+            >
+              Готово
+            </el-button>
 
-              <div class="modal-mask" v-show="showMurrCoverCropper">
-                <vue-cropper
-                  ref="cropper"
-                  :view-mode="1"
-                  :src="imgSrc"
-                  preview=".preview"
-                  class="cropper_div mb"
-                />
-
-                <el-button
-                  class="murr-button__danger"
-                  @click="cancelMurrCoverCropper"
-                >
-                  Отмена
-                </el-button>
-
-                <el-button
-                  class="murr-button__success"
-                  @click="saveMurrCoverCropper"
-                >
-                  Готово
-                </el-button>
-              </div>
-
-              <p class="mb">или</p>
-
-              <el-button
-                class="murr-button__dark mb"
-                @click="showEditMurrHeaderModal = true"
-              >
-                Поправить заголовок
-              </el-button>
-
-              <div v-if="showEditMurrHeaderModal" class="modal-mask">
-                <div class="textarea-wrapper mb">
-                  <resizable-textarea>
-                    <label>
-                      <textarea
-                        class="murr-header fs"
-                        placeholder="Заголовок"
-                        v-model="murrHeader"
-                        maxlength="224"
-                      ></textarea>
-                    </label>
-                  </resizable-textarea>
-                </div>
-
-                <el-button
-                  class="murr-button__success"
-                  @click="showEditMurrHeaderModal = false"
-                >
-                  Готово
-                </el-button>
-              </div>
-            </div>
-
-            <div class="bottom">
+            <div class="bottom absolute" v-show="showMurrCoverCropper">
               <p class="mb">Превью мурра:</p>
               <div class="murr-card">
                 <div v-if="imgSrc" class="preview"></div>
@@ -147,7 +119,19 @@
               </div>
             </div>
           </div>
-        </transition>
+          <div class="editorjs-main mb">
+            <div id="editorjs"></div>
+          </div>
+          <div class="bottom mb" v-show="showMurrPreview">
+            <p class="mb">Превью мурра:</p>
+            <div class="murr-card__preview">
+              <div class="murr-card">
+                <div v-if="imgSrc" class="preview"></div>
+                <p class="murr-card__description">{{ murrHeader }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -159,7 +143,10 @@ import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import ImageTool from "@editorjs/image";
 import axios from "axios";
-import {axios_defaults_baseURL, newMurrInReleaseStatus} from "../../devAndProdVariables";
+import {
+  axios_defaults_baseURL,
+  newMurrInReleaseStatus,
+} from "../../devAndProdVariables";
 import ResizableTextarea from "../common/ResizableTextarea.js";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
@@ -204,7 +191,7 @@ export default {
         },
         paragraph: {
           config: {
-            placeholder: "Кликни сюда и создай свой мурр...",
+            placeholder: "Сделай большой и красивый мурр...",
           },
         },
       },
@@ -229,7 +216,6 @@ export default {
     return {
       startCreateMurr: true,
       saveTimeOut: true,
-      showEditMurrHeaderModal: false,
       showMurrCoverCropper: false,
       showAlmostDone: false,
       murrHeader: "",
@@ -238,6 +224,7 @@ export default {
       cropImg: "",
       visiblePopover: false,
       loading: false,
+      showMurrPreview: true,
     };
   },
   destroyed() {
@@ -250,17 +237,6 @@ export default {
       notification: "popUpMessage",
     }),
     ...mapMutations(["clearMurrCards"]),
-    changeShowAlmostDone() {
-      if (!this.murrHeader) {
-        this.murrHeaderEmpty = true;
-        return;
-      }
-      if (this.murrHeader.trim().length === 0) {
-        this.murrHeaderEmpty = true;
-        return;
-      }
-      this.showAlmostDone = !this.showAlmostDone;
-    },
     cancelMurrCoverCropper() {
       this.imgSrc = "";
       this.showMurrCoverCropper = false;
@@ -273,7 +249,16 @@ export default {
       this.cropImg = await this.$refs.cropper.getCroppedCanvas().toDataURL();
     },
     async save(recaptchaToken) {
+      if (!this.murrHeader) {
+        this.murrHeaderEmpty = true;
+        return;
+      }
+      if (this.murrHeader.trim().length === 0) {
+        this.murrHeaderEmpty = true;
+        return;
+      }
       this.loading = true;
+
       let murr_content = await window.editor.save();
       const murrCardData = {
         recaptchaToken,
@@ -290,7 +275,7 @@ export default {
             Authorization: "Bearer " + this.$store.getters.accessToken_getters,
           },
           data: {
-              status: newMurrInReleaseStatus
+            status: newMurrInReleaseStatus,
           },
         });
         if (response.status === 201) {
@@ -380,7 +365,12 @@ export default {
   top: 0;
   left: 0;
   z-index: 124324;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 1);
+}
+
+.murr-card__preview {
+  box-shadow: -1px -1px 20px 1px #ab25f9, 1px 1px 20px 1px #ab25f9;
+  border-radius: 3px;
 }
 
 .cropper_div {
@@ -423,9 +413,8 @@ input[type="file"] {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  position: absolute;
   left: 0;
-  bottom: 2rem;
+  bottom: 1rem;
 }
 
 .almost-done-popup {
@@ -475,18 +464,4 @@ input[type="file"] {
   width: 100%;
 }
 
-.operation-icon {
-  font-size: 2.5rem;
-  color: #ad00ff;
-  transition: 0.5s;
-}
-
-.operation-icon:hover {
-  color: #b388ff;
-  transform: scale(1.25);
-}
-
-.operation-icon:active {
-  color: #c3a1ff;
-}
 </style>

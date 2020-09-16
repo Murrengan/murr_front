@@ -136,7 +136,8 @@
   text-align: left;
   padding: 0 10px 0;
   border: rgba(173, 0, 255, 0.9) dashed 1px;
-  border-bottom: none;
+  height: 400px;
+  overflow: auto;
 }
 
 .ce-code__textarea {
@@ -154,7 +155,6 @@
 
 .input-murr-header-area{
   border:  1px dashed $main;
-  border-bottom: none;
   padding: 10px;
 }
 .input-murr-header-area::placeholder{
