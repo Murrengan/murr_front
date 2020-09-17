@@ -1,4 +1,8 @@
 export const whitelistEmails = [
+  "bk.ru",
+  "inbox.ru",
+  "list.ru",
+  "bk.ru",
   "gmail.com",
   "yahoo.com",
   "hotmail.com",
